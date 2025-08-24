@@ -6,6 +6,84 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class PaymentService {
+  async handlePaystackCallback(callbackData: any, signature?: string) {
+    try {
+      // Verify webhook signature for security (optional but recommended)
+      const webhookSecret = process.env.PAYSTACK_WEBHOOK_SECRET;
+      if (webhookSecret && signature) {
+        const crypto = require('crypto');
+        const hash = crypto.createHmac('sha512', webhookSecret).update(JSON.stringify(callbackData)).digest('hex');
+        if (hash !== signature) {
+          throw new BadRequestException('Invalid webhook signature');
+        }
+      }
+
+      console.log('Paystack callback received:', JSON.stringify(callbackData, null, 2));
+      
+      // Paystack sends webhook events with event type and data
+      const event = callbackData.event;
+      const data = callbackData.data;
+      
+      if (event !== 'charge.success' && event !== 'charge.failed') {
+        return {
+          success: true,
+          message: 'Event type not handled',
+          event
+        };
+      }
+
+      const reference = data?.reference;
+      const status = data?.status;
+      
+      if (!reference) {
+        throw new BadRequestException('Missing transaction reference in callback');
+      }
+
+      const payment = await prisma.payment.findFirst({ 
+        where: { transactionId: reference } 
+      });
+      
+      if (!payment) {
+        console.warn(`Payment not found for reference: ${reference}`);
+        throw new NotFoundException('Payment not found');
+      }
+
+      const finalStatus = status === 'success' ? 'completed' : 'failed';
+      
+      const updatedPayment = await prisma.payment.update({
+        where: { id: payment.id },
+        data: {
+          status: finalStatus,
+          metadata: {
+            ...payment.metadata as any,
+            paystackCallback: callbackData,
+            callbackReceivedAt: new Date().toISOString(),
+            amount_paid: data?.amount ? data.amount / 100 : null, // Convert from kobo
+            paystack_reference: data?.reference,
+            gateway_response: data?.gateway_response
+          }
+        }
+      });
+
+      console.log(`Payment ${reference} updated to status: ${finalStatus}`);
+
+      return {
+        success: true,
+        message: 'Paystack callback processed successfully',
+        data: {
+          id: updatedPayment.id,
+          transactionId: updatedPayment.transactionId,
+          status: updatedPayment.status
+        }
+      };
+    } catch (error: any) {
+      console.error('Error handling Paystack callback:', error);
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException('Failed to process Paystack callback');
+    }
+  }
 
   async findAll(page: number = 1, limit: number = 10, status?: string) {
     try {
@@ -77,9 +155,9 @@ export class PaymentService {
       // Generate transaction ID
       const transactionId = `TXN${Date.now()}${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
       let payment;
+      
       // M-PESA Integration
       if (data.paymentMethod === 'mpesa') {
-        // Call M-PESA STK Push API
         const mpesaResult = await this.initiateMpesaStkPush(data.phoneNumber || '', data.amount, transactionId);
         payment = await prisma.payment.create({
           data: {
@@ -89,19 +167,18 @@ export class PaymentService {
             metadata: mpesaResult
           }
         });
-      } else if (data.paymentMethod === 'paypal') {
-        // Call PayPal payment creation API
-        const paypalResult = await this.initiatePaypalPayment(data.amount, transactionId, data.email);
+      } else if (data.paymentMethod === 'paystack') {
+        const paystackResult = await this.initiatePaystackPayment(data.amount, transactionId, data.email);
         payment = await prisma.payment.create({
           data: {
             ...data,
             transactionId,
-            status: paypalResult.success ? 'processing' : 'failed',
-            metadata: paypalResult
+            status: paystackResult.success ? 'processing' : 'failed',
+            metadata: paystackResult
           }
         });
       } else {
-        // Card or other method
+        // Default case for other payment methods
         payment = await prisma.payment.create({
           data: {
             ...data,
@@ -110,18 +187,18 @@ export class PaymentService {
           }
         });
       }
-      // Send confirmation email to client (existing logic)
-      // ...existing code...
+
       return {
         success: true,
         message: 'Payment initiated successfully',
-        data: {
+        data: payment ? {
           id: payment.id,
           transactionId: payment.transactionId,
           status: payment.status,
           amount: payment.amount,
-          paymentMethod: payment.paymentMethod
-        }
+          paymentMethod: payment.paymentMethod,
+          metadata: payment.metadata
+        } : null
       };
     } catch (error) {
       console.error('Error creating payment:', error);
@@ -129,30 +206,190 @@ export class PaymentService {
     }
   }
 
+  async initiatePaystackPayment(amount: number, transactionId: string, email: string) {
+    const apiUrl = process.env.PAYSTACK_API_URL || 'https://api.paystack.co';
+    const secretKey = process.env.PAYSTACK_SECRET_KEY;
+    const callbackUrl = process.env.PAYSTACK_CALLBACK_URL;
+    
+    if (!secretKey) {
+      return { success: false, message: 'Paystack secret key not configured', error: 'Missing API credentials' };
+    }
+
+    const axios = require('axios');
+    
+    try {
+      const response = await axios.post(
+        `${apiUrl}/transaction/initialize`,
+        {
+          email,
+          amount: amount * 100, // Paystack expects amount in kobo
+          reference: transactionId,
+          callback_url: callbackUrl,
+          currency: 'USD', // Since diaspora payments are in USD
+          metadata: {
+            transactionId,
+            custom_fields: [
+              {
+                display_name: "Transaction ID",
+                variable_name: "transaction_id",
+                value: transactionId
+              }
+            ]
+          }
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data && response.data.status) {
+        return {
+          success: true,
+          message: 'Paystack payment initialized successfully',
+          data: response.data.data,
+          authorization_url: response.data.data.authorization_url,
+          access_code: response.data.data.access_code,
+          reference: response.data.data.reference
+        };
+      } else {
+        return { 
+          success: false, 
+          message: 'Paystack payment initialization failed', 
+          error: response.data.message || 'Unknown error' 
+        };
+      }
+    } catch (error: any) {
+      console.error('Paystack payment error:', error.response?.data || error.message);
+      return { 
+        success: false, 
+        message: 'Paystack payment failed', 
+        error: error.response?.data?.message || error.message 
+      };
+    }
+  }
+
+  // Verify payment status directly from Paystack
+  async verifyPaystackPayment(reference: string) {
+    const apiUrl = process.env.PAYSTACK_API_URL || 'https://api.paystack.co';
+    const secretKey = process.env.PAYSTACK_SECRET_KEY;
+    
+    if (!secretKey) {
+      return { success: false, message: 'Paystack secret key not configured' };
+    }
+
+    const axios = require('axios');
+    
+    try {
+      const response = await axios.get(
+        `${apiUrl}/transaction/verify/${reference}`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.data && response.data.status) {
+        return {
+          success: true,
+          message: 'Payment verification successful',
+          data: response.data.data,
+          status: response.data.data.status
+        };
+      } else {
+        return { 
+          success: false, 
+          message: 'Payment verification failed', 
+          error: response.data.message || 'Unknown error' 
+        };
+      }
+    } catch (error: any) {
+      console.error('Paystack verification error:', error.response?.data || error.message);
+      return { 
+        success: false, 
+        message: 'Payment verification failed', 
+        error: error.response?.data?.message || error.message 
+      };
+    }
+  }
+
   // M-PESA STK Push API Integration
   async initiateMpesaStkPush(phone: string, amount: number, transactionId: string) {
-    // Use environment variables for credentials
     const consumerKey = process.env.MPESA_CONSUMER_KEY;
     const consumerSecret = process.env.MPESA_CONSUMER_SECRET;
     const shortcode = process.env.MPESA_SHORTCODE;
     const passkey = process.env.MPESA_PASSKEY;
     const callbackUrl = process.env.MPESA_CALLBACK_URL;
     const environment = process.env.MPESA_ENVIRONMENT || 'production';
-    // TODO: Implement OAuth, STK Push request, handle response
-    // For now, return mock result
-    return { success: true, message: 'STK Push sent', mpesaCheckoutId: transactionId };
-  }
+    const axios = require('axios');
+    
+    try {
+      // Step 1: Get OAuth token
+      const oauthUrl = environment === 'production'
+        ? 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+        : 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+      const oauthResponse = await axios.get(oauthUrl, {
+        auth: {
+          username: consumerKey,
+          password: consumerSecret,
+        },
+      });
+      const accessToken = oauthResponse.data.access_token;
 
-  // PayPal Payment API Integration
-  async initiatePaypalPayment(amount: number, transactionId: string, email: string) {
-    const clientId = process.env.PAYPAL_CLIENT_ID;
-    const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-    const apiUrl = process.env.PAYPAL_API_URL || 'https://api-m.paypal.com';
-    // TODO: Implement OAuth, payment creation, handle response
-    // For now, return mock result
-    return { success: true, message: 'PayPal payment created', paypalOrderId: transactionId };
+      // Step 2: Prepare STK Push payload
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[-:TZ.]/g, '')
+        .slice(0, 14);
+      const passwordStr = (shortcode || '') + (passkey || '') + timestamp;
+      const password = Buffer.from(passwordStr).toString('base64');
+
+      const stkPushUrl = environment === 'production'
+        ? 'https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+        : 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+
+      const payload = {
+        BusinessShortCode: shortcode,
+        Password: password,
+        Timestamp: timestamp,
+        TransactionType: 'CustomerPayBillOnline',
+        Amount: amount,
+        PartyA: phone,
+        PartyB: shortcode,
+        PhoneNumber: phone,
+        CallBackURL: callbackUrl,
+        AccountReference: transactionId,
+        TransactionDesc: 'Payment for services',
+      };
+
+      // Step 3: Send STK Push request
+      const stkResponse = await axios.post(stkPushUrl, payload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Step 4: Return response
+      return {
+        success: true,
+        message: 'STK Push sent',
+        mpesaCheckoutId: stkResponse.data.CheckoutRequestID,
+        merchantRequestId: stkResponse.data.MerchantRequestID,
+        response: stkResponse.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: 'M-PESA STK Push failed',
+        error: (error as Error).message,
+      };
+    }
   }
-// M-PESA and PayPal callback endpoints are defined once below, after all other methods.
 
   async processPayment(id: number) {
     try {
@@ -214,7 +451,7 @@ export class PaymentService {
         return Math.random() > 0.1; // 90% success rate
       case 'card':
         return Math.random() > 0.15; // 85% success rate
-      case 'paypal':
+      case 'paystack':
         return Math.random() > 0.05; // 95% success rate
       default:
         return Math.random() > 0.2; // 80% success rate

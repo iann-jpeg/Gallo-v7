@@ -29,12 +29,20 @@ async function bootstrap() {
         crossOriginEmbedderPolicy: false,
     }));
     app.enableCors({
-        origin: '*',
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
+        origin: [
+            'https://galloways.co.ke',
+            'http://localhost:3000',
+            'http://127.0.0.1:3000',
+        ],
         credentials: true,
-        preflightContinue: false,
-        optionsSuccessStatus: 200,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
+        exposedHeaders: 'Authorization',
+    });
+    app.use((req, res, next) => {
+        res.header('Cross-Origin-Resource-Policy', 'cross-origin');
+        res.header('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https://galloways.co.ke http://localhost:* http://127.0.0.1:*; form-action 'self'; script-src 'self'; base-uri 'self'; font-src 'self' https: data:; frame-ancestors 'self'; object-src 'none'; script-src-attr 'none'; upgrade-insecure-requests");
+        next();
     });
     app.setGlobalPrefix('api');
     const config = new swagger_1.DocumentBuilder()

@@ -15,7 +15,7 @@ export class CreatePaymentDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsIn(['mpesa', 'card', 'paypal'])
+  @IsIn(['mpesa', 'card', 'paystack'])
   paymentMethod!: string;
 
   @IsOptional()

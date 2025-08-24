@@ -33,6 +33,9 @@ let PaymentController = class PaymentController {
     async create(createPaymentDto) {
         return this.paymentService.create(createPaymentDto);
     }
+    async initiatePayment(createPaymentDto) {
+        return this.paymentService.create(createPaymentDto);
+    }
     async processPayment(id) {
         return this.paymentService.processPayment(+id);
     }
@@ -45,8 +48,12 @@ let PaymentController = class PaymentController {
     async cardCallback(callbackData) {
         return this.paymentService.handleCardCallback(callbackData);
     }
-    async getPaymentStatus(id) {
-        return this.paymentService.getPaymentStatus(+id);
+    async paystackCallback(callbackData, req) {
+        const signature = req.headers['x-paystack-signature'];
+        return this.paymentService.handlePaystackCallback(callbackData, signature);
+    }
+    async verifyPayment(reference) {
+        return this.paymentService.verifyPaystackPayment(reference);
     }
 };
 exports.PaymentController = PaymentController;
@@ -77,6 +84,14 @@ __decorate([
     __metadata("design:paramtypes", [payment_dto_1.CreatePaymentDto]),
     __metadata("design:returntype", Promise)
 ], PaymentController.prototype, "create", null);
+__decorate([
+    (0, common_1.Post)('initiate'),
+    (0, public_decorator_1.Public)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [payment_dto_1.CreatePaymentDto]),
+    __metadata("design:returntype", Promise)
+], PaymentController.prototype, "initiatePayment", null);
 __decorate([
     (0, common_1.Post)('process/:id'),
     __param(0, (0, common_1.Param)('id')),
@@ -109,12 +124,22 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PaymentController.prototype, "cardCallback", null);
 __decorate([
-    (0, common_1.Get)(':id/status'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Post)('callback/paystack'),
+    (0, public_decorator_1.Public)(),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], PaymentController.prototype, "paystackCallback", null);
+__decorate([
+    (0, common_1.Get)('verify/:reference'),
+    (0, public_decorator_1.Public)(),
+    __param(0, (0, common_1.Param)('reference')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], PaymentController.prototype, "getPaymentStatus", null);
+], PaymentController.prototype, "verifyPayment", null);
 exports.PaymentController = PaymentController = __decorate([
     (0, common_1.Controller)('payments'),
     __metadata("design:paramtypes", [payment_service_1.PaymentService])

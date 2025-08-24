@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './middleware/jwt-auth.guard';
 import { PrismaService } from './prisma/prisma.service';
@@ -42,6 +43,7 @@ import { AdminModule } from './admin/admin.module';
     },
   ],
   exports: [PrismaService],
+  controllers: [AppController],
 })
 export class AppModule {}
 //import { PrismaClient, Role } from '@prisma/client';

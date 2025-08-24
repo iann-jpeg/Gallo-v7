@@ -32,7 +32,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsIn)(['mpesa', 'card', 'paypal']),
+    (0, class_validator_1.IsIn)(['mpesa', 'card', 'paystack']),
     __metadata("design:type", String)
 ], CreatePaymentDto.prototype, "paymentMethod", void 0);
 __decorate([

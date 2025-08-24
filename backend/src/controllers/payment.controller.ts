@@ -32,14 +32,24 @@ export class PaymentController {
     return this.paymentService.create(createPaymentDto);
   }
 
+  @Post('initiate')
+  @Public()
+  async initiatePayment(@Body() createPaymentDto: CreatePaymentDto) {
+    // This endpoint is specifically for frontend payment initiation
+    return this.paymentService.create(createPaymentDto);
+  }
+
   @Post('process/:id')
   async processPayment(@Param('id') id: string) {
     return this.paymentService.processPayment(+id);
   }
 
+  // M-PESA Webhook (Callback)
   @Post('callback/mpesa')
   @Public()
   async mpesaCallback(@Body() callbackData: PaymentCallbackDto) {
+    // Safaricom sends callback data in a specific format
+    // You may need to parse and map it to your DTO
     return this.paymentService.handleMpesaCallback(callbackData);
   }
 
@@ -54,9 +64,19 @@ export class PaymentController {
   async cardCallback(@Body() callbackData: PaymentCallbackDto) {
     return this.paymentService.handleCardCallback(callbackData);
   }
+  // Paystack Webhook (Callback)
+  @Post('callback/paystack')
+  @Public()
+  async paystackCallback(@Body() callbackData: any, @Req() req: any) {
+    // Get webhook signature from headers for verification
+    const signature = req.headers['x-paystack-signature'];
+    return this.paymentService.handlePaystackCallback(callbackData, signature);
+  }
 
-  @Get(':id/status')
-  async getPaymentStatus(@Param('id') id: string) {
-    return this.paymentService.getPaymentStatus(+id);
+  // Verify Paystack payment status
+  @Get('verify/:reference')
+  @Public()
+  async verifyPayment(@Param('reference') reference: string) {
+    return this.paymentService.verifyPaystackPayment(reference);
   }
 }

@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const app_controller_1 = require("./app.controller");
 const core_1 = require("@nestjs/core");
 const jwt_auth_guard_1 = require("./middleware/jwt-auth.guard");
 const prisma_service_1 = require("./prisma/prisma.service");
@@ -54,6 +55,7 @@ exports.AppModule = AppModule = __decorate([
             },
         ],
         exports: [prisma_service_1.PrismaService],
+        controllers: [app_controller_1.AppController],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
