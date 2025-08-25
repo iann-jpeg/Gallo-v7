@@ -8,13 +8,13 @@ export declare class OutsourcingController {
     } | {
         success: boolean;
         outsourcing: {
+            location: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
-            location: string;
             organizationName: string;
             coreFunctions: string | null;
             address: string | null;
@@ -28,13 +28,13 @@ export declare class OutsourcingController {
         message: any;
     } | {
         outsourcing: {
+            location: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
-            location: string;
             organizationName: string;
             coreFunctions: string | null;
             address: string | null;

@@ -28,16 +28,23 @@ async function bootstrap() {
         },
         crossOriginEmbedderPolicy: false,
     }));
+    const allowedOrigins = [
+        'https://galloways.co.ke',
+        'https://www.galloways.co.ke',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+    ];
+    if (process.env.FRONTEND_URL) {
+        allowedOrigins.push(process.env.FRONTEND_URL);
+    }
     app.enableCors({
-        origin: [
-            'https://galloways.co.ke',
-            'http://localhost:3000',
-            'http://127.0.0.1:3000',
-        ],
+        origin: allowedOrigins,
         credentials: true,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
         exposedHeaders: 'Authorization',
+        preflightContinue: false,
+        optionsSuccessStatus: 204
     });
     app.use((req, res, next) => {
         res.header('Cross-Origin-Resource-Policy', 'cross-origin');

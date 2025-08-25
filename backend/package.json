@@ -7,8 +7,13 @@
     "dev": "nest start --watch",
     "build": "nest build",
     "start": "node dist/main.js",
+    "start:prod": "node dist/main.js",
+    "build:prod": "prisma generate && nest build",
     "migrate": "prisma migrate dev",
-    "seed": "ts-node prisma/seed.ts"
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:prod": "prisma migrate deploy",
+    "seed": "ts-node prisma/seed.ts",
+    "postbuild": "prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

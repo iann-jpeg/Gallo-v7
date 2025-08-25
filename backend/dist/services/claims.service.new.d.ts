@@ -7,16 +7,16 @@ export declare class ClaimsService {
         limit?: number;
     }): Promise<{
         data: {
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -29,46 +29,46 @@ export declare class ClaimsService {
         };
     }>;
     findOne(id: number): Promise<{
+        description: string;
+        status: string;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        status: string;
         submitterEmail: string | null;
         submitterName: string | null;
         submitterPhone: string | null;
     }>;
     create(data: any): Promise<{
+        description: string;
+        status: string;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        status: string;
         submitterEmail: string | null;
         submitterName: string | null;
         submitterPhone: string | null;
     }>;
     update(id: number, data: any): Promise<{
+        description: string;
+        status: string;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        status: string;
         submitterEmail: string | null;
         submitterName: string | null;
         submitterPhone: string | null;

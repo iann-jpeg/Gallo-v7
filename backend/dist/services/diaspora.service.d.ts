@@ -4,12 +4,12 @@ export declare class DiasporaService {
         limit?: number;
     }): Promise<{
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string;
         timezone: string;
@@ -18,12 +18,12 @@ export declare class DiasporaService {
     }[]>;
     findOne(id: number): import(".prisma/client").Prisma.Prisma__DiasporaRequestClient<{
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string;
         timezone: string;
@@ -32,12 +32,12 @@ export declare class DiasporaService {
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     create(data: any): import(".prisma/client").Prisma.Prisma__DiasporaRequestClient<{
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string;
         timezone: string;
@@ -46,12 +46,12 @@ export declare class DiasporaService {
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: number, data: any): import(".prisma/client").Prisma.Prisma__DiasporaRequestClient<{
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string;
         timezone: string;
@@ -60,12 +60,12 @@ export declare class DiasporaService {
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: number): import(".prisma/client").Prisma.Prisma__DiasporaRequestClient<{
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string;
         timezone: string;

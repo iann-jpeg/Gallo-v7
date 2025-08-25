@@ -15,42 +15,42 @@ export declare class DashboardService {
         allSubmissions: {
             claims: ({
                 documents: {
+                    path: string;
+                    filename: string;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    filename: string;
                     originalName: string;
                     mimeType: string;
                     size: number;
-                    path: string;
                     claimId: number | null;
                     quoteId: number | null;
                     content: Uint8Array | null;
                     outsourcingId: number | null;
                 }[];
             } & {
+                description: string;
+                status: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string;
                 userId: number | null;
                 policyNumber: string;
                 claimType: string;
                 incidentDate: Date;
                 estimatedLoss: number;
-                status: string;
                 submitterEmail: string | null;
                 submitterName: string | null;
                 submitterPhone: string | null;
             })[];
             outsourcing: {
+                location: string;
+                status: string;
                 id: number;
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
                 userId: number | null;
-                status: string;
-                location: string;
                 organizationName: string;
                 coreFunctions: string | null;
                 address: string | null;
@@ -59,13 +59,14 @@ export declare class DashboardService {
                 budgetRange: string;
             }[];
             consultations: {
+                message: string;
                 name: string;
+                status: string;
                 id: number;
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
                 userId: number | null;
-                status: string;
                 phone: string;
                 country: string | null;
                 timezone: string | null;
@@ -73,7 +74,6 @@ export declare class DashboardService {
                 company: string | null;
                 consultationDate: string;
                 consultationTime: string;
-                message: string;
                 serviceType: string;
                 duration: number | null;
                 meetingLink: string | null;
@@ -81,13 +81,14 @@ export declare class DashboardService {
                 notes: string | null;
             }[];
             payments: {
+                status: string;
                 id: number;
+                metadata: import("@prisma/client/runtime/library").JsonValue | null;
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
                 userId: number | null;
                 policyNumber: string | null;
-                status: string;
                 clientName: string;
                 amount: number;
                 paymentMethod: string;
@@ -97,16 +98,15 @@ export declare class DashboardService {
                 cvv: string | null;
                 billingPhone: string | null;
                 transactionId: string | null;
-                metadata: import("@prisma/client/runtime/library").JsonValue | null;
             }[];
             diaspora: {
                 name: string;
+                status: string;
                 id: number;
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
                 userId: number | null;
-                status: string;
                 phone: string;
                 country: string;
                 timezone: string;
@@ -119,47 +119,47 @@ export declare class DashboardService {
     }>;
     getActivities(limit?: number): Promise<({
         type: string;
+        status: string;
         id: number;
         createdAt: Date;
         policyNumber: string;
         claimType: string;
         estimatedLoss: number;
-        status: string;
         submitterEmail: string | null;
         submitterName: string | null;
     } | {
         type: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
-        status: string;
         organizationName: string;
         services: string[];
         budgetRange: string;
     } | {
         type: string;
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
-        status: string;
         consultationDate: string;
         serviceType: string;
     } | {
         type: string;
+        status: string;
         id: number;
         createdAt: Date;
-        status: string;
         clientName: string;
         amount: number;
         paymentMethod: string;
     } | {
         type: string;
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
-        status: string;
         country: string;
     })[]>;
     getTopStats(): Promise<{

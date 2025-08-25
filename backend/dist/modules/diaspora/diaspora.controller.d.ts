@@ -9,12 +9,12 @@ export declare class DiasporaController {
         success: boolean;
         diaspora: {
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string;
             timezone: string;
@@ -28,12 +28,12 @@ export declare class DiasporaController {
     } | {
         diaspora: {
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string;
             timezone: string;

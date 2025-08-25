@@ -30,7 +30,7 @@ export function AdminAnalytics() {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/admin/analytics?period=${period}`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/analytics?period=${period}`);
       const result = await response.json();
       
       if (result.success) {

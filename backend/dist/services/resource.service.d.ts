@@ -10,10 +10,10 @@ export declare class ResourceService {
                 email: string;
             } | null;
         } & {
+            description: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             category: string;
             title: string;
             filePath: string | null;
@@ -31,9 +31,9 @@ export declare class ResourceService {
     findPublicResources(category?: string): Promise<{
         success: boolean;
         data: {
+            description: string | null;
             id: number;
             createdAt: Date;
-            description: string | null;
             category: string;
             title: string;
             filePath: string | null;
@@ -47,10 +47,10 @@ export declare class ResourceService {
             email: string;
         } | null;
     } & {
+        description: string | null;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string | null;
         category: string;
         title: string;
         filePath: string | null;
@@ -68,10 +68,10 @@ export declare class ResourceService {
                 email: string;
             } | null;
         } & {
+            description: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             category: string;
             title: string;
             filePath: string | null;
@@ -90,10 +90,10 @@ export declare class ResourceService {
                 email: string;
             } | null;
         } & {
+            description: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             category: string;
             title: string;
             filePath: string | null;

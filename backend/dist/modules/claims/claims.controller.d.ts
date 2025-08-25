@@ -8,16 +8,16 @@ export declare class ClaimsController {
     } | {
         success: boolean;
         claim: {
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -28,16 +28,16 @@ export declare class ClaimsController {
         message: any;
     } | {
         claims: {
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -45,16 +45,16 @@ export declare class ClaimsController {
         total: number;
     }>;
     getClaim(id: string): Promise<{
+        description: string;
+        status: string;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        status: string;
         submitterEmail: string | null;
         submitterName: string | null;
         submitterPhone: string | null;
@@ -68,16 +68,16 @@ export declare class ClaimsController {
     } | {
         success: boolean;
         claim: {
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;

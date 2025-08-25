@@ -9,7 +9,7 @@ class AdminRealtimeService {
       return this.socket;
     }
 
-    const serverUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:3001';
+    const serverUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'https://api.galloways.co.ke';
     
     this.socket = io(serverUrl, {
       transports: ['websocket', 'polling'],

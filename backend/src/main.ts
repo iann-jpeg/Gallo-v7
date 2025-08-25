@@ -39,16 +39,26 @@ async function bootstrap() {
   );
 
   // Configure CORS for frontend
+  const allowedOrigins = [
+    'https://galloways.co.ke',
+    'https://www.galloways.co.ke',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+  ];
+
+  // Add environment-specific origins
+  if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }
+
   app.enableCors({
-    origin: [
-      'https://galloways.co.ke',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000',
-    ],
+    origin: allowedOrigins,
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
     exposedHeaders: 'Authorization',
+    preflightContinue: false,
+    optionsSuccessStatus: 204
   });    // Set CORP and CSP headers for all responses
     app.use((req: any, res: any, next: () => void) => {
       res.header('Cross-Origin-Resource-Policy', 'cross-origin');

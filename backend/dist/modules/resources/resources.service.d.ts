@@ -3,10 +3,10 @@ export declare class ResourcesService {
         success: boolean;
         message: any;
     } | {
+        description: string | null;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string | null;
         category: string;
         title: string;
         filePath: string | null;
@@ -15,10 +15,10 @@ export declare class ResourcesService {
         createdBy: number | null;
     }[]>;
     downloadResource(id: string): Promise<{
+        description: string | null;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string | null;
         category: string;
         title: string;
         filePath: string | null;

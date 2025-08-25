@@ -8,27 +8,27 @@ export declare class OutsourcingService {
                 email: string;
             } | null;
             documents: {
+                path: string;
+                filename: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
-                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 content: Uint8Array | null;
                 outsourcingId: number | null;
             }[];
         } & {
+            location: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
-            location: string;
             organizationName: string;
             coreFunctions: string | null;
             address: string | null;
@@ -50,27 +50,27 @@ export declare class OutsourcingService {
             email: string;
         } | null;
         documents: {
+            path: string;
+            filename: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            filename: string;
             originalName: string;
             mimeType: string;
             size: number;
-            path: string;
             claimId: number | null;
             quoteId: number | null;
             content: Uint8Array | null;
             outsourcingId: number | null;
         }[];
     } & {
+        location: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
-        location: string;
         organizationName: string;
         coreFunctions: string | null;
         address: string | null;
@@ -83,27 +83,27 @@ export declare class OutsourcingService {
         message: string;
         data: {
             documents: {
+                path: string;
+                filename: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
-                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 content: Uint8Array | null;
                 outsourcingId: number | null;
             }[];
         } & {
+            location: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
-            location: string;
             organizationName: string;
             coreFunctions: string | null;
             address: string | null;
@@ -122,27 +122,27 @@ export declare class OutsourcingService {
                 email: string;
             } | null;
             documents: {
+                path: string;
+                filename: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
-                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 content: Uint8Array | null;
                 outsourcingId: number | null;
             }[];
         } & {
+            location: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
-            location: string;
             organizationName: string;
             coreFunctions: string | null;
             address: string | null;
@@ -165,13 +165,13 @@ export declare class OutsourcingService {
                 email: string;
             } | null;
         } & {
+            location: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
-            location: string;
             organizationName: string;
             coreFunctions: string | null;
             address: string | null;

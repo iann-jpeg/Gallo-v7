@@ -45,7 +45,7 @@ export function AdminPayments() {
         limit: '20'
       });
       
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/admin/payments?${params}`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/payments?${params}`);
       const result = await response.json();
       
       if (result.success) {
@@ -61,7 +61,7 @@ export function AdminPayments() {
 
   const fetchPaymentStats = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/admin/payments/stats`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/payments/stats`);
       const result = await response.json();
       
       if (result.success) {

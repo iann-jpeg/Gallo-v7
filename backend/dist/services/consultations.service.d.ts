@@ -8,13 +8,14 @@ export declare class ConsultationsService {
         limit?: number;
     }): Promise<{
         data: {
+            message: string;
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string | null;
             timezone: string | null;
@@ -22,7 +23,6 @@ export declare class ConsultationsService {
             company: string | null;
             consultationDate: string;
             consultationTime: string;
-            message: string;
             serviceType: string;
             duration: number | null;
             meetingLink: string | null;
@@ -37,13 +37,14 @@ export declare class ConsultationsService {
         };
     }>;
     findOne(id: number): Promise<{
+        message: string;
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string | null;
         timezone: string | null;
@@ -51,7 +52,6 @@ export declare class ConsultationsService {
         company: string | null;
         consultationDate: string;
         consultationTime: string;
-        message: string;
         serviceType: string;
         duration: number | null;
         meetingLink: string | null;
@@ -62,13 +62,14 @@ export declare class ConsultationsService {
         success: boolean;
         message: string;
         data: {
+            message: string;
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string | null;
             timezone: string | null;
@@ -76,7 +77,6 @@ export declare class ConsultationsService {
             company: string | null;
             consultationDate: string;
             consultationTime: string;
-            message: string;
             serviceType: string;
             duration: number | null;
             meetingLink: string | null;
@@ -85,13 +85,14 @@ export declare class ConsultationsService {
         };
     }>;
     update(id: number, data: UpdateConsultationDto): Promise<{
+        message: string;
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string | null;
         timezone: string | null;
@@ -99,7 +100,6 @@ export declare class ConsultationsService {
         company: string | null;
         consultationDate: string;
         consultationTime: string;
-        message: string;
         serviceType: string;
         duration: number | null;
         meetingLink: string | null;
@@ -107,13 +107,14 @@ export declare class ConsultationsService {
         notes: string | null;
     }>;
     remove(id: number): Promise<{
+        message: string;
         name: string;
+        status: string;
         id: number;
         email: string;
         createdAt: Date;
         updatedAt: Date;
         userId: number | null;
-        status: string;
         phone: string;
         country: string | null;
         timezone: string | null;
@@ -121,7 +122,6 @@ export declare class ConsultationsService {
         company: string | null;
         consultationDate: string;
         consultationTime: string;
-        message: string;
         serviceType: string;
         duration: number | null;
         meetingLink: string | null;

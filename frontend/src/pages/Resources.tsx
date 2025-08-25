@@ -221,7 +221,7 @@ const Resources = () => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/dashboard/export-pdf`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/dashboard/export-pdf`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

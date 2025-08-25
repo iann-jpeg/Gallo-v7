@@ -14,23 +14,23 @@ export declare class ClaimsController {
                     email: string;
                 } | null;
                 documents: {
+                    filename: string;
                     id: number;
                     createdAt: Date;
-                    filename: string;
                     originalName: string;
                     mimeType: string;
                     size: number;
                 }[];
+                description: string;
+                status: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string;
                 userId: number | null;
                 policyNumber: string;
                 claimType: string;
                 incidentDate: Date;
                 estimatedLoss: number;
-                status: string;
                 submitterEmail: string | null;
                 submitterName: string | null;
                 submitterPhone: string | null;
@@ -53,23 +53,23 @@ export declare class ClaimsController {
                 email: string;
             } | null;
             documents: {
+                filename: string;
                 id: number;
                 createdAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
             }[];
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -78,9 +78,9 @@ export declare class ClaimsController {
     getClaimDocuments(id: string): Promise<{
         success: boolean;
         data: {
+            filename: string;
             id: number;
             createdAt: Date;
-            filename: string;
             originalName: string;
             mimeType: string;
             size: number;
@@ -90,16 +90,16 @@ export declare class ClaimsController {
         success: boolean;
         message: string;
         data: {
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -109,16 +109,16 @@ export declare class ClaimsController {
         success: boolean;
         message: string;
         data: {
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -136,16 +136,16 @@ export declare class ClaimsController {
                 email: string;
             } | null;
         } & {
+            description: string;
+            status: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;

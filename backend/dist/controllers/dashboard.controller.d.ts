@@ -31,47 +31,47 @@ export declare class DashboardController extends BaseController {
         success: boolean;
         data: ({
             type: string;
+            status: string;
             id: number;
             createdAt: Date;
             policyNumber: string;
             claimType: string;
             estimatedLoss: number;
-            status: string;
             submitterEmail: string | null;
             submitterName: string | null;
         } | {
             type: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
-            status: string;
             organizationName: string;
             services: string[];
             budgetRange: string;
         } | {
             type: string;
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
-            status: string;
             consultationDate: string;
             serviceType: string;
         } | {
             type: string;
+            status: string;
             id: number;
             createdAt: Date;
-            status: string;
             clientName: string;
             amount: number;
             paymentMethod: string;
         } | {
             type: string;
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
-            status: string;
             country: string;
         })[];
         message?: undefined;

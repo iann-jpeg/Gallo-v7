@@ -5,20 +5,20 @@ export declare class QuotesService {
     } | {
         success: boolean;
         quote: {
+            location: string | null;
+            details: string | null;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             product: string;
             userId: number | null;
-            status: string;
             firstName: string;
             lastName: string;
             phone: string;
-            location: string | null;
             budget: string | null;
             coverage: string | null;
-            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         };
@@ -28,20 +28,20 @@ export declare class QuotesService {
         message: any;
     } | {
         quotes: {
+            location: string | null;
+            details: string | null;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             product: string;
             userId: number | null;
-            status: string;
             firstName: string;
             lastName: string;
             phone: string;
-            location: string | null;
             budget: string | null;
             coverage: string | null;
-            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         }[];

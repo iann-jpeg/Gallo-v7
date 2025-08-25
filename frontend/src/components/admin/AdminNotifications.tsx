@@ -37,7 +37,7 @@ export function AdminNotifications() {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/admin/notifications`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/notifications`);
       const result = await response.json();
       
       if (result.success) {
@@ -54,7 +54,7 @@ export function AdminNotifications() {
     e.preventDefault();
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/admin/notifications`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/notifications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ export function AdminNotifications() {
 
   const handleMarkAsRead = async (id: number) => {
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'}/admin/notifications/${id}/read`, {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/notifications/${id}/read`, {
         method: 'PUT'
       });
       fetchNotifications();

@@ -7,10 +7,10 @@ export declare class ResourcesController {
         success: boolean;
         message: any;
     } | {
+        description: string | null;
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        description: string | null;
         category: string;
         title: string;
         filePath: string | null;

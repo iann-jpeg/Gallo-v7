@@ -6,12 +6,12 @@ export declare class DiasporaService {
         success: boolean;
         diaspora: {
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string;
             timezone: string;
@@ -25,12 +25,12 @@ export declare class DiasporaService {
     } | {
         diaspora: {
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string;
             timezone: string;

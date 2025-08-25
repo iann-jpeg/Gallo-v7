@@ -8,13 +8,14 @@ export declare class ConsultationsController {
     } | {
         success: boolean;
         consultation: {
+            message: string;
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string | null;
             timezone: string | null;
@@ -22,7 +23,6 @@ export declare class ConsultationsController {
             company: string | null;
             consultationDate: string;
             consultationTime: string;
-            message: string;
             serviceType: string;
             duration: number | null;
             meetingLink: string | null;
@@ -35,13 +35,14 @@ export declare class ConsultationsController {
         message: any;
     } | {
         consultations: {
+            message: string;
             name: string;
+            status: string;
             id: number;
             email: string;
             createdAt: Date;
             updatedAt: Date;
             userId: number | null;
-            status: string;
             phone: string;
             country: string | null;
             timezone: string | null;
@@ -49,7 +50,6 @@ export declare class ConsultationsController {
             company: string | null;
             consultationDate: string;
             consultationTime: string;
-            message: string;
             serviceType: string;
             duration: number | null;
             meetingLink: string | null;
