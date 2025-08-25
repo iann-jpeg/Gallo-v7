@@ -11,13 +11,14 @@ const common_1 = require("@nestjs/common");
 const claims_controller_1 = require("../controllers/claims.controller");
 const claims_service_1 = require("../services/claims.service");
 const email_service_1 = require("../services/email.service");
+const prisma_service_1 = require("../prisma/prisma.service");
 let ClaimsModule = class ClaimsModule {
 };
 exports.ClaimsModule = ClaimsModule;
 exports.ClaimsModule = ClaimsModule = __decorate([
     (0, common_1.Module)({
         controllers: [claims_controller_1.ClaimsController],
-        providers: [claims_service_1.ClaimsService, email_service_1.EmailService],
+        providers: [claims_service_1.ClaimsService, email_service_1.EmailService, prisma_service_1.PrismaService],
     })
 ], ClaimsModule);
 //# sourceMappingURL=claims.module.js.map

@@ -15,14 +15,19 @@ const client_1 = require("@prisma/client");
 let PrismaService = class PrismaService extends client_1.PrismaClient {
     constructor() {
         super({
-            log: ['error', 'warn'],
+            log: process.env.NODE_ENV === 'development' ? ['error', 'warn', 'info'] : ['error', 'warn'],
             errorFormat: 'minimal',
+            datasources: {
+                db: {
+                    url: process.env.DATABASE_URL,
+                },
+            },
         });
     }
     async onModuleInit() {
         try {
             await this.$connect();
-            console.log('✅ Database connected successfully');
+            console.log('✅ Database connected successfully with optimized settings');
         }
         catch (error) {
             console.error('❌ Database connection failed:', error.message || 'Unknown error');
@@ -31,8 +36,40 @@ let PrismaService = class PrismaService extends client_1.PrismaClient {
     }
     async onModuleDestroy() {
         await this.$disconnect();
+        console.log('🔌 Database connection closed');
     }
     async enableShutdownHooks(app) {
+        process.on('beforeExit', async () => {
+            console.log('📤 Gracefully shutting down database connections...');
+            await this.$disconnect();
+        });
+    }
+    async healthCheck() {
+        try {
+            await this.$queryRaw `SELECT 1`;
+            return true;
+        }
+        catch (error) {
+            console.error('Database health check failed:', error);
+            return false;
+        }
+    }
+    async executeTransaction(operations, maxRetries = 3) {
+        let attempt = 0;
+        while (attempt < maxRetries) {
+            try {
+                return await this.$transaction(operations);
+            }
+            catch (error) {
+                attempt++;
+                if (attempt >= maxRetries) {
+                    throw error;
+                }
+                console.warn(`Transaction attempt ${attempt} failed, retrying...`);
+                await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+            }
+        }
+        throw new Error('Max transaction retries exceeded');
     }
 };
 exports.PrismaService = PrismaService;

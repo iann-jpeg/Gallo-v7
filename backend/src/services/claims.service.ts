@@ -1,20 +1,19 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from './email.service';
 import { CreateClaimDto, UpdateClaimDto } from '../config/claim.dto';
-
-const prisma = new PrismaClient();
 
 @Injectable()
 export class ClaimsService {
   constructor(
+    private readonly prisma: PrismaService,
     private readonly emailService: EmailService
   ) {}
 
   async findAll({ page = 1, limit = 10 }: { page?: number; limit?: number }) {
     try {
       const [claims, total] = await Promise.all([
-        prisma.claim.findMany({
+        this.prisma.claim.findMany({
           skip: (page - 1) * limit,
           take: limit,
           orderBy: { createdAt: 'desc' },
@@ -38,13 +37,13 @@ export class ClaimsService {
             },
           },
         }),
-        prisma.claim.count()
+        this.prisma.claim.count()
       ]);
 
       // Add document URLs to claims
-      const claimsWithUrls = claims.map(claim => ({
+      const claimsWithUrls = claims.map((claim: any) => ({
         ...claim,
-        documentUrls: claim.documents.map(doc => 
+        documentUrls: claim.documents.map((doc: any) => 
           `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`
         ),
       }));
@@ -65,7 +64,7 @@ export class ClaimsService {
 
   async findOne(id: number) {
     try {
-      const claim = await prisma.claim.findUnique({ 
+      const claim = await this.prisma.claim.findUnique({ 
         where: { id },
         include: {
           user: {
@@ -92,7 +91,7 @@ export class ClaimsService {
       // Add document URLs
       const claimWithUrls = {
         ...claim,
-        documentUrls: claim.documents.map(doc => 
+        documentUrls: claim.documents.map((doc: any) => 
           `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`
         ),
       };
@@ -129,7 +128,7 @@ export class ClaimsService {
       };
 
       // Save claim to database
-      const claim = await prisma.claim.create({ data: finalData });
+      const claim = await this.prisma.claim.create({ data: finalData });
 
       // Handle document creation if provided
       if (documentDetails && documentDetails.length > 0) {
@@ -163,7 +162,7 @@ export class ClaimsService {
               documentData.content = content;
             }
 
-            return prisma.document.create({
+            return this.prisma.document.create({
               data: documentData
             });
           })
@@ -214,7 +213,7 @@ export class ClaimsService {
 
   async update(id: number, data: any) {
     try {
-      const claim = await prisma.claim.update({ 
+      const claim = await this.prisma.claim.update({ 
         where: { id }, 
         data: {
           updatedAt: new Date(),
@@ -223,7 +222,7 @@ export class ClaimsService {
       });
 
       // Get the claim with full details for notifications
-      const fullClaim = await prisma.claim.findUnique({ 
+      const fullClaim = await this.prisma.claim.findUnique({ 
         where: { id }
       });
 
@@ -253,7 +252,7 @@ export class ClaimsService {
 
   async updateStatus(id: number, status: string) {
     try {
-      const claim = await prisma.claim.update({ 
+      const claim = await this.prisma.claim.update({ 
         where: { id }, 
         data: {
           status: status,
@@ -294,7 +293,7 @@ export class ClaimsService {
 
   async remove(id: number) {
     try {
-      await prisma.claim.delete({ where: { id } });
+      await this.prisma.claim.delete({ where: { id } });
       
       // Notify admin of deletion
       await Promise.allSettled([

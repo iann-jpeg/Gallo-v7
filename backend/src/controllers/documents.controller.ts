@@ -1,12 +1,11 @@
 import { Controller, Get, Param, Res, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 import { Public } from '../middleware/public.decorator';
-
-const prisma = new PrismaClient();
 
 @Controller('documents')
 export class DocumentsController {
+  constructor(private readonly prisma: PrismaService) {}
   
   @Get('claims/:filename')
   @Public()
@@ -18,7 +17,7 @@ export class DocumentsController {
       }
 
       // Find document in database
-      const document = await prisma.document.findFirst({
+      const document = await this.prisma.document.findFirst({
         where: {
           filename: filename,
           claimId: { not: null }
@@ -54,7 +53,7 @@ export class DocumentsController {
       }
 
       // Find document in database
-      const document = await prisma.document.findFirst({
+      const document = await this.prisma.document.findFirst({
         where: {
           filename: filename,
           quoteId: { not: null }
@@ -91,7 +90,7 @@ export class DocumentsController {
       }
 
       // Find document in database by ID
-      const document = await prisma.document.findUnique({
+      const document = await this.prisma.document.findUnique({
         where: { id: documentId }
       });
       

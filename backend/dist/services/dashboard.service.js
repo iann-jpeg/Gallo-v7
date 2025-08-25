@@ -5,12 +5,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DashboardService = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+const prisma_service_1 = require("../prisma/prisma.service");
 let DashboardService = class DashboardService {
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
     async getDashboardStats(query) {
         try {
             let startDate;
@@ -26,20 +31,20 @@ let DashboardService = class DashboardService {
                 ? { createdAt: { gte: startDate, lte: endDate } }
                 : {};
             const [totalClaims, totalQuotes, totalConsultations, totalOutsourcingRequests, totalPayments, totalDiasporaRequests, totalUsers, pendingClaims, activePolicies, recentClaims, recentOutsourcing, recentConsultations, recentPayments, recentDiaspora] = await Promise.all([
-                prisma.claim.count({ where: dateFilter }),
-                prisma.quote.count({ where: dateFilter }),
-                prisma.consultation.count({ where: dateFilter }),
-                prisma.outsourcingRequest.count({ where: dateFilter }),
-                prisma.payment.count({ where: dateFilter }),
-                prisma.diasporaRequest.count({ where: dateFilter }),
-                prisma.user.count(),
-                prisma.claim.count({
+                this.prisma.claim.count({ where: dateFilter }),
+                this.prisma.quote.count({ where: dateFilter }),
+                this.prisma.consultation.count({ where: dateFilter }),
+                this.prisma.outsourcingRequest.count({ where: dateFilter }),
+                this.prisma.payment.count({ where: dateFilter }),
+                this.prisma.diasporaRequest.count({ where: dateFilter }),
+                this.prisma.user.count(),
+                this.prisma.claim.count({
                     where: Object.assign({ status: { in: ['filed', 'under_review', 'pending'] } }, dateFilter)
                 }),
-                prisma.policy.count({
+                this.prisma.policy.count({
                     where: Object.assign({ status: 'active' }, dateFilter)
                 }),
-                prisma.claim.findMany({
+                this.prisma.claim.findMany({
                     take: 20,
                     orderBy: { createdAt: 'desc' },
                     where: dateFilter,
@@ -47,22 +52,22 @@ let DashboardService = class DashboardService {
                         documents: true
                     }
                 }),
-                prisma.outsourcingRequest.findMany({
+                this.prisma.outsourcingRequest.findMany({
                     take: 20,
                     orderBy: { createdAt: 'desc' },
                     where: dateFilter
                 }),
-                prisma.consultation.findMany({
+                this.prisma.consultation.findMany({
                     take: 20,
                     orderBy: { createdAt: 'desc' },
                     where: dateFilter
                 }),
-                prisma.payment.findMany({
+                this.prisma.payment.findMany({
                     take: 20,
                     orderBy: { createdAt: 'desc' },
                     where: dateFilter
                 }),
-                prisma.diasporaRequest.findMany({
+                this.prisma.diasporaRequest.findMany({
                     take: 20,
                     orderBy: { createdAt: 'desc' },
                     where: dateFilter
@@ -102,7 +107,7 @@ let DashboardService = class DashboardService {
     async getActivities(limit = 50) {
         try {
             const [claims, outsourcing, consultations, payments, diaspora] = await Promise.all([
-                prisma.claim.findMany({
+                this.prisma.claim.findMany({
                     take: limit / 5,
                     orderBy: { createdAt: 'desc' },
                     select: {
@@ -116,7 +121,7 @@ let DashboardService = class DashboardService {
                         createdAt: true
                     }
                 }),
-                prisma.outsourcingRequest.findMany({
+                this.prisma.outsourcingRequest.findMany({
                     take: limit / 5,
                     orderBy: { createdAt: 'desc' },
                     select: {
@@ -129,7 +134,7 @@ let DashboardService = class DashboardService {
                         createdAt: true
                     }
                 }),
-                prisma.consultation.findMany({
+                this.prisma.consultation.findMany({
                     take: limit / 5,
                     orderBy: { createdAt: 'desc' },
                     select: {
@@ -142,7 +147,7 @@ let DashboardService = class DashboardService {
                         createdAt: true
                     }
                 }),
-                prisma.payment.findMany({
+                this.prisma.payment.findMany({
                     take: limit / 5,
                     orderBy: { createdAt: 'desc' },
                     select: {
@@ -154,7 +159,7 @@ let DashboardService = class DashboardService {
                         createdAt: true
                     }
                 }),
-                prisma.diasporaRequest.findMany({
+                this.prisma.diasporaRequest.findMany({
                     take: limit / 5,
                     orderBy: { createdAt: 'desc' },
                     select: {
@@ -187,11 +192,11 @@ let DashboardService = class DashboardService {
             const today = new Date();
             const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
             const [thisMonthClaims, thisMonthOutsourcing, thisMonthConsultations, thisMonthPayments, totalRevenue] = await Promise.all([
-                prisma.claim.count({ where: { createdAt: { gte: startOfMonth } } }),
-                prisma.outsourcingRequest.count({ where: { createdAt: { gte: startOfMonth } } }),
-                prisma.consultation.count({ where: { createdAt: { gte: startOfMonth } } }),
-                prisma.payment.count({ where: { createdAt: { gte: startOfMonth } } }),
-                prisma.payment.aggregate({
+                this.prisma.claim.count({ where: { createdAt: { gte: startOfMonth } } }),
+                this.prisma.outsourcingRequest.count({ where: { createdAt: { gte: startOfMonth } } }),
+                this.prisma.consultation.count({ where: { createdAt: { gte: startOfMonth } } }),
+                this.prisma.payment.count({ where: { createdAt: { gte: startOfMonth } } }),
+                this.prisma.payment.aggregate({
                     _sum: { amount: true },
                     where: { createdAt: { gte: startOfMonth } }
                 })
@@ -212,6 +217,7 @@ let DashboardService = class DashboardService {
 };
 exports.DashboardService = DashboardService;
 exports.DashboardService = DashboardService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], DashboardService);
 //# sourceMappingURL=dashboard.service.js.map

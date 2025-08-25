@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../middleware/jwt-auth.guard");
 const roles_guard_1 = require("../middleware/roles.guard");
 const roles_decorator_1 = require("../middleware/roles.decorator");
+const public_decorator_1 = require("../middleware/public.decorator");
 const dashboard_service_1 = require("../services/dashboard.service");
 const pdf_service_1 = require("../services/pdf.service");
 const dashboard_dto_1 = require("../config/dashboard.dto");
@@ -43,13 +44,20 @@ let DashboardController = class DashboardController extends base_controller_1.Ba
     async getDashboardStats(query) {
         try {
             const stats = await this.dashboardService.getDashboardStats(query);
-            return this.handleSuccess(stats, 'Dashboard statistics retrieved successfully');
+            return {
+                success: true,
+                data: stats,
+                message: 'Dashboard statistics retrieved successfully',
+                isRealTime: true
+            };
         }
         catch (error) {
+            console.error('Dashboard stats error:', error);
             return {
                 success: false,
                 message: error instanceof Error ? error.message : 'Internal server error',
-                data: null
+                data: null,
+                isRealTime: false
             };
         }
     }
@@ -60,13 +68,17 @@ let DashboardController = class DashboardController extends base_controller_1.Ba
             return {
                 success: true,
                 data: activities,
+                message: 'Recent activities retrieved successfully',
+                isRealTime: true
             };
         }
         catch (error) {
+            console.error('Activities fetch error:', error);
             return {
                 success: false,
                 message: `Failed to fetch recent activities: ${error instanceof Error ? error.message : 'Unknown error'}`,
-                data: null,
+                data: [],
+                isRealTime: false
             };
         }
     }
@@ -76,6 +88,7 @@ let DashboardController = class DashboardController extends base_controller_1.Ba
             await this.pdfService.generateDashboardReport(stats, res);
         }
         catch (error) {
+            console.error('PDF export error:', error);
             res.status(500).json({
                 success: false,
                 message: `Failed to generate PDF report: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -107,6 +120,7 @@ __decorate([
 ], DashboardController.prototype, "getAdminMetrics", null);
 __decorate([
     (0, common_1.Get)('stats'),
+    (0, public_decorator_1.Public)(),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [dashboard_dto_1.AdminStatsQueryDto]),
@@ -114,6 +128,7 @@ __decorate([
 ], DashboardController.prototype, "getDashboardStats", null);
 __decorate([
     (0, common_1.Get)('activities'),
+    (0, public_decorator_1.Public)(),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -121,6 +136,7 @@ __decorate([
 ], DashboardController.prototype, "getRecentActivities", null);
 __decorate([
     (0, common_1.Get)('export-pdf'),
+    (0, public_decorator_1.Public)(),
     __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
