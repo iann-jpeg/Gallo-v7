@@ -1,7 +1,40 @@
 # Galloways Insurance Platform - Deployment Guide for Aplin Hosting
 
 ## 🚀 Production Build Status
-✅ Backend: Successfully compiled to `/backend/dist/`
+✅ Backend: ### Step 2: Frontend Deployment (Static Website)
+
+1. **Upload Static Files**:
+   - Go to your domain's public_html or www folder
+   - Upload all contents from `frontend/dist/` folder
+   - Ensure `index.html` is in the root directory
+   - **IMPORTANT**: Include the `.htaccess` file for React Router support
+
+2. **Fix React Router 404 Issues**:
+   - Create `.htaccess` file in your public_html folder with this content:
+   ```apache
+   RewriteEngine On
+   RewriteBase /
+   
+   # Handle React Router - redirect all requests to index.html
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule . /index.html [L]
+   ```
+
+3. **File Structure on Aplin**:
+   ```
+   public_html/
+   ├── .htaccess              # ← CRITICAL for /admin route to work
+   ├── index.html             # ← Main page
+   ├── assets/               # ← CSS/JS files
+   ├── favicon.ico           # ← Website icon
+   └── ... other static files
+   ```
+
+4. **Test Routes**:
+   - `https://galloways.co.ke/` ← Home page
+   - `https://galloways.co.ke/admin` ← Should work now (not 404)
+   - `https://galloways.co.ke/products` ← All routes should worky compiled to `/backend/dist/`
 ✅ Frontend: Successfully compiled to `/frontend/gallo/dist/`
 
 ## 📦 Deployment Package Structure
@@ -33,16 +66,36 @@ frontend/gallo/dist/         # Static website files (UPLOAD TO WEB ROOT)
 ### Step 1: Backend Deployment (Node.js Hosting)
 
 1. **Upload Backend Files**:
-   - Compress the entire `backend/` folder
-   - Upload to your Node.js hosting directory on Aplin
+   - **IMPORTANT**: Upload the ENTIRE `backend/` folder (not just dist/)
+   - The `dist/` folder contains the compiled JavaScript files
+   - But you ALSO need: `package.json`, `node_modules/`, `prisma/`, `.env`, etc.
+   - Upload to your Node.js hosting directory on Aplin (usually `/nodejs/` or `/app/`)
    - Extract files on the server
 
-2. **Install Dependencies**:
+2. **Backend Folder Structure on Aplin**:
+   ```
+   /your-nodejs-directory/
+   ├── dist/                    # ← Compiled JavaScript (THIS is what runs)
+   ├── node_modules/           # ← Dependencies 
+   ├── package.json           # ← Required for npm commands
+   ├── package-lock.json      # ← Lock file
+   ├── .env                   # ← Environment variables
+   ├── prisma/               # ← Database schema
+   ├── uploads/              # ← File storage
+   └── src/                  # ← Source code (optional, for reference)
+   ```
+
+3. **What Actually Runs**:
+   - Aplin will run: `node dist/main.js` (the compiled version)
+   - NOT the TypeScript source files in `src/`
+   - The `dist/` folder IS your production backend
+
+4. **Install Dependencies**:
    ```bash
    npm install --production
    ```
 
-3. **Configure Environment Variables** on Aplin Control Panel:
+5. **Configure Environment Variables** on Aplin Control Panel:
    ```env
    NODE_ENV=production
    PORT=3000
@@ -79,8 +132,14 @@ frontend/gallo/dist/         # Static website files (UPLOAD TO WEB ROOT)
 
 5. **Start the Application**:
    ```bash
+   # Aplin will automatically run this command:
    npm run start:prod
+   # Which executes: node dist/main.js
    ```
+
+6. **Verify Backend is Running**:
+   - Check: `https://api.galloways.co.ke/api/health`
+   - Should return: `{"status": "ok", "message": "Server is running"}`
 
 ### Step 2: Frontend Deployment (Static Website)
 
@@ -94,7 +153,51 @@ frontend/gallo/dist/         # Static website files (UPLOAD TO WEB ROOT)
    - Point it to your Node.js application directory
    - Ensure SSL certificate is enabled
 
-## 🔧 Domain Configuration
+## 🔧 Backend Deployment Details
+
+### Understanding the Backend Structure:
+
+**Source Files (`src/` folder)**:
+- Contains TypeScript source code
+- Used for development only
+- NOT used in production
+
+**Compiled Files (`dist/` folder)**:
+- Contains compiled JavaScript
+- THIS is what actually runs in production
+- Generated from TypeScript source
+- Already optimized and ready to run
+
+### Aplin Backend Deployment Process:
+
+1. **Create Node.js App** on Aplin control panel
+2. **Upload Method 1 - Full Backend Folder**:
+   ```bash
+   # Compress entire backend folder
+   tar -czf backend.tar.gz backend/
+   # Upload backend.tar.gz to Aplin
+   # Extract in your Node.js directory
+   ```
+
+3. **Upload Method 2 - File Manager**:
+   - Use Aplin File Manager
+   - Upload entire `backend/` folder contents
+   - Ensure `dist/` folder is included
+
+4. **Aplin Configuration**:
+   - **Startup File**: `dist/main.js` (NOT src/main.ts)
+   - **Node Version**: 18.x or higher
+   - **Environment**: Production
+   - **Port**: 3000 (or as configured)
+
+### Key Points:
+- ✅ **dist/** folder contains your production backend
+- ✅ Upload ENTIRE backend/ folder (includes dist/ + dependencies)
+- ✅ Aplin runs `node dist/main.js` automatically
+- ❌ Do NOT try to run TypeScript files directly
+- ❌ Do NOT upload only the dist/ folder (missing package.json, etc.)
+
+## 🌐 Domain Configuration
 
 ### Main Domain Setup (galloways.co.ke)
 - **Document Root**: `/public_html/` (contains frontend dist files)
@@ -184,6 +287,25 @@ CNAME   www     galloways.co.ke         300
 2. **CORS Errors**: Check API URL in frontend environment
 3. **Payment Failures**: Verify webhook URLs and API keys
 4. **Database Errors**: Check connection string and migrations
+5. **404 on /admin or other routes**: Missing .htaccess file for React Router
+   - **Solution**: Add .htaccess file to public_html with rewrite rules
+   - **Symptoms**: Direct URLs like `/admin` show 404, but clicking links works
+   - **Fix**: Upload the .htaccess file from frontend/dist/ folder
+
+### React Router 404 Fix:
+If you get 404 errors when accessing routes like `/admin` directly:
+
+1. **Create .htaccess** in your public_html folder:
+   ```apache
+   RewriteEngine On
+   RewriteBase /
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteRule . /index.html [L]
+   ```
+
+2. **Verify Apache mod_rewrite** is enabled on Aplin
+3. **Test all routes** after uploading .htaccess
 
 ### Log Files:
 - Backend logs: Check Node.js application logs
