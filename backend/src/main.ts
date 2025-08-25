@@ -51,6 +51,9 @@ async function bootstrap() {
     allowedOrigins.push(process.env.FRONTEND_URL);
   }
 
+  // Add Railway-specific origins
+  allowedOrigins.push('https://*.railway.app');
+
   app.enableCors({
     origin: allowedOrigins,
     credentials: true,
