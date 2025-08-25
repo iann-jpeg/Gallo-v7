@@ -6,35 +6,7 @@ export declare class ClaimsController {
     findAll(page?: number, limit?: number): Promise<{
         success: boolean;
         data: {
-            data: {
-                documentUrls: string[];
-                user: {
-                    name: string;
-                    id: number;
-                    email: string;
-                } | null;
-                documents: {
-                    id: number;
-                    createdAt: Date;
-                    filename: string;
-                    originalName: string;
-                    mimeType: string;
-                    size: number;
-                }[];
-                id: number;
-                createdAt: Date;
-                updatedAt: Date;
-                description: string;
-                userId: number | null;
-                policyNumber: string;
-                claimType: string;
-                incidentDate: Date;
-                estimatedLoss: number;
-                status: string;
-                submitterEmail: string | null;
-                submitterName: string | null;
-                submitterPhone: string | null;
-            }[];
+            data: any[];
             meta: {
                 total: number;
                 page: number;
@@ -48,8 +20,8 @@ export declare class ClaimsController {
         data: {
             documentUrls: string[];
             user: {
-                name: string;
                 id: number;
+                name: string;
                 email: string;
             } | null;
             documents: {
@@ -61,15 +33,15 @@ export declare class ClaimsController {
                 size: number;
             }[];
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
+            description: string;
             status: string;
+            createdAt: Date;
+            updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -80,15 +52,15 @@ export declare class ClaimsController {
         message: string;
         data: {
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
+            description: string;
             status: string;
+            createdAt: Date;
+            updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -99,15 +71,15 @@ export declare class ClaimsController {
         message: string;
         data: {
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
+            description: string;
             status: string;
+            createdAt: Date;
+            updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;

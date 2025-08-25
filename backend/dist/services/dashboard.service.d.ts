@@ -1,5 +1,8 @@
+import { PrismaService } from '../prisma/prisma.service';
 import { AdminStatsQueryDto } from '../config/dashboard.dto';
 export declare class DashboardService {
+    private readonly prisma;
+    constructor(prisma: PrismaService);
     getDashboardStats(query?: AdminStatsQueryDto): Promise<{
         totalClaims: number;
         totalQuotes: number;
@@ -29,16 +32,16 @@ export declare class DashboardService {
                     outsourcingId: number | null;
                 }[];
             } & {
+                description: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string;
+                status: string;
                 userId: number | null;
                 policyNumber: string;
                 claimType: string;
                 incidentDate: Date;
                 estimatedLoss: number;
-                status: string;
                 submitterEmail: string | null;
                 submitterName: string | null;
                 submitterPhone: string | null;
@@ -48,8 +51,8 @@ export declare class DashboardService {
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
-                userId: number | null;
                 status: string;
+                userId: number | null;
                 location: string;
                 organizationName: string;
                 coreFunctions: string | null;
@@ -59,13 +62,14 @@ export declare class DashboardService {
                 budgetRange: string;
             }[];
             consultations: {
-                name: string;
                 id: number;
+                name: string;
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
-                userId: number | null;
+                message: string;
                 status: string;
+                userId: number | null;
                 phone: string;
                 country: string | null;
                 timezone: string | null;
@@ -73,7 +77,6 @@ export declare class DashboardService {
                 company: string | null;
                 consultationDate: string;
                 consultationTime: string;
-                message: string;
                 serviceType: string;
                 duration: number | null;
                 meetingLink: string | null;
@@ -85,11 +88,11 @@ export declare class DashboardService {
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
+                status: string;
+                amount: number;
                 userId: number | null;
                 policyNumber: string | null;
-                status: string;
                 clientName: string;
-                amount: number;
                 paymentMethod: string;
                 phoneNumber: string | null;
                 cardNumber: string | null;
@@ -100,13 +103,13 @@ export declare class DashboardService {
                 metadata: import("@prisma/client/runtime/library").JsonValue | null;
             }[];
             diaspora: {
-                name: string;
                 id: number;
+                name: string;
                 email: string;
                 createdAt: Date;
                 updatedAt: Date;
-                userId: number | null;
                 status: string;
+                userId: number | null;
                 phone: string;
                 country: string;
                 timezone: string;
@@ -121,10 +124,10 @@ export declare class DashboardService {
         type: string;
         id: number;
         createdAt: Date;
+        status: string;
         policyNumber: string;
         claimType: string;
         estimatedLoss: number;
-        status: string;
         submitterEmail: string | null;
         submitterName: string | null;
     } | {
@@ -138,8 +141,8 @@ export declare class DashboardService {
         budgetRange: string;
     } | {
         type: string;
-        name: string;
         id: number;
+        name: string;
         email: string;
         createdAt: Date;
         status: string;
@@ -150,13 +153,13 @@ export declare class DashboardService {
         id: number;
         createdAt: Date;
         status: string;
-        clientName: string;
         amount: number;
+        clientName: string;
         paymentMethod: string;
     } | {
         type: string;
-        name: string;
         id: number;
+        name: string;
         email: string;
         createdAt: Date;
         status: string;

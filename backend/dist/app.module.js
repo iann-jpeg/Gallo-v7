@@ -25,6 +25,7 @@ const documents_module_1 = require("./routes/documents.module");
 const outsourcing_module_1 = require("./routes/outsourcing.module");
 const payment_module_1 = require("./routes/payment.module");
 const resource_module_1 = require("./routes/resource.module");
+const static_files_module_1 = require("./routes/static-files.module");
 const admin_module_1 = require("./admin/admin.module");
 let AppModule = class AppModule {
 };
@@ -45,6 +46,7 @@ exports.AppModule = AppModule = __decorate([
             outsourcing_module_1.OutsourcingModule,
             payment_module_1.PaymentModule,
             resource_module_1.ResourceModule,
+            static_files_module_1.StaticFilesModule,
             admin_module_1.AdminModule,
         ],
         providers: [

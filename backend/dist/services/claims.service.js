@@ -22,17 +22,17 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClaimsService = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
+const prisma_service_1 = require("../prisma/prisma.service");
 const email_service_1 = require("./email.service");
-const prisma = new client_1.PrismaClient();
 let ClaimsService = class ClaimsService {
-    constructor(emailService) {
+    constructor(prisma, emailService) {
+        this.prisma = prisma;
         this.emailService = emailService;
     }
     async findAll({ page = 1, limit = 10 }) {
         try {
             const [claims, total] = await Promise.all([
-                prisma.claim.findMany({
+                this.prisma.claim.findMany({
                     skip: (page - 1) * limit,
                     take: limit,
                     orderBy: { createdAt: 'desc' },
@@ -56,9 +56,9 @@ let ClaimsService = class ClaimsService {
                         },
                     },
                 }),
-                prisma.claim.count()
+                this.prisma.claim.count()
             ]);
-            const claimsWithUrls = claims.map(claim => (Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map(doc => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) })));
+            const claimsWithUrls = claims.map((claim) => (Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) })));
             return {
                 data: claimsWithUrls,
                 meta: {
@@ -75,7 +75,7 @@ let ClaimsService = class ClaimsService {
     }
     async findOne(id) {
         try {
-            const claim = await prisma.claim.findUnique({
+            const claim = await this.prisma.claim.findUnique({
                 where: { id },
                 include: {
                     user: {
@@ -99,7 +99,7 @@ let ClaimsService = class ClaimsService {
             });
             if (!claim)
                 throw new common_1.BadRequestException('Claim not found');
-            const claimWithUrls = Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map(doc => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) });
+            const claimWithUrls = Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) });
             return claimWithUrls;
         }
         catch (error) {
@@ -119,7 +119,7 @@ let ClaimsService = class ClaimsService {
                 submitterEmail: email,
                 submitterPhone: phone
             };
-            const claim = await prisma.claim.create({ data: finalData });
+            const claim = await this.prisma.claim.create({ data: finalData });
             if (documentDetails && documentDetails.length > 0) {
                 await Promise.all(documentDetails.map(async (doc) => {
                     let content = undefined;
@@ -145,7 +145,7 @@ let ClaimsService = class ClaimsService {
                     if (content) {
                         documentData.content = content;
                     }
-                    return prisma.document.create({
+                    return this.prisma.document.create({
                         data: documentData
                     });
                 }));
@@ -176,11 +176,11 @@ let ClaimsService = class ClaimsService {
     }
     async update(id, data) {
         try {
-            const claim = await prisma.claim.update({
+            const claim = await this.prisma.claim.update({
                 where: { id },
                 data: Object.assign({ updatedAt: new Date() }, data)
             });
-            const fullClaim = await prisma.claim.findUnique({
+            const fullClaim = await this.prisma.claim.findUnique({
                 where: { id }
             });
             const updatedFields = Object.keys(data).join(', ');
@@ -195,7 +195,7 @@ let ClaimsService = class ClaimsService {
     }
     async updateStatus(id, status) {
         try {
-            const claim = await prisma.claim.update({
+            const claim = await this.prisma.claim.update({
                 where: { id },
                 data: {
                     status: status,
@@ -223,7 +223,7 @@ let ClaimsService = class ClaimsService {
     }
     async remove(id) {
         try {
-            await prisma.claim.delete({ where: { id } });
+            await this.prisma.claim.delete({ where: { id } });
             await Promise.allSettled([
                 this.emailService.sendMail(process.env.ADMIN_EMAIL, `Claim Deleted - #${id}`, `Claim #${id} has been permanently deleted from the system.\n\nDeleted on: ${new Date().toLocaleString()}`)
             ]);
@@ -237,6 +237,7 @@ let ClaimsService = class ClaimsService {
 exports.ClaimsService = ClaimsService;
 exports.ClaimsService = ClaimsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [email_service_1.EmailService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        email_service_1.EmailService])
 ], ClaimsService);
 //# sourceMappingURL=claims.service.js.map

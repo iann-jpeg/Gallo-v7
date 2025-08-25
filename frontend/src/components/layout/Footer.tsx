@@ -28,6 +28,7 @@ const Footer = () => {
               <li><Link to="/diaspora" className="text-sm opacity-90 hover:text-accent transition-colors">Diaspora Services</Link></li>
               <li><Link to="/consultancy" className="text-sm opacity-90 hover:text-accent transition-colors">Consultancy</Link></li>
               <li><Link to="/quotes" className="text-sm opacity-90 hover:text-accent transition-colors">Get Quote</Link></li>
+              <li><Link to="/downloads" className="text-sm opacity-90 hover:text-accent transition-colors">Forms & Downloads</Link></li>
             </ul>
           </div>
 

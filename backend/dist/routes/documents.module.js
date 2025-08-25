@@ -9,12 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DocumentsModule = void 0;
 const common_1 = require("@nestjs/common");
 const documents_controller_1 = require("../controllers/documents.controller");
+const prisma_service_1 = require("../prisma/prisma.service");
 let DocumentsModule = class DocumentsModule {
 };
 exports.DocumentsModule = DocumentsModule;
 exports.DocumentsModule = DocumentsModule = __decorate([
     (0, common_1.Module)({
         controllers: [documents_controller_1.DocumentsController],
+        providers: [prisma_service_1.PrismaService],
     })
 ], DocumentsModule);
 //# sourceMappingURL=documents.module.js.map

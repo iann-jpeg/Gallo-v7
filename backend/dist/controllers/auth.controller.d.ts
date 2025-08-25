@@ -7,10 +7,10 @@ export declare class AuthController {
         success: boolean;
         message: string;
         user: {
-            name: string;
-            id: number;
-            email: string;
             role: import(".prisma/client").$Enums.Role;
+            id: number;
+            name: string;
+            email: string;
             createdAt: Date;
         };
     }>;
@@ -18,10 +18,10 @@ export declare class AuthController {
         success: boolean;
         message: string;
         user: {
-            name: string;
-            id: number;
-            email: string;
             role: import(".prisma/client").$Enums.Role;
+            id: number;
+            name: string;
+            email: string;
             createdAt: Date;
         };
     }>;
@@ -31,10 +31,10 @@ export declare class AuthController {
             access_token: string;
             refresh_token: string;
             user: {
-                name: string;
-                id: number;
-                email: string;
                 role: import(".prisma/client").$Enums.Role;
+                id: number;
+                name: string;
+                email: string;
                 createdAt: Date;
             };
         };
@@ -48,10 +48,10 @@ export declare class AuthController {
         data: {
             access_token: string;
             user: {
-                name: string;
-                id: number;
-                email: string;
                 role: import(".prisma/client").$Enums.Role;
+                id: number;
+                name: string;
+                email: string;
             };
         };
     }>;
@@ -61,10 +61,10 @@ export declare class AuthController {
         success: boolean;
         message: string;
         user: {
-            name: string;
-            id: number;
-            email: string;
             role: import(".prisma/client").$Enums.Role;
+            id: number;
+            name: string;
+            email: string;
             createdAt: Date;
         };
     }>;
@@ -72,20 +72,20 @@ export declare class AuthController {
         success: boolean;
         message: string;
         user: {
-            name: string;
-            id: number;
-            email: string;
             role: import(".prisma/client").$Enums.Role;
+            id: number;
+            name: string;
+            email: string;
             updatedAt: Date;
         };
     }>;
     getProfile(req: any): Promise<{
         success: boolean;
         data: {
-            name: string;
-            id: number;
-            email: string;
             role: import(".prisma/client").$Enums.Role;
+            id: number;
+            name: string;
+            email: string;
             createdAt: Date;
             updatedAt: Date;
         };

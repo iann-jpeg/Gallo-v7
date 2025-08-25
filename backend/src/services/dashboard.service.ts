@@ -1,11 +1,11 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 import { DashboardStatsDto, AdminStatsQueryDto } from '../config/dashboard.dto';
-
-const prisma = new PrismaClient();
 
 @Injectable()
 export class DashboardService {
+  constructor(private readonly prisma: PrismaService) {}
+
   async getDashboardStats(query?: AdminStatsQueryDto) {
     try {
       // Get date range for filtering
@@ -41,22 +41,22 @@ export class DashboardService {
         recentPayments,
         recentDiaspora
       ] = await Promise.all([
-        prisma.claim.count({ where: dateFilter }),
-        prisma.quote.count({ where: dateFilter }),
-        prisma.consultation.count({ where: dateFilter }),
-        prisma.outsourcingRequest.count({ where: dateFilter }),
-        prisma.payment.count({ where: dateFilter }),
-        prisma.diasporaRequest.count({ where: dateFilter }),
-        prisma.user.count(),
-        prisma.claim.count({ 
+        this.prisma.claim.count({ where: dateFilter }),
+        this.prisma.quote.count({ where: dateFilter }),
+        this.prisma.consultation.count({ where: dateFilter }),
+        this.prisma.outsourcingRequest.count({ where: dateFilter }),
+        this.prisma.payment.count({ where: dateFilter }),
+        this.prisma.diasporaRequest.count({ where: dateFilter }),
+        this.prisma.user.count(),
+        this.prisma.claim.count({ 
           where: { status: { in: ['filed', 'under_review', 'pending'] }, ...dateFilter }
         }),
-        prisma.policy.count({ 
+        this.prisma.policy.count({ 
           where: { status: 'active', ...dateFilter }
         }),
         
         // Recent submissions with full details
-        prisma.claim.findMany({
+        this.prisma.claim.findMany({
           take: 20,
           orderBy: { createdAt: 'desc' },
           where: dateFilter,
@@ -65,25 +65,25 @@ export class DashboardService {
           }
         }),
         
-        prisma.outsourcingRequest.findMany({
+        this.prisma.outsourcingRequest.findMany({
           take: 20,
           orderBy: { createdAt: 'desc' },
           where: dateFilter
         }),
         
-        prisma.consultation.findMany({
+        this.prisma.consultation.findMany({
           take: 20,
           orderBy: { createdAt: 'desc' },
           where: dateFilter
         }),
         
-        prisma.payment.findMany({
+        this.prisma.payment.findMany({
           take: 20,
           orderBy: { createdAt: 'desc' },
           where: dateFilter
         }),
         
-        prisma.diasporaRequest.findMany({
+        this.prisma.diasporaRequest.findMany({
           take: 20,
           orderBy: { createdAt: 'desc' },
           where: dateFilter
@@ -91,7 +91,7 @@ export class DashboardService {
       ]);
 
       // Calculate monthly revenue
-      const monthlyRevenue = recentPayments.reduce((sum, payment) => sum + (payment.amount || 0), 0);
+      const monthlyRevenue = recentPayments.reduce((sum: number, payment: any) => sum + (payment.amount || 0), 0);
       const totalRequests = totalClaims + totalQuotes + totalConsultations + totalOutsourcingRequests;
       const conversionRate = totalRequests > 0 ? Math.round((activePolicies / totalRequests) * 100) : 0;
 
@@ -135,7 +135,7 @@ export class DashboardService {
     try {
       // Get recent activities from all tables
       const [claims, outsourcing, consultations, payments, diaspora] = await Promise.all([
-        prisma.claim.findMany({
+        this.prisma.claim.findMany({
           take: limit / 5,
           orderBy: { createdAt: 'desc' },
           select: {
@@ -150,7 +150,7 @@ export class DashboardService {
           }
         }),
         
-        prisma.outsourcingRequest.findMany({
+        this.prisma.outsourcingRequest.findMany({
           take: limit / 5,
           orderBy: { createdAt: 'desc' },
           select: {
@@ -164,7 +164,7 @@ export class DashboardService {
           }
         }),
         
-        prisma.consultation.findMany({
+        this.prisma.consultation.findMany({
           take: limit / 5,
           orderBy: { createdAt: 'desc' },
           select: {
@@ -178,7 +178,7 @@ export class DashboardService {
           }
         }),
         
-        prisma.payment.findMany({
+        this.prisma.payment.findMany({
           take: limit / 5,
           orderBy: { createdAt: 'desc' },
           select: {
@@ -191,7 +191,7 @@ export class DashboardService {
           }
         }),
         
-        prisma.diasporaRequest.findMany({
+        this.prisma.diasporaRequest.findMany({
           take: limit / 5,
           orderBy: { createdAt: 'desc' },
           select: {
@@ -237,11 +237,11 @@ export class DashboardService {
         thisMonthPayments,
         totalRevenue
       ] = await Promise.all([
-        prisma.claim.count({ where: { createdAt: { gte: startOfMonth } } }),
-        prisma.outsourcingRequest.count({ where: { createdAt: { gte: startOfMonth } } }),
-        prisma.consultation.count({ where: { createdAt: { gte: startOfMonth } } }),
-        prisma.payment.count({ where: { createdAt: { gte: startOfMonth } } }),
-        prisma.payment.aggregate({
+        this.prisma.claim.count({ where: { createdAt: { gte: startOfMonth } } }),
+        this.prisma.outsourcingRequest.count({ where: { createdAt: { gte: startOfMonth } } }),
+        this.prisma.consultation.count({ where: { createdAt: { gte: startOfMonth } } }),
+        this.prisma.payment.count({ where: { createdAt: { gte: startOfMonth } } }),
+        this.prisma.payment.aggregate({
           _sum: { amount: true },
           where: { createdAt: { gte: startOfMonth } }
         })
