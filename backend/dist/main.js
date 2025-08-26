@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const helmet_1 = require("helmet");
+const cors = require("cors");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const prisma_service_1 = require("./prisma/prisma.service");
@@ -37,23 +38,25 @@ async function bootstrap() {
         'https://galloways.co.ke',
         'https://www.galloways.co.ke',
         'https://app.galloways.co.ke',
-        'https://api.galloways.co.ke'
+        'http://localhost:5173',
+        'http://localhost:3000',
     ];
-    if (process.env.NODE_ENV === 'development') {
-        allowedOrigins.push('http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173');
-    }
-    if (process.env.FRONTEND_URL && !allowedOrigins.includes(process.env.FRONTEND_URL)) {
-        allowedOrigins.push(process.env.FRONTEND_URL);
-    }
-    app.enableCors({
-        origin: allowedOrigins,
+    app.use(cors({
+        origin: (origin, callback) => {
+            if (!origin)
+                return callback(null, true);
+            if (allowedOrigins.includes(origin)) {
+                callback(null, true);
+            }
+            else {
+                logger.warn(`CORS blocked request from: ${origin}`);
+                callback(new Error(`Origin ${origin} not allowed by CORS policy`));
+            }
+        },
         credentials: true,
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
-        exposedHeaders: 'Authorization',
-        preflightContinue: false,
-        optionsSuccessStatus: 204
-    });
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    }));
     app.use((req, res, next) => {
         res.header('Cross-Origin-Resource-Policy', 'cross-origin');
         const cspConnectSrc = process.env.NODE_ENV === 'development'
@@ -74,12 +77,17 @@ async function bootstrap() {
     const port = process.env.PORT || 3001;
     logger.log(`🚀 Server starting on port ${port}`);
     try {
-        const server = await app.listen(port);
+        const server = await app.listen(port, '0.0.0.0');
         const { setupAdminPanelSocket } = require('./internal-admin-panel.controller');
         setupAdminPanelSocket(server);
-        const baseUrl = process.env.NODE_ENV === 'production' ? 'https://galloways.co.ke' : `http://localhost:${port}`;
-        logger.log(`✅ Server running at ${baseUrl}`);
+        const baseUrl = process.env.RAILWAY_STATIC_URL
+            ? `https://${process.env.RAILWAY_STATIC_URL}`
+            : process.env.NODE_ENV === 'production'
+                ? 'https://galloways-backend-production.up.railway.app'
+                : `http://localhost:${port}`;
+        logger.log(`✅ Backend running at ${baseUrl}`);
         logger.log(`📚 API Documentation: ${baseUrl}/docs`);
+        logger.log(`🌐 Frontend at: https://galloways.co.ke`);
     }
     catch (error) {
         logger.error('❌ Failed to start server:', error);

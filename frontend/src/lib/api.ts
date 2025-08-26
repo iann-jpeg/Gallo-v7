@@ -1,5 +1,20 @@
-// API configuration and service for connecting to the backend
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://galloways.co.ke/api';
+// API configuration for Railway + cPanel hybrid architecture
+const getApiBaseUrl = () => {
+  // Check for explicit environment variable first
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  
+  // Production: Railway backend
+  if (import.meta.env.PROD) {
+    return 'https://galloways-backend-production.up.railway.app/api';
+  }
+  
+  // Development: Local backend
+  return 'http://localhost:3001/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Generic API client
 class ApiClient {

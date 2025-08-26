@@ -45,38 +45,31 @@ async function bootstrap() {
     })
   );
 
-  // Configure CORS for Aplin production hosting
+    // Configure CORS for Railway + cPanel hybrid architecture
   const allowedOrigins = [
-    'https://galloways.co.ke',
-    'https://www.galloways.co.ke',
-    'https://app.galloways.co.ke',
-    'https://api.galloways.co.ke'
+    'https://galloways.co.ke',           // Production cPanel frontend
+    'https://www.galloways.co.ke',       // www version
+    'https://app.galloways.co.ke',       // if using subdomain
+    'http://localhost:5173',             // Development Vite server
+    'http://localhost:3000',             // Development React server
   ];
 
-  // Add development origins only in development mode
-  if (process.env.NODE_ENV === 'development') {
-    allowedOrigins.push(
-      'http://localhost:3000',
-      'http://localhost:5173',
-      'http://127.0.0.1:3000',
-      'http://127.0.0.1:5173'
-    );
-  }
-
-  // Add environment-specific frontend URL if provided
-  if (process.env.FRONTEND_URL && !allowedOrigins.includes(process.env.FRONTEND_URL)) {
-    allowedOrigins.push(process.env.FRONTEND_URL);
-  }
-
-  app.enableCors({
-    origin: allowedOrigins,
+  app.use(cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        logger.warn(`CORS blocked request from: ${origin}`);
+        callback(new Error(`Origin ${origin} not allowed by CORS policy`));
+      }
+    },
     credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
-    exposedHeaders: 'Authorization',
-    preflightContinue: false,
-    optionsSuccessStatus: 204
-  });    // Set CORP and CSP headers for all responses
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  }));    // Set CORP and CSP headers for all responses
     app.use((req: any, res: any, next: () => void) => {
       res.header('Cross-Origin-Resource-Policy', 'cross-origin');
       const cspConnectSrc = process.env.NODE_ENV === 'development' 
@@ -100,18 +93,28 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
+  // Railway provides PORT environment variable
   const port = process.env.PORT || 3001;
   logger.log(`🚀 Server starting on port ${port}`);
   
   try {
-    const server = await app.listen(port);
+    // Listen on 0.0.0.0 for Railway deployment
+    const server = await app.listen(port, '0.0.0.0');
+    
     // Setup Socket.io for real-time admin dashboard
     const { setupAdminPanelSocket } = require('./internal-admin-panel.controller');
     setupAdminPanelSocket(server);
     
-    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://galloways.co.ke' : `http://localhost:${port}`;
-    logger.log(`✅ Server running at ${baseUrl}`);
+    // Railway will provide the actual URL
+    const baseUrl = process.env.RAILWAY_STATIC_URL 
+      ? `https://${process.env.RAILWAY_STATIC_URL}` 
+      : process.env.NODE_ENV === 'production' 
+        ? 'https://galloways-backend-production.up.railway.app'
+        : `http://localhost:${port}`;
+        
+    logger.log(`✅ Backend running at ${baseUrl}`);
     logger.log(`📚 API Documentation: ${baseUrl}/docs`);
+    logger.log(`🌐 Frontend at: https://galloways.co.ke`);
   } catch (error) {
     logger.error('❌ Failed to start server:', error);
     process.exit(1);

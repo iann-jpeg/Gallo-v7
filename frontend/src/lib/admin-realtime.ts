@@ -9,7 +9,23 @@ class AdminRealtimeService {
       return this.socket;
     }
 
-    const serverUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'https://galloways.co.ke';
+    // Get Railway backend URL for Socket.IO connection
+    const getSocketUrl = () => {
+      // Check for explicit environment variable
+      if (import.meta.env.VITE_API_BASE_URL) {
+        return import.meta.env.VITE_API_BASE_URL.replace('/api', '');
+      }
+      
+      // Production: Railway backend
+      if (import.meta.env.PROD) {
+        return 'https://galloways-backend-production.up.railway.app';
+      }
+      
+      // Development: Local backend
+      return 'http://localhost:3001';
+    };
+
+    const serverUrl = getSocketUrl();
     
     this.socket = io(serverUrl, {
       transports: ['websocket', 'polling'],
