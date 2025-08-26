@@ -236,7 +236,8 @@ export class ClaimsService {
           `Claim Updated - #${id}`,
           `Claim #${id} has been updated.\n\nUpdated fields: ${updatedFields}\n\nView in dashboard: ${process.env.FRONTEND_URL || 'http://localhost:3000'}/resources`
         ),
-        // TODO: Client notification when submitterEmail is available in types
+        // Send notification when submitter email is available
+        // await this.emailService.sendNotificationEmail();
         // fullClaim?.submitterEmail && data.status ? this.emailService.sendMail(
         //   fullClaim.submitterEmail,
         //   `Claim Status Update - Reference #${id}`,

@@ -1,5 +1,5 @@
 // API configuration and service for connecting to the backend
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://gallo-end-production.up.railway.app/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://galloways.co.ke/api';
 
 // Generic API client
 class ApiClient {

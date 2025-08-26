@@ -23,7 +23,9 @@ let AdminPanelSocketService = class AdminPanelSocketService {
     setupAdminPanelSocket(server) {
         this.io = new socket_io_1.Server(server, {
             cors: {
-                origin: ["http://localhost:8080", "http://localhost:3000", "http://localhost:5173"],
+                origin: process.env.NODE_ENV === 'development'
+                    ? ["http://localhost:8080", "http://localhost:3000", "http://localhost:5173"]
+                    : ["https://galloways.co.ke", "https://www.galloways.co.ke", "https://app.galloways.co.ke"],
                 credentials: true
             }
         });

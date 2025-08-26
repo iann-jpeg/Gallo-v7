@@ -4,6 +4,7 @@ import { AdminTopbar } from "@/components/admin/AdminTopbar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { logger } from "@/lib/logger";
 import { 
   Users, 
   FileText, 
@@ -47,7 +48,7 @@ export default function StaticAdmin() {
   });
 
   useEffect(() => {
-    console.log("🔧 Static Admin Panel Loaded");
+    logger.log("🔧 Static Admin Panel Loaded");
     
     // Test backend connection
     testBackendConnection();
@@ -62,7 +63,7 @@ export default function StaticAdmin() {
         ? `${import.meta.env.VITE_API_BASE_URL}/api/health`
         : 'https://api.galloways.co.ke/api/health';
       
-      console.log(`🌐 Testing connection to: ${apiUrl}`);
+      logger.log(`🌐 Testing connection to: ${apiUrl}`);
       
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -71,15 +72,15 @@ export default function StaticAdmin() {
       
       if (response.ok) {
         setConnectionStatus('connected');
-        console.log("✅ Backend connected - Loading live data");
+        logger.log("✅ Backend connected - Loading live data");
         loadLiveData();
       } else {
         setConnectionStatus('offline');
-        console.log("⚠️ Backend offline - Using static data");
+        logger.log("⚠️ Backend offline - Using static data");
       }
     } catch (error) {
       setConnectionStatus('offline');
-      console.log("🔌 Backend unavailable - Operating in offline mode");
+      logger.log("🔌 Backend unavailable - Operating in offline mode");
     }
   };
 
@@ -93,10 +94,10 @@ export default function StaticAdmin() {
       if (response.ok) {
         const liveData = await response.json();
         setAdminData(liveData);
-        console.log("📊 Live data loaded from backend");
+        logger.log("📊 Live data loaded from backend");
       }
     } catch (error) {
-      console.log("📊 Using static data - backend unavailable");
+      logger.log("📊 Using static data - backend unavailable");
       loadStaticData();
     }
   };
@@ -295,7 +296,7 @@ export default function StaticAdmin() {
               <Button size="sm" onClick={testBackendConnection}>
                 🔄 Retry Connection
               </Button>
-              <Button size="sm" variant="outline" onClick={() => console.log("Admin data:", adminData)}>
+              <Button size="sm" variant="outline" onClick={() => logger.log("Admin data:", adminData)}>
                 🔍 View Debug Info
               </Button>
             </div>
@@ -350,15 +351,12 @@ export default function StaticAdmin() {
         <AdminSidebar 
           activeTab={activeTab} 
           setActiveTab={setActiveTab}
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
+          isOpen={sidebarOpen}
+          toggleSidebar={() => setSidebarOpen((prev) => !prev)}
         />
         
         <div className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
-          <AdminTopbar 
-            sidebarOpen={sidebarOpen}
-            setSidebarOpen={setSidebarOpen}
-          />
+          <AdminTopbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
           
           <main className="p-6">
             {renderContent()}

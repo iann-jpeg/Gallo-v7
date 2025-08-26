@@ -17,7 +17,7 @@ import { OutsourcingModule } from './routes/outsourcing.module';
 import { PaymentModule } from './routes/payment.module';
 import { ResourceModule } from './routes/resource.module';
 import { StaticFilesModule } from './routes/static-files.module';
-import { AdminModule } from './admin/admin.module';
+import { AdminModule } from './routes/admin.module';
 
 @Module({
   imports: [

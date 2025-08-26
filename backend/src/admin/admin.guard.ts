@@ -8,10 +8,10 @@ export class AdminGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     
-    // For now, allow all requests to admin endpoints
-    // In production, you might want to check IP whitelist, API keys, etc.
-    // This is a simple guard that allows access from specific origins
-    const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173'];
+    // Allow requests from allowed origins based on environment
+    const allowedOrigins = process.env.NODE_ENV === 'development' 
+      ? ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173']
+      : ['https://galloways.co.ke', 'https://www.galloways.co.ke', 'https://app.galloways.co.ke'];
     const origin = request.headers.origin;
     
     return allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development';

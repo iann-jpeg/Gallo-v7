@@ -11,8 +11,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(),
-    mode === 'development' &&
-    componentTagger(),
+    mode === 'development' && componentTagger(),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -42,15 +41,22 @@ export default defineConfig(({ mode }) => ({
         }
       }
     },
-    // Increase chunk size warning limit
+    // Increase chunk size warning limit for production builds
     chunkSizeWarningLimit: 1000,
     // Enable minification for production
-    minify: 'terser',
-    terserOptions: {
+    minify: mode === 'production' ? 'terser' : false,
+    terserOptions: mode === 'production' ? {
       compress: {
         drop_console: true, // Remove console.log in production
-        drop_debugger: true
+        drop_debugger: true,
+        pure_funcs: ['console.log', 'console.warn'],
       }
-    }
+    } : undefined,
+    // Generate source maps in development
+    sourcemap: mode === 'development'
+  },
+  // Define global constants
+  define: {
+    __DEV__: JSON.stringify(mode === 'development'),
   }
 }));

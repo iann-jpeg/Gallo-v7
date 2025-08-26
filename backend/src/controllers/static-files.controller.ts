@@ -9,7 +9,7 @@ import { Public } from '../middleware/public.decorator';
 export class StaticFilesController {
   
   @Get('downloads/:filename')
-  async downloadFile(@Param('filename') filename: string, @Res() res: Response) {
+  async downloadFile(@Param('filename') filename: string, @Res() res: Response): Promise<void> {
     try {
       // Sanitize filename to prevent directory traversal attacks
       const sanitizedFilename = filename.replace(/\.\./g, '').replace(/\//g, '');
@@ -51,7 +51,16 @@ export class StaticFilesController {
   }
 
   @Get('downloads')
-  async listDownloadableFiles() {
+  async listDownloadableFiles(): Promise<{
+    success: boolean;
+    data: Array<{
+      filename: string;
+      displayName: string;
+      description: string;
+      category: string;
+    }>;
+    message: string;
+  }> {
     try {
       // List of available PDF files in the Downloads folder
       const availableFiles = [

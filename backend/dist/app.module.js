@@ -26,7 +26,7 @@ const outsourcing_module_1 = require("./routes/outsourcing.module");
 const payment_module_1 = require("./routes/payment.module");
 const resource_module_1 = require("./routes/resource.module");
 const static_files_module_1 = require("./routes/static-files.module");
-const admin_module_1 = require("./admin/admin.module");
+const admin_module_1 = require("./routes/admin.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;

@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, ParseIntPipe, Res } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, ParseIntPipe, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AdminService } from '../services/admin.service';
+import { AdminGuard } from './admin.guard';
 import { Public } from '../middleware/public.decorator';
 
 @Controller('admin')
-@Public() // Make all admin endpoints public for development
+@UseGuards(AdminGuard)
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 

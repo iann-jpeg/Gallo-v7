@@ -1,6 +1,24 @@
-# Galloways Insurance Platform
+# 🛡️ Galloways Insurance Platform
 
-A comprehensive full-stack insurance platform built with modern technologies, featuring complete payment integration, admin dashboard, and multi-service offerings.
+A comprehensive insurance management platform built with modern web technologies, optimized for Aplin hosting with PostgreSQL database integration.
+
+## 🏗️ Architecture & Technology Stack
+
+### Frontend (React + TypeScript)
+- **Framework**: React 18 + TypeScript + Vite 5
+- **Styling**: TailwindCSS + Shadcn/ui components
+- **State Management**: React Query (TanStack Query)
+- **Real-time**: Socket.io Client for live updates
+- **Deployment**: Static hosting on Aplin (galloways.co.ke)
+
+### Backend (NestJS + PostgreSQL)
+- **Framework**: NestJS + TypeScript
+- **Database**: PostgreSQL with Prisma ORM (gallowa2_gallowaysdb)
+- **Authentication**: JWT-based secure auth system
+- **Payments**: M-PESA + Paystack integration
+- **Email**: ElasticEmail SMTP service
+- **Real-time**: Socket.io for admin dashboard
+- **Deployment**: Node.js hosting on Aplin (galloways.co.ke/api)
 
 ## 🚀 Features
 

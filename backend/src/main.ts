@@ -3,16 +3,23 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import * as cors from 'cors';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PrismaService } from './prisma/prisma.service';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
   
   // Initialize Prisma service for database connection
   const prismaService = app.get(PrismaService);
-  await prismaService.enableShutdownHooks(app);
+  
+  // Setup graceful shutdown
+  process.on('SIGTERM', async () => {
+    logger.log('SIGTERM received, shutting down gracefully...');
+    await prismaService.$disconnect();
+    process.exit(0);
+  });
   
   // Enable validation pipe for DTOs
   app.useGlobalPipes(new ValidationPipe({
@@ -29,7 +36,7 @@ async function bootstrap() {
           defaultSrc: ["'self'"],
           styleSrc: ["'self'", "'unsafe-inline'", "https:"],
           imgSrc: ["'self'", "data:", "https:"],
-          connectSrc: ["'self'", "http://localhost:*", "http://127.0.0.1:*"],
+          connectSrc: ["'self'", "https://galloways.co.ke", ...(process.env.NODE_ENV === 'development' ? ["http://localhost:*", "http://127.0.0.1:*"] : [])],
           formAction: ["'self'"],
           scriptSrc: ["'self'"],
         },
@@ -38,21 +45,28 @@ async function bootstrap() {
     })
   );
 
-  // Configure CORS for frontend
+  // Configure CORS for Aplin production hosting
   const allowedOrigins = [
     'https://galloways.co.ke',
     'https://www.galloways.co.ke',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
+    'https://app.galloways.co.ke',
+    'https://api.galloways.co.ke'
   ];
 
-  // Add environment-specific origins
-  if (process.env.FRONTEND_URL) {
-    allowedOrigins.push(process.env.FRONTEND_URL);
+  // Add development origins only in development mode
+  if (process.env.NODE_ENV === 'development') {
+    allowedOrigins.push(
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:5173'
+    );
   }
 
-  // Add Railway-specific origins
-  allowedOrigins.push('https://*.railway.app');
+  // Add environment-specific frontend URL if provided
+  if (process.env.FRONTEND_URL && !allowedOrigins.includes(process.env.FRONTEND_URL)) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }
 
   app.enableCors({
     origin: allowedOrigins,
@@ -65,7 +79,11 @@ async function bootstrap() {
   });    // Set CORP and CSP headers for all responses
     app.use((req: any, res: any, next: () => void) => {
       res.header('Cross-Origin-Resource-Policy', 'cross-origin');
-      res.header('Content-Security-Policy', "default-src 'self'; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https://galloways.co.ke http://localhost:* http://127.0.0.1:*; form-action 'self'; script-src 'self'; base-uri 'self'; font-src 'self' https: data:; frame-ancestors 'self'; object-src 'none'; script-src-attr 'none'; upgrade-insecure-requests");
+      const cspConnectSrc = process.env.NODE_ENV === 'development' 
+        ? "connect-src 'self' https://galloways.co.ke http://localhost:* http://127.0.0.1:*" 
+        : "connect-src 'self' https://galloways.co.ke";
+      
+      res.header('Content-Security-Policy', `default-src 'self'; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; ${cspConnectSrc}; form-action 'self'; script-src 'self'; base-uri 'self'; font-src 'self' https: data:; frame-ancestors 'self'; object-src 'none'; script-src-attr 'none'; upgrade-insecure-requests`);
       next();
     });
 
@@ -83,17 +101,19 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   const port = process.env.PORT || 3001;
-  console.log(`🚀 Server starting on port ${port}`);
+  logger.log(`🚀 Server starting on port ${port}`);
   
   try {
     const server = await app.listen(port);
     // Setup Socket.io for real-time admin dashboard
     const { setupAdminPanelSocket } = require('./internal-admin-panel.controller');
     setupAdminPanelSocket(server);
-    console.log(`✅ Server is running on http://localhost:${port}`);
-    console.log(`📚 API Documentation available at http://localhost:${port}/docs`);
+    
+    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://galloways.co.ke' : `http://localhost:${port}`;
+    logger.log(`✅ Server running at ${baseUrl}`);
+    logger.log(`📚 API Documentation: ${baseUrl}/docs`);
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    logger.error('❌ Failed to start server:', error);
     process.exit(1);
   }
 }

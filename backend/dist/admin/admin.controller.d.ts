@@ -298,11 +298,11 @@ export declare class AdminController {
                     email: string;
                 } | null;
             } & {
-                description: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
                 status: string;
+                description: string;
                 userId: number | null;
                 policyNumber: string;
                 claimType: string;
@@ -360,11 +360,11 @@ export declare class AdminController {
                 size: number;
             }[];
         } & {
-            description: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
             status: string;
+            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
@@ -409,11 +409,11 @@ export declare class AdminController {
                 email: string;
             } | null;
         } & {
-            description: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
             status: string;
+            description: string;
             userId: number | null;
             policyNumber: string;
             claimType: string;
