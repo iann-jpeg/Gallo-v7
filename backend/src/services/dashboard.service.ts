@@ -207,11 +207,11 @@ export class DashboardService {
 
       // Combine all activities with type labels
       const activities = [
-        ...claims.map(item => ({ ...item, type: 'claim' })),
-        ...outsourcing.map(item => ({ ...item, type: 'outsourcing' })),
-        ...consultations.map(item => ({ ...item, type: 'consultation' })),
-        ...payments.map(item => ({ ...item, type: 'payment' })),
-        ...diaspora.map(item => ({ ...item, type: 'diaspora' }))
+        ...claims.map((item: any) => ({ ...item, type: 'claim' })),
+        ...outsourcing.map((item: any) => ({ ...item, type: 'outsourcing' })),
+        ...consultations.map((item: any) => ({ ...item, type: 'consultation' })),
+        ...payments.map((item: any) => ({ ...item, type: 'payment' })),
+        ...diaspora.map((item: any) => ({ ...item, type: 'diaspora' }))
       ];
 
       // Sort by creation date

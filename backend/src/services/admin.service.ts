@@ -287,7 +287,7 @@ export class AdminService {
           
           // Detailed submissions for tables
           allSubmissions: {
-            claims: recentClaims.map(claim => ({
+            claims: recentClaims.map((claim: any) => ({
               id: claim.id,
               policyNumber: claim.policyNumber,
               clientEmail: claim.user?.email || claim.submitterEmail || 'N/A',
@@ -296,7 +296,7 @@ export class AdminService {
               status: claim.status,
               createdAt: claim.createdAt
             })),
-            consultations: recentConsultations.map(consultation => ({
+            consultations: recentConsultations.map((consultation: any) => ({
               id: consultation.id,
               fullName: consultation.name,
               email: consultation.email,
@@ -305,7 +305,7 @@ export class AdminService {
               status: consultation.status,
               createdAt: consultation.createdAt
             })),
-            outsourcing: recentOutsourcingRequests.map(request => ({
+            outsourcing: recentOutsourcingRequests.map((request: any) => ({
               id: request.id,
               companyName: request.organizationName,
               contactEmail: request.email,
@@ -314,7 +314,7 @@ export class AdminService {
               status: request.status,
               createdAt: request.createdAt
             })),
-            payments: recentPayments.map(payment => ({
+            payments: recentPayments.map((payment: any) => ({
               id: payment.id,
               policyNumber: payment.policyNumber || 'N/A',
               clientEmail: payment.user?.email || payment.email || 'N/A',
@@ -323,7 +323,7 @@ export class AdminService {
               status: payment.status,
               createdAt: payment.createdAt
             })),
-            diaspora: recentDiasporaRequests.map(request => ({
+            diaspora: recentDiasporaRequests.map((request: any) => ({
               id: request.id,
               fullName: request.name,
               email: request.email,
@@ -593,7 +593,7 @@ export class AdminService {
 
       // Format activities
       const activities = [
-        ...claims.map(claim => ({
+        ...claims.map((claim: any) => ({
           id: `claim-${claim.id}`,
           type: 'claim',
           action: 'submitted',
@@ -601,7 +601,7 @@ export class AdminService {
           user: claim.user,
           timestamp: claim.createdAt
         })),
-        ...quotes.map(quote => ({
+        ...quotes.map((quote: any) => ({
           id: `quote-${quote.id}`,
           type: 'quote',
           action: 'requested',
@@ -609,7 +609,7 @@ export class AdminService {
           user: quote.user,
           timestamp: quote.createdAt
         })),
-        ...users.map(user => ({
+        ...users.map((user: { id: number; name: string; email: string; createdAt: Date; role: string }) => ({
           id: `user-${user.id}`,
           type: 'user',
           action: 'registered',
@@ -722,7 +722,7 @@ export class AdminService {
           admins,
           regular,
           recentSignups,
-          byRole: byRole.map(r => ({ role: r.role, count: r._count.role }))
+          byRole: byRole.map((r: { role: string; _count: { role: number } }) => ({ role: r.role, count: r._count.role }))
         }
       };
     } catch (error: any) {
@@ -1643,7 +1643,7 @@ export class AdminService {
       if (format === 'csv') {
         const csvHeaders = 'ID,First Name,Last Name,Email,Phone,Product,Location,Budget,Coverage,Status,Contact Method,Best Time,Created At';
         const csvData = quotes
-          .map(quote => 
+          .map((quote: any) => 
             `${quote.id},"${quote.firstName}","${quote.lastName}","${quote.email}","${quote.phone}","${quote.product}","${quote.location || ''}","${quote.budget || ''}","${quote.coverage || ''}","${quote.status}","${quote.contactMethod}","${quote.bestTime || ''}","${quote.createdAt.toISOString()}"`
           )
           .join('\n');
@@ -2475,7 +2475,7 @@ export class AdminService {
         })
       ]);
 
-      const statusStats = statusCounts.reduce((acc, item) => {
+      const statusStats = statusCounts.reduce((acc: Record<string, number>, item: { status: string; _count: { status: number } }) => {
         acc[item.status] = item._count.status;
         return acc;
       }, {} as Record<string, number>);
@@ -2564,7 +2564,7 @@ export class AdminService {
           'Created At', 'Updated At'
         ];
 
-        const csvData = requests.map(req => [
+        const csvData = requests.map((req: any) => [
           req.id,
           req.organizationName || '',
           req.coreFunctions || '',
@@ -2579,7 +2579,7 @@ export class AdminService {
         ]);
 
         const csvContent = [headers, ...csvData]
-          .map(row => row.map(cell => `"${cell}"`).join(','))
+          .map((row: string[]) => row.map((cell: string) => `"${cell}"`).join(','))
           .join('\n');
 
         return {
