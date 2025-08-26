@@ -18,8 +18,8 @@ export declare class DashboardService {
         allSubmissions: {
             claims: ({
                 documents: {
-                    id: number;
                     createdAt: Date;
+                    id: number;
                     updatedAt: Date;
                     filename: string;
                     originalName: string;
@@ -32,44 +32,43 @@ export declare class DashboardService {
                     outsourcingId: number | null;
                 }[];
             } & {
-                description: string;
-                id: number;
                 createdAt: Date;
-                updatedAt: Date;
                 status: string;
+                id: number;
                 userId: number | null;
                 policyNumber: string;
                 claimType: string;
                 incidentDate: Date;
                 estimatedLoss: number;
+                description: string;
+                updatedAt: Date;
                 submitterEmail: string | null;
                 submitterName: string | null;
                 submitterPhone: string | null;
             })[];
             outsourcing: {
-                id: number;
-                email: string;
                 createdAt: Date;
-                updatedAt: Date;
                 status: string;
+                id: number;
                 userId: number | null;
-                location: string;
+                updatedAt: Date;
                 organizationName: string;
                 coreFunctions: string | null;
+                location: string;
                 address: string | null;
+                email: string;
                 services: string[];
                 natureOfOutsourcing: string;
                 budgetRange: string;
             }[];
             consultations: {
+                createdAt: Date;
+                status: string;
                 id: number;
+                userId: number | null;
+                updatedAt: Date;
                 name: string;
                 email: string;
-                createdAt: Date;
-                updatedAt: Date;
-                message: string;
-                status: string;
-                userId: number | null;
                 phone: string;
                 country: string | null;
                 timezone: string | null;
@@ -77,6 +76,7 @@ export declare class DashboardService {
                 company: string | null;
                 consultationDate: string;
                 consultationTime: string;
+                message: string;
                 serviceType: string;
                 duration: number | null;
                 meetingLink: string | null;
@@ -84,15 +84,15 @@ export declare class DashboardService {
                 notes: string | null;
             }[];
             payments: {
-                id: number;
-                email: string;
                 createdAt: Date;
-                updatedAt: Date;
                 status: string;
-                amount: number;
+                id: number;
                 userId: number | null;
                 policyNumber: string | null;
+                updatedAt: Date;
+                email: string;
                 clientName: string;
+                amount: number;
                 paymentMethod: string;
                 phoneNumber: string | null;
                 cardNumber: string | null;
@@ -103,13 +103,13 @@ export declare class DashboardService {
                 metadata: import("@prisma/client/runtime/library").JsonValue | null;
             }[];
             diaspora: {
+                createdAt: Date;
+                status: string;
                 id: number;
+                userId: number | null;
+                updatedAt: Date;
                 name: string;
                 email: string;
-                createdAt: Date;
-                updatedAt: Date;
-                status: string;
-                userId: number | null;
                 phone: string;
                 country: string;
                 timezone: string;
@@ -120,51 +120,7 @@ export declare class DashboardService {
         totalSubmissions: number;
         submissionsThisMonth: number;
     }>;
-    getActivities(limit?: number): Promise<({
-        type: string;
-        id: number;
-        createdAt: Date;
-        status: string;
-        policyNumber: string;
-        claimType: string;
-        estimatedLoss: number;
-        submitterEmail: string | null;
-        submitterName: string | null;
-    } | {
-        type: string;
-        id: number;
-        email: string;
-        createdAt: Date;
-        status: string;
-        organizationName: string;
-        services: string[];
-        budgetRange: string;
-    } | {
-        type: string;
-        id: number;
-        name: string;
-        email: string;
-        createdAt: Date;
-        status: string;
-        consultationDate: string;
-        serviceType: string;
-    } | {
-        type: string;
-        id: number;
-        createdAt: Date;
-        status: string;
-        amount: number;
-        clientName: string;
-        paymentMethod: string;
-    } | {
-        type: string;
-        id: number;
-        name: string;
-        email: string;
-        createdAt: Date;
-        status: string;
-        country: string;
-    })[]>;
+    getActivities(limit?: number): Promise<any[]>;
     getTopStats(): Promise<{
         thisMonthClaims: number;
         thisMonthOutsourcing: number;

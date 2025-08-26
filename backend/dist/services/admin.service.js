@@ -218,7 +218,7 @@ let AdminService = class AdminService {
                     totalSubmissions: totalUsers + totalClaims + totalQuotes + totalConsultations +
                         totalOutsourcingRequests + totalPayments + totalDiasporaRequests,
                     allSubmissions: {
-                        claims: recentClaims.map(claim => {
+                        claims: recentClaims.map((claim) => {
                             var _a;
                             return ({
                                 id: claim.id,
@@ -230,7 +230,7 @@ let AdminService = class AdminService {
                                 createdAt: claim.createdAt
                             });
                         }),
-                        consultations: recentConsultations.map(consultation => ({
+                        consultations: recentConsultations.map((consultation) => ({
                             id: consultation.id,
                             fullName: consultation.name,
                             email: consultation.email,
@@ -239,7 +239,7 @@ let AdminService = class AdminService {
                             status: consultation.status,
                             createdAt: consultation.createdAt
                         })),
-                        outsourcing: recentOutsourcingRequests.map(request => ({
+                        outsourcing: recentOutsourcingRequests.map((request) => ({
                             id: request.id,
                             companyName: request.organizationName,
                             contactEmail: request.email,
@@ -248,7 +248,7 @@ let AdminService = class AdminService {
                             status: request.status,
                             createdAt: request.createdAt
                         })),
-                        payments: recentPayments.map(payment => {
+                        payments: recentPayments.map((payment) => {
                             var _a;
                             return ({
                                 id: payment.id,
@@ -260,7 +260,7 @@ let AdminService = class AdminService {
                                 createdAt: payment.createdAt
                             });
                         }),
-                        diaspora: recentDiasporaRequests.map(request => ({
+                        diaspora: recentDiasporaRequests.map((request) => ({
                             id: request.id,
                             fullName: request.name,
                             email: request.email,
@@ -502,7 +502,7 @@ let AdminService = class AdminService {
                 })
             ]);
             const activities = [
-                ...claims.map(claim => ({
+                ...claims.map((claim) => ({
                     id: `claim-${claim.id}`,
                     type: 'claim',
                     action: 'submitted',
@@ -510,7 +510,7 @@ let AdminService = class AdminService {
                     user: claim.user,
                     timestamp: claim.createdAt
                 })),
-                ...quotes.map(quote => ({
+                ...quotes.map((quote) => ({
                     id: `quote-${quote.id}`,
                     type: 'quote',
                     action: 'requested',
@@ -518,7 +518,7 @@ let AdminService = class AdminService {
                     user: quote.user,
                     timestamp: quote.createdAt
                 })),
-                ...users.map(user => ({
+                ...users.map((user) => ({
                     id: `user-${user.id}`,
                     type: 'user',
                     action: 'registered',
@@ -622,7 +622,7 @@ let AdminService = class AdminService {
                     admins,
                     regular,
                     recentSignups,
-                    byRole: byRole.map(r => ({ role: r.role, count: r._count.role }))
+                    byRole: byRole.map((r) => ({ role: r.role, count: r._count.role }))
                 }
             };
         }
@@ -1458,7 +1458,7 @@ let AdminService = class AdminService {
             if (format === 'csv') {
                 const csvHeaders = 'ID,First Name,Last Name,Email,Phone,Product,Location,Budget,Coverage,Status,Contact Method,Best Time,Created At';
                 const csvData = quotes
-                    .map(quote => `${quote.id},"${quote.firstName}","${quote.lastName}","${quote.email}","${quote.phone}","${quote.product}","${quote.location || ''}","${quote.budget || ''}","${quote.coverage || ''}","${quote.status}","${quote.contactMethod}","${quote.bestTime || ''}","${quote.createdAt.toISOString()}"`)
+                    .map((quote) => `${quote.id},"${quote.firstName}","${quote.lastName}","${quote.email}","${quote.phone}","${quote.product}","${quote.location || ''}","${quote.budget || ''}","${quote.coverage || ''}","${quote.status}","${quote.contactMethod}","${quote.bestTime || ''}","${quote.createdAt.toISOString()}"`)
                     .join('\n');
                 return {
                     success: true,
@@ -2287,7 +2287,7 @@ let AdminService = class AdminService {
                     'Services', 'Nature of Outsourcing', 'Budget Range', 'Status',
                     'Created At', 'Updated At'
                 ];
-                const csvData = requests.map(req => [
+                const csvData = requests.map((req) => [
                     req.id,
                     req.organizationName || '',
                     req.coreFunctions || '',
@@ -2301,7 +2301,7 @@ let AdminService = class AdminService {
                     req.updatedAt.toISOString()
                 ]);
                 const csvContent = [headers, ...csvData]
-                    .map(row => row.map(cell => `"${cell}"`).join(','))
+                    .map((row) => row.map((cell) => `"${cell}"`).join(','))
                     .join('\n');
                 return {
                     success: true,

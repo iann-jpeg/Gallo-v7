@@ -173,11 +173,11 @@ let DashboardService = class DashboardService {
                 })
             ]);
             const activities = [
-                ...claims.map(item => (Object.assign(Object.assign({}, item), { type: 'claim' }))),
-                ...outsourcing.map(item => (Object.assign(Object.assign({}, item), { type: 'outsourcing' }))),
-                ...consultations.map(item => (Object.assign(Object.assign({}, item), { type: 'consultation' }))),
-                ...payments.map(item => (Object.assign(Object.assign({}, item), { type: 'payment' }))),
-                ...diaspora.map(item => (Object.assign(Object.assign({}, item), { type: 'diaspora' })))
+                ...claims.map((item) => (Object.assign(Object.assign({}, item), { type: 'claim' }))),
+                ...outsourcing.map((item) => (Object.assign(Object.assign({}, item), { type: 'outsourcing' }))),
+                ...consultations.map((item) => (Object.assign(Object.assign({}, item), { type: 'consultation' }))),
+                ...payments.map((item) => (Object.assign(Object.assign({}, item), { type: 'payment' }))),
+                ...diaspora.map((item) => (Object.assign(Object.assign({}, item), { type: 'diaspora' })))
             ];
             activities.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
             return activities.slice(0, limit);
