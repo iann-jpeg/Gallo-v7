@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 
 class AdminRealtimeService {
   private socket: ReturnType<typeof io> | null = null;
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, ((data: unknown) => void)[]> = new Map();
 
   connect() {
     if (this.socket?.connected) {
@@ -102,14 +102,14 @@ class AdminRealtimeService {
     });
   }
 
-  subscribe(event: string, callback: Function) {
+  subscribe(event: string, callback: (data: unknown) => void) {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
     this.listeners.get(event)?.push(callback);
   }
 
-  unsubscribe(event: string, callback: Function) {
+  unsubscribe(event: string, callback: (data: unknown) => void) {
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
       const index = eventListeners.indexOf(callback);
@@ -119,7 +119,7 @@ class AdminRealtimeService {
     }
   }
 
-  private notifyListeners(event: string, data: any) {
+  private notifyListeners(event: string, data: unknown) {
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
       eventListeners.forEach(callback => callback(data));

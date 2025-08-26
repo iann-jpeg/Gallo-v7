@@ -19,11 +19,18 @@ export NODE_ENV=production
 # Clean up and install dependencies
 echo "📦 Installing production dependencies..."
 rm -rf node_modules
-npm ci --only=production
+npm ci
 
-# Run TypeScript build
-echo "🔨 Building TypeScript application..."
-npm run build
+# Check if build exists, if not create it
+if [ ! -d "dist" ] || [ ! -f "dist/main.js" ]; then
+    echo "🔧 Installing build dependencies..."
+    npm install --save-dev @nestjs/cli typescript ts-node
+    
+    echo "🔨 Building TypeScript application..."
+    npx nest build
+else
+    echo "✅ Build already exists, skipping compilation"
+fi
 
 # Generate Prisma client for production
 echo "🗄️  Generating Prisma client..."
