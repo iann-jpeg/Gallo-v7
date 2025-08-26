@@ -80,9 +80,9 @@ export default function Claims() {
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        // Convert estimatedLoss to number
+        // Convert estimatedLoss to number and then to string
         if (key === 'estimatedLoss') {
-          formDataToSend.append(key, parseFloat(value) || '0');
+          formDataToSend.append(key, String(parseFloat(value) || 0));
         } else {
           formDataToSend.append(key, value);
         }

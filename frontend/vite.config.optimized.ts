@@ -69,8 +69,7 @@ export default defineConfig({
       }
     }
   },
-  // Enable gzip compression
+  // Server options (no gzip compression available here)
   server: {
-    compress: true
   }
 })
