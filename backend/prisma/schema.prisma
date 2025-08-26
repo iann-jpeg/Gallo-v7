@@ -1,45 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-model User {
-  id                  Int                  @id @default(autoincrement())
-  name                String
-  email               String               @unique
-  password            String
-  role                Role                 @default(USER)
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  adminNotes          AdminNote[]
-  claims              Claim[]
-  consultations       Consultation[]
-  diasporaRequests    DiasporaRequest[]
-  assignedLeads       Lead[]               @relation("AssignedLeads")
-  outsourcingRequests OutsourcingRequest[]
-  payments            Payment[]
-  policies            Policy[]
-  profile             Profile?
-  quotes              Quote[]
-  resources           Resource[]
-
-  @@index([role])
-  @@index([createdAt])
-}
-
-model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  features    String[]
-  category    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
 model Claim {
@@ -52,16 +18,70 @@ model Claim {
   description    String
   status         String     @default("pending")
   createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  updatedAt      DateTime
   submitterEmail String?
   submitterName  String?
   submitterPhone String?
-  user           User?      @relation(fields: [userId], references: [id])
-  documents      Document[] @relation("ClaimDocuments")
+  User           User?      @relation(fields: [userId], references: [id])
+  Document       Document[]
+}
 
-  @@index([status])
-  @@index([claimType])
-  @@index([createdAt])
+model Consultation {
+  id              Int       @id @default(autoincrement())
+  userId          Int?
+  name            String
+  email           String
+  phone           String
+  country         String
+  timezone        String
+  serviceInterest String
+  scheduledAt     DateTime?
+  status          String    @default("pending")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  User            User?     @relation(fields: [userId], references: [id])
+}
+
+model DiasporaRequest {
+  id              Int       @id @default(autoincrement())
+  userId          Int?
+  name            String
+  email           String
+  phone           String
+  country         String
+  timezone        String
+  serviceInterest String
+  scheduledAt     DateTime?
+  status          String    @default("pending")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  User            User?     @relation(fields: [userId], references: [id])
+}
+
+model Document {
+  id           Int      @id @default(autoincrement())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  path         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+  claimId      Int?
+  quoteId      Int?
+  content      Bytes?
+  Claim        Claim?   @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  Quote        Quote?   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  features    String[]
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
 }
 
 model Quote {
@@ -80,199 +100,23 @@ model Quote {
   bestTime      String?
   status        String     @default("pending")
   createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  documents     Document[] @relation("QuoteDocuments")
-  user          User?      @relation(fields: [userId], references: [id])
-
-  @@index([status])
-  @@index([product])
-  @@index([createdAt])
+  updatedAt     DateTime
+  Document      Document[]
+  User          User?      @relation(fields: [userId], references: [id])
 }
 
-model Consultation {
-  id               Int       @id @default(autoincrement())
-  userId           Int?
-  name             String
-  email            String
-  phone            String
-  country          String?
-  timezone         String?
-  scheduledAt      DateTime?
-  status           String    @default("pending")
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  company          String?
-  consultationDate String
-  consultationTime String
-  message          String
-  serviceType      String
-  duration         Int?      @default(60)
-  meetingLink      String?
-  meetingType      String?
-  notes            String?
-  user             User?     @relation(fields: [userId], references: [id])
-}
-
-model DiasporaRequest {
-  id              Int       @id @default(autoincrement())
-  userId          Int?
+model User {
+  id              Int               @id @default(autoincrement())
   name            String
-  email           String
-  phone           String
-  country         String
-  timezone        String
-  serviceInterest String
-  scheduledAt     DateTime?
-  status          String    @default("pending")
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  user            User?     @relation(fields: [userId], references: [id])
-}
-
-model Document {
-  id            Int                 @id @default(autoincrement())
-  filename      String
-  originalName  String
-  mimeType      String
-  size          Int
-  path          String
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
-  claimId       Int?
-  quoteId       Int?
-  content       Bytes?
-  outsourcingId Int?
-  claim         Claim?              @relation("ClaimDocuments", fields: [claimId], references: [id], onDelete: Cascade)
-  outsourcing   OutsourcingRequest? @relation("OutsourcingDocuments", fields: [outsourcingId], references: [id], onDelete: Cascade)
-  quote         Quote?              @relation("QuoteDocuments", fields: [quoteId], references: [id], onDelete: Cascade)
-}
-
-model OutsourcingRequest {
-  id                  Int        @id @default(autoincrement())
-  userId              Int?
-  organizationName    String
-  coreFunctions       String?
-  location            String
-  address             String?
-  email               String
-  services            String[]
-  natureOfOutsourcing String
-  budgetRange         String
-  status              String     @default("pending")
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt
-  documents           Document[] @relation("OutsourcingDocuments")
-  user                User?      @relation(fields: [userId], references: [id])
-
-  @@index([status])
-  @@index([createdAt])
-}
-
-model Payment {
-  id            Int      @id @default(autoincrement())
-  userId        Int?
-  policyNumber  String?
-  clientName    String
-  amount        Float
-  paymentMethod String
-  phoneNumber   String?
-  cardNumber    String?
-  expiryDate    String?
-  cvv           String?
-  email         String
-  billingPhone  String?
-  transactionId String?
-  status        String   @default("pending")
-  metadata      Json?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  user          User?    @relation(fields: [userId], references: [id])
-
-  @@index([status])
-  @@index([transactionId])
-  @@index([createdAt])
-}
-
-model Resource {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  category    String
-  filePath    String?
-  fileSize    Int?
-  adminOnly   Boolean  @default(false)
-  createdBy   Int?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  creator     User?    @relation(fields: [createdBy], references: [id])
-
-  @@index([category])
-  @@index([adminOnly])
-}
-
-model Profile {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
-  fullName  String?
-  phone     String?
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-}
-
-model Lead {
-  id           Int       @id @default(autoincrement())
-  name         String
-  email        String
-  phone        String?
-  company      String?
-  serviceType  String
-  message      String?
-  source       String?
-  status       String    @default("new")
-  priority     String?
-  assignedTo   Int?
-  followUpDate DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  assignedUser User?     @relation("AssignedLeads", fields: [assignedTo], references: [id])
-
-  @@index([status])
-  @@index([createdAt])
-}
-
-model Policy {
-  id             Int      @id @default(autoincrement())
-  clientId       Int?
-  policyNumber   String   @unique
-  policyType     String
-  insurer        String
-  premiumAmount  Float
-  coverageAmount Float?
-  startDate      DateTime
-  endDate        DateTime
-  status         String   @default("active")
-  notes          String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  client         User?    @relation(fields: [clientId], references: [id])
-
-  @@index([status])
-  @@index([policyType])
-}
-
-model AdminNote {
-  id         Int      @id @default(autoincrement())
-  adminId    Int?
-  entityId   String
-  entityType String
-  note       String
-  isPrivate  Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  admin      User?    @relation(fields: [adminId], references: [id])
-
-  @@index([entityType, entityId])
+  email           String            @unique
+  password        String
+  role            Role              @default(USER)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  Claim           Claim[]
+  Consultation    Consultation[]
+  DiasporaRequest DiasporaRequest[]
+  Quote           Quote[]
 }
 
 enum Role {

@@ -8,7 +8,7 @@
     "build": "nest build",
     "start": "node dist/main.js",
     "start:prod": "NODE_ENV=production node dist/main.js",
-    "start:railway": "node dist/main.js",
+    "start:railway": "npx prisma generate && npx prisma migrate deploy && node dist/main.js",
     "build:prod": "prisma generate && nest build",
     "migrate": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
@@ -16,7 +16,8 @@
     "seed": "ts-node prisma/seed.ts",
     "postbuild": "prisma generate",
     "railway:deploy": "./scripts/deploy-railway.sh",
-    "railway:setup": "npm install --production && npx prisma generate && npx prisma migrate deploy"
+    "railway:setup": "npm install --production && npx prisma generate && npx prisma migrate deploy",
+    "railway:migrate": "./migrate-railway.sh"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

@@ -18,7 +18,7 @@ class AdminRealtimeService {
       
       // Production: Railway backend
       if (import.meta.env.PROD) {
-        return 'https://galloways-backend-production.up.railway.app';
+        return 'https://gallo-end-production.up.railway.app';
       }
       
       // Development: Local backend

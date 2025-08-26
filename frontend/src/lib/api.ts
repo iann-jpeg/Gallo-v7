@@ -7,7 +7,7 @@ const getApiBaseUrl = () => {
   
   // Production: Railway backend
   if (import.meta.env.PROD) {
-    return 'https://galloways-backend-production.up.railway.app/api';
+    return 'https://gallo-end-production.up.railway.app/api';
   }
   
   // Development: Local backend

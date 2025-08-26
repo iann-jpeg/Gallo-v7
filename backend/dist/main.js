@@ -83,7 +83,7 @@ async function bootstrap() {
         const baseUrl = process.env.RAILWAY_STATIC_URL
             ? `https://${process.env.RAILWAY_STATIC_URL}`
             : process.env.NODE_ENV === 'production'
-                ? 'https://galloways-backend-production.up.railway.app'
+                ? 'https://gallo-end-production.up.railway.app'
                 : `http://localhost:${port}`;
         logger.log(`✅ Backend running at ${baseUrl}`);
         logger.log(`📚 API Documentation: ${baseUrl}/docs`);
