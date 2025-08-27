@@ -94,7 +94,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   // Railway provides PORT environment variable
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 8080;
   logger.log(`🚀 Server starting on port ${port}`);
   
   try {
