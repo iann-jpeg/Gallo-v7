@@ -23,7 +23,8 @@ let AppController = class AppController {
             'Content-Type': 'image/x-icon',
             'Cross-Origin-Resource-Policy': 'cross-origin',
         });
-        res.status(204).end();
+        // You can use a default empty favicon or serve a real one from your public folder
+        res.status(204).end(); // No Content, avoids 404 and CORP error
     }
 };
 exports.AppController = AppController;
@@ -43,4 +44,3 @@ __decorate([
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)()
 ], AppController);
-//# sourceMappingURL=app.controller.js.map

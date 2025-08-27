@@ -45,7 +45,7 @@ export class ClaimsController {
       const claim = await this.claimsService.findOne(+id);
       return {
         success: true,
-        data: claim.documents
+        data: claim.document
       };
     } catch (error: any) {
       throw new BadRequestException(error.message || 'Failed to fetch claim documents');
@@ -99,11 +99,10 @@ export class ClaimsController {
       }
       
       // Add document info to the claim data
-      const claimData = {
-        ...data,
-        documents: documentPaths,
-        documentDetails: documentDetails
-      };
+        const claimData = {
+          ...data,
+          documentDetails: documentDetails
+        };
       
       const claim = await this.claimsService.create(claimData);
       return {

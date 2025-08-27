@@ -61,7 +61,7 @@ export class DashboardService {
           orderBy: { createdAt: 'desc' },
           where: dateFilter,
           include: {
-            documents: true
+            document: true
           }
         }),
         
@@ -91,7 +91,7 @@ export class DashboardService {
       ]);
 
       // Calculate monthly revenue
-      const monthlyRevenue = recentPayments.reduce((sum, payment) => sum + (payment.amount || 0), 0);
+      const monthlyRevenue = recentPayments.reduce((sum: number, payment: any) => sum + (payment.amount || 0), 0);
       const totalRequests = totalClaims + totalQuotes + totalConsultations + totalOutsourcingRequests;
       const conversionRate = totalRequests > 0 ? Math.round((activePolicies / totalRequests) * 100) : 0;
 
@@ -158,7 +158,6 @@ export class DashboardService {
             organizationName: true,
             email: true,
             services: true,
-            budgetRange: true,
             status: true,
             createdAt: true
           }
@@ -207,11 +206,11 @@ export class DashboardService {
 
       // Combine all activities with type labels
       const activities = [
-        ...claims.map(item => ({ ...item, type: 'claim' })),
-        ...outsourcing.map(item => ({ ...item, type: 'outsourcing' })),
-        ...consultations.map(item => ({ ...item, type: 'consultation' })),
-        ...payments.map(item => ({ ...item, type: 'payment' })),
-        ...diaspora.map(item => ({ ...item, type: 'diaspora' }))
+        ...claims.map((item: any) => ({ ...item, type: 'claim' })),
+        ...outsourcing.map((item: any) => ({ ...item, type: 'outsourcing' })),
+        ...consultations.map((item: any) => ({ ...item, type: 'consultation' })),
+        ...payments.map((item: any) => ({ ...item, type: 'payment' })),
+        ...diaspora.map((item: any) => ({ ...item, type: 'diaspora' }))
       ];
 
       // Sort by creation date

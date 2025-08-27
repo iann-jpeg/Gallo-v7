@@ -26,7 +26,7 @@ export class ClaimsService {
                 email: true,
               },
             },
-            documents: {
+            document: {
               select: {
                 id: true,
                 filename: true,
@@ -42,9 +42,9 @@ export class ClaimsService {
       ]);
 
       // Add document URLs to claims
-      const claimsWithUrls = claims.map(claim => ({
+      const claimsWithUrls = claims.map((claim: any) => ({
         ...claim,
-        documentUrls: claim.documents.map(doc => 
+        documentUrls: (claim.document || []).map((doc: any) => 
           `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}`
         ),
       }));
@@ -75,7 +75,7 @@ export class ClaimsService {
               email: true,
             },
           },
-          documents: {
+          document: {
             select: {
               id: true,
               filename: true,
@@ -92,7 +92,7 @@ export class ClaimsService {
       // Add document URLs
       const claimWithUrls = {
         ...claim,
-        documentUrls: claim.documents.map(doc => 
+        documentUrls: (claim.document || []).map((doc: any) => 
           `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}`
         ),
       };
@@ -108,7 +108,7 @@ export class ClaimsService {
       const claim = await prisma.claim.findUnique({
         where: { id },
         select: {
-          documents: {
+          document: {
             select: {
               id: true,
               filename: true,
@@ -124,7 +124,7 @@ export class ClaimsService {
       if (!claim) throw new NotFoundException('Claim not found');
 
       // Add URLs to documents
-      const documentsWithUrls = claim.documents.map(doc => ({
+  const documentsWithUrls = (claim.document || []).map((doc: any) => ({
         ...doc,
         url: `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}`,
       }));
@@ -227,7 +227,7 @@ export class ClaimsService {
       const fullClaim = await prisma.claim.findUnique({ 
         where: { id },
         include: {
-          documents: true
+          document: true
         }
       });
 

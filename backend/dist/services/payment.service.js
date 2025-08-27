@@ -374,7 +374,8 @@ let PaymentService = class PaymentService {
     async simulatePaymentProcessing(paymentMethod) {
         const delay = Math.random() * 2000 + 1000;
         await new Promise(resolve => setTimeout(resolve, delay));
-        switch (paymentMethod) {
+        const method = paymentMethod || 'unknown';
+        switch (method) {
             case 'mpesa':
                 return Math.random() > 0.1;
             case 'card':

@@ -151,12 +151,7 @@ let AdminService = class AdminService {
                         user: {
                             select: {
                                 name: true,
-                                email: true,
-                                profile: {
-                                    select: {
-                                        phone: true
-                                    }
-                                }
+                                email: true
                             }
                         }
                     }
@@ -559,8 +554,8 @@ let AdminService = class AdminService {
                         updatedAt: true,
                         _count: {
                             select: {
-                                claims: true,
-                                quotes: true
+                                claim: true,
+                                quote: true
                             }
                         }
                     }
@@ -658,9 +653,7 @@ let AdminService = class AdminService {
                 data: {
                     note: `User status changed to: ${status}`,
                     entityType: 'USER_STATUS_UPDATE',
-                    entityId: userId.toString(),
-                    adminId: 1,
-                    isPrivate: false
+                    adminId: 1
                 }
             });
             return {
@@ -830,9 +823,7 @@ let AdminService = class AdminService {
                 data: {
                     note: `Claim status updated to: ${status}`,
                     entityType: 'CLAIM_STATUS_UPDATE',
-                    entityId: claimId.toString(),
-                    adminId: adminId !== null && adminId !== void 0 ? adminId : null,
-                    isPrivate: false
+                    adminId: adminId !== null && adminId !== void 0 ? adminId : null
                 }
             });
             return {
@@ -873,7 +864,7 @@ let AdminService = class AdminService {
                             }
                         }
                     },
-                    documents: {
+                    document: {
                         select: {
                             id: true,
                             filename: true,
@@ -1113,9 +1104,7 @@ let AdminService = class AdminService {
                 data: {
                     note: `Consultation status updated to: ${status}`,
                     entityType: 'CONSULTATION_STATUS_UPDATE',
-                    entityId: consultationId.toString(),
-                    adminId: adminId !== null && adminId !== void 0 ? adminId : null,
-                    isPrivate: false
+                    adminId: adminId !== null && adminId !== void 0 ? adminId : null
                 }
             });
             return {
@@ -1193,9 +1182,7 @@ let AdminService = class AdminService {
                 data: {
                     note: `Meeting scheduled for ${meetingData.meetingDate} at ${meetingData.meetingTime}. Type: ${meetingData.meetingType}${meetingData.notes ? `. Notes: ${meetingData.notes}` : ''}`,
                     entityType: 'MEETING_SCHEDULED',
-                    entityId: consultationId.toString(),
-                    adminId: null,
-                    isPrivate: false
+                    adminId: null
                 }
             });
             return {
@@ -1278,9 +1265,7 @@ let AdminService = class AdminService {
                 data: {
                     note: `WhatsApp meeting details sent to ${((_f = (_e = consultation.user) === null || _e === void 0 ? void 0 : _e.name) !== null && _f !== void 0 ? _f : 'Client')} at ${userPhone}`,
                     entityType: 'WHATSAPP_SENT',
-                    entityId: consultationId.toString(),
-                    adminId: null,
-                    isPrivate: false
+                    adminId: null
                 }
             });
             return {
@@ -1380,7 +1365,7 @@ let AdminService = class AdminService {
                             email: true
                         }
                     },
-                    documents: true
+                    document: true
                 }
             });
             if (!quote) {
@@ -2166,7 +2151,10 @@ let AdminService = class AdminService {
         try {
             const outsourcingRequest = await this.prisma.outsourcingRequest.update({
                 where: { id },
-                data: Object.assign(Object.assign({ status }, (notes && { adminNotes: notes })), { updatedAt: new Date() }),
+                data: {
+                    status,
+                    updatedAt: new Date()
+                },
                 include: {
                     user: {
                         select: {
@@ -2177,6 +2165,20 @@ let AdminService = class AdminService {
                     }
                 }
             });
+            if (notes) {
+                try {
+                    await this.prisma.adminNote.create({
+                        data: {
+                            note: notes,
+                            entityType: 'OUTSOURCING_STATUS_UPDATE',
+                            adminId: null
+                        }
+                    });
+                }
+                catch (noteErr) {
+                    console.error('Failed to create admin note for outsourcing status update:', noteErr);
+                }
+            }
             return {
                 success: true,
                 data: outsourcingRequest,

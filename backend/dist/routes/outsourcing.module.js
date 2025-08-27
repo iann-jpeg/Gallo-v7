@@ -10,13 +10,14 @@ exports.OutsourcingModule = void 0;
 const common_1 = require("@nestjs/common");
 const outsourcing_controller_1 = require("../controllers/outsourcing.controller");
 const outsourcing_service_1 = require("../services/outsourcing.service");
+const prisma_service_1 = require("../prisma/prisma.service");
 let OutsourcingModule = class OutsourcingModule {
 };
 exports.OutsourcingModule = OutsourcingModule;
 exports.OutsourcingModule = OutsourcingModule = __decorate([
     (0, common_1.Module)({
         controllers: [outsourcing_controller_1.OutsourcingController],
-        providers: [outsourcing_service_1.OutsourcingService],
+        providers: [outsourcing_service_1.OutsourcingService, prisma_service_1.PrismaService],
     })
 ], OutsourcingModule);
 //# sourceMappingURL=outsourcing.module.js.map

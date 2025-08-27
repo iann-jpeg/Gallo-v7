@@ -77,4 +77,3 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], UpdateResourceDto.prototype, "adminOnly", void 0);
-//# sourceMappingURL=resource.dto.js.map

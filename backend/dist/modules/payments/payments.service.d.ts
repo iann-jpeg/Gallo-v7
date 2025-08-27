@@ -5,23 +5,22 @@ export declare class PaymentsService {
     } | {
         success: boolean;
         payment: {
-            status: string;
             id: number;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            email: string;
+            userId: number | null;
+            description: string | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            policyNumber: string | null;
-            clientName: string;
+            claimId: number | null;
+            quoteId: number | null;
             amount: number;
-            paymentMethod: string;
-            phoneNumber: string | null;
-            cardNumber: string | null;
-            expiryDate: string | null;
-            cvv: string | null;
-            billingPhone: string | null;
+            currency: string;
+            reference: string | null;
             transactionId: string | null;
+            method: string | null;
+            paymentMethod: string | null;
+            clientName: string | null;
+            metadata: import("@prisma/client/runtime/library").JsonValue | null;
         };
     }>;
     processPayment(id: string, data: any): Promise<{
@@ -30,23 +29,22 @@ export declare class PaymentsService {
     } | {
         success: boolean;
         payment: {
-            status: string;
             id: number;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            email: string;
+            userId: number | null;
+            description: string | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            policyNumber: string | null;
-            clientName: string;
+            claimId: number | null;
+            quoteId: number | null;
             amount: number;
-            paymentMethod: string;
-            phoneNumber: string | null;
-            cardNumber: string | null;
-            expiryDate: string | null;
-            cvv: string | null;
-            billingPhone: string | null;
+            currency: string;
+            reference: string | null;
             transactionId: string | null;
+            method: string | null;
+            paymentMethod: string | null;
+            clientName: string | null;
+            metadata: import("@prisma/client/runtime/library").JsonValue | null;
         };
     }>;
     getPaymentStatus(id: string): Promise<{

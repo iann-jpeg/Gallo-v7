@@ -117,4 +117,3 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateClaimDto.prototype, "submitterPhone", void 0);
-//# sourceMappingURL=claim.dto.js.map

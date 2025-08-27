@@ -20,11 +20,11 @@ export declare class ClaimsController {
         data: {
             documentUrls: string[];
             user: {
-                id: number;
                 name: string;
+                id: number;
                 email: string;
             } | null;
-            documents: {
+            document: {
                 id: number;
                 createdAt: Date;
                 filename: string;
@@ -103,8 +103,8 @@ export declare class ClaimsController {
         message: string;
         data: {
             user: {
-                id: number;
                 name: string;
+                id: number;
                 email: string;
             } | null;
         } & {

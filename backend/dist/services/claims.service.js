@@ -44,7 +44,7 @@ let ClaimsService = class ClaimsService {
                                 email: true,
                             },
                         },
-                        documents: {
+                        document: {
                             select: {
                                 id: true,
                                 filename: true,
@@ -58,7 +58,7 @@ let ClaimsService = class ClaimsService {
                 }),
                 this.prisma.claim.count()
             ]);
-            const claimsWithUrls = claims.map((claim) => (Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) })));
+            const claimsWithUrls = claims.map((claim) => (Object.assign(Object.assign({}, claim), { documentUrls: (claim.document || []).map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) })));
             return {
                 data: claimsWithUrls,
                 meta: {
@@ -85,7 +85,7 @@ let ClaimsService = class ClaimsService {
                             email: true,
                         },
                     },
-                    documents: {
+                    document: {
                         select: {
                             id: true,
                             filename: true,
@@ -99,7 +99,7 @@ let ClaimsService = class ClaimsService {
             });
             if (!claim)
                 throw new common_1.BadRequestException('Claim not found');
-            const claimWithUrls = Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) });
+            const claimWithUrls = Object.assign(Object.assign({}, claim), { documentUrls: (claim.document || []).map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`) });
             return claimWithUrls;
         }
         catch (error) {

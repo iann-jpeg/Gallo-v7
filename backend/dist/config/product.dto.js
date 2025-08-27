@@ -53,4 +53,3 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateProductDto.prototype, "category", void 0);
-//# sourceMappingURL=product.dto.js.map

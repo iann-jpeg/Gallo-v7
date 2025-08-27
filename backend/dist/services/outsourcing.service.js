@@ -5,18 +5,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OutsourcingService = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+const prisma_service_1 = require("../prisma/prisma.service");
 let OutsourcingService = class OutsourcingService {
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
     async findAll(page = 1, limit = 10, status) {
         try {
             const skip = (page - 1) * limit;
             const where = status ? { status } : {};
             const [requests, total] = await Promise.all([
-                prisma.outsourcingRequest.findMany({
+                this.prisma.outsourcingRequest.findMany({
                     skip,
                     take: limit,
                     where,
@@ -25,10 +30,10 @@ let OutsourcingService = class OutsourcingService {
                         user: {
                             select: { id: true, name: true, email: true }
                         },
-                        documents: true
+                        document: true
                     }
                 }),
-                prisma.outsourcingRequest.count({ where })
+                this.prisma.outsourcingRequest.count({ where })
             ]);
             return {
                 data: requests,
@@ -47,13 +52,13 @@ let OutsourcingService = class OutsourcingService {
     }
     async findOne(id) {
         try {
-            const request = await prisma.outsourcingRequest.findUnique({
+            const request = await this.prisma.outsourcingRequest.findUnique({
                 where: { id },
                 include: {
                     user: {
                         select: { id: true, name: true, email: true }
                     },
-                    documents: true
+                    document: true
                 }
             });
             if (!request) {
@@ -72,14 +77,22 @@ let OutsourcingService = class OutsourcingService {
     async create(data, document) {
         var _a, _b;
         try {
-            const request = await prisma.outsourcingRequest.create({
-                data: Object.assign(Object.assign({}, data), { services: data.services || [] }),
-                include: {
-                    documents: true
-                }
+            const createData = {
+                title: data.organizationName,
+                description: data.natureOfOutsourcing || 'No description provided',
+                category: 'general',
+                email: data.email,
+                organizationName: data.organizationName,
+                services: data.services,
+                budget: data.budgetRange ? parseFloat(data.budgetRange.replace(/[^0-9.-]+/g, '')) || undefined : undefined,
+                status: 'pending'
+            };
+            const request = await this.prisma.outsourcingRequest.create({
+                data: createData,
+                include: { document: true }
             });
             if (document) {
-                await prisma.document.create({
+                await this.prisma.document.create({
                     data: {
                         filename: document.filename,
                         originalName: document.originalname,
@@ -127,20 +140,20 @@ Galloways Insurance Team`;
     }
     async update(id, data) {
         try {
-            const existingRequest = await prisma.outsourcingRequest.findUnique({
+            const existingRequest = await this.prisma.outsourcingRequest.findUnique({
                 where: { id }
             });
             if (!existingRequest) {
                 throw new common_1.NotFoundException(`Outsourcing request with ID ${id} not found`);
             }
-            const updatedRequest = await prisma.outsourcingRequest.update({
+            const updatedRequest = await this.prisma.outsourcingRequest.update({
                 where: { id },
-                data: Object.assign(Object.assign({}, data), { services: data.services || existingRequest.services }),
+                data: data,
                 include: {
                     user: {
                         select: { id: true, name: true, email: true }
                     },
-                    documents: true
+                    document: true
                 }
             });
             return {
@@ -159,13 +172,13 @@ Galloways Insurance Team`;
     }
     async remove(id) {
         try {
-            const existingRequest = await prisma.outsourcingRequest.findUnique({
+            const existingRequest = await this.prisma.outsourcingRequest.findUnique({
                 where: { id }
             });
             if (!existingRequest) {
                 throw new common_1.NotFoundException(`Outsourcing request with ID ${id} not found`);
             }
-            await prisma.outsourcingRequest.delete({
+            await this.prisma.outsourcingRequest.delete({
                 where: { id }
             });
             return {
@@ -187,7 +200,7 @@ Galloways Insurance Team`;
             if (!validStatuses.includes(status)) {
                 throw new common_1.BadRequestException('Invalid status provided');
             }
-            const updatedRequest = await prisma.outsourcingRequest.update({
+            const updatedRequest = await this.prisma.outsourcingRequest.update({
                 where: { id },
                 data: { status },
                 include: {
@@ -213,6 +226,7 @@ Galloways Insurance Team`;
 };
 exports.OutsourcingService = OutsourcingService;
 exports.OutsourcingService = OutsourcingService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], OutsourcingService);
 //# sourceMappingURL=outsourcing.service.js.map

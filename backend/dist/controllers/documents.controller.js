@@ -22,9 +22,11 @@ let DocumentsController = class DocumentsController {
     }
     async viewClaimDocument(filename, res) {
         try {
+            // Security: validate filename to prevent path traversal
             if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
                 throw new common_1.BadRequestException('Invalid filename');
             }
+            // Find document in database
             const document = await this.prisma.document.findFirst({
                 where: {
                     filename: filename,
@@ -34,9 +36,11 @@ let DocumentsController = class DocumentsController {
             if (!document || !document.content) {
                 throw new common_1.NotFoundException('Document not found or no content available');
             }
+            // Set appropriate content type based on mimeType
             res.setHeader('Content-Type', document.mimeType);
             res.setHeader('Content-Disposition', `inline; filename="${document.originalName}"`);
             res.setHeader('Content-Length', document.size.toString());
+            // Send file content from database
             res.send(Buffer.from(document.content));
         }
         catch (error) {
@@ -48,9 +52,11 @@ let DocumentsController = class DocumentsController {
     }
     async viewQuoteDocument(filename, res) {
         try {
+            // Security: validate filename to prevent path traversal
             if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
                 throw new common_1.BadRequestException('Invalid filename');
             }
+            // Find document in database
             const document = await this.prisma.document.findFirst({
                 where: {
                     filename: filename,
@@ -60,9 +66,11 @@ let DocumentsController = class DocumentsController {
             if (!document || !document.content) {
                 throw new common_1.NotFoundException('Document not found or no content available');
             }
+            // Set appropriate content type based on mimeType
             res.setHeader('Content-Type', document.mimeType);
             res.setHeader('Content-Disposition', `inline; filename="${document.originalName}"`);
             res.setHeader('Content-Length', document.size.toString());
+            // Send file content from database
             res.send(Buffer.from(document.content));
         }
         catch (error) {
@@ -72,21 +80,25 @@ let DocumentsController = class DocumentsController {
             throw new common_1.BadRequestException('Failed to serve document: ' + error.message);
         }
     }
+    // New endpoint to view document by ID
     async viewDocumentById(id, res) {
         try {
             const documentId = parseInt(id);
             if (isNaN(documentId)) {
                 throw new common_1.BadRequestException('Invalid document ID');
             }
+            // Find document in database by ID
             const document = await this.prisma.document.findUnique({
                 where: { id: documentId }
             });
             if (!document || !document.content) {
                 throw new common_1.NotFoundException('Document not found or no content available');
             }
+            // Set appropriate content type based on mimeType
             res.setHeader('Content-Type', document.mimeType);
             res.setHeader('Content-Disposition', `inline; filename="${document.originalName}"`);
             res.setHeader('Content-Length', document.size.toString());
+            // Send file content from database
             res.send(Buffer.from(document.content));
         }
         catch (error) {
@@ -129,4 +141,3 @@ exports.DocumentsController = DocumentsController = __decorate([
     (0, common_1.Controller)('documents'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], DocumentsController);
-//# sourceMappingURL=documents.controller.js.map

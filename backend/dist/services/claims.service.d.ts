@@ -20,11 +20,11 @@ export declare class ClaimsService {
     findOne(id: number): Promise<{
         documentUrls: string[];
         user: {
-            id: number;
             name: string;
+            id: number;
             email: string;
         } | null;
-        documents: {
+        document: {
             id: number;
             createdAt: Date;
             filename: string;
@@ -80,8 +80,8 @@ export declare class ClaimsService {
     }>;
     updateStatus(id: number, status: string): Promise<{
         user: {
-            id: number;
             name: string;
+            id: number;
             email: string;
         } | null;
     } & {

@@ -8,20 +8,20 @@ export declare class QuotesController {
     } | {
         success: boolean;
         quote: {
-            location: string | null;
-            details: string | null;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
+            email: string;
+            phone: string;
             product: string;
-            userId: number | null;
             firstName: string;
             lastName: string;
-            phone: string;
+            location: string | null;
             budget: string | null;
             coverage: string | null;
+            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         };
@@ -31,20 +31,20 @@ export declare class QuotesController {
         message: any;
     } | {
         quotes: {
-            location: string | null;
-            details: string | null;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
+            email: string;
+            phone: string;
             product: string;
-            userId: number | null;
             firstName: string;
             lastName: string;
-            phone: string;
+            location: string | null;
             budget: string | null;
             coverage: string | null;
+            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         }[];

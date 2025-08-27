@@ -117,7 +117,7 @@ __decorate([
                 callback(new common_1.BadRequestException('Invalid file type'), false);
             }
         },
-        limits: { fileSize: 10 * 1024 * 1024 },
+        limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
     })),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
@@ -148,4 +148,3 @@ exports.ResourceController = ResourceController = __decorate([
     (0, common_1.Controller)('resources'),
     __metadata("design:paramtypes", [resource_service_1.ResourceService])
 ], ResourceController);
-//# sourceMappingURL=resource.controller.js.map

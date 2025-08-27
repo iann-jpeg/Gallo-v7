@@ -72,11 +72,9 @@ let ConsultationsService = class ConsultationsService {
                     name: data.name,
                     email: data.email,
                     phone: data.phone,
-                    company: data.company,
-                    serviceType: data.serviceType,
-                    consultationDate: data.consultationDate,
-                    consultationTime: data.consultationTime,
-                    message: data.message,
+                    serviceInterest: data.serviceType,
+                    consultationDate: data.consultationDate ? new Date(data.consultationDate) : undefined,
+                    notes: [data.company, data.message].filter(Boolean).join('\n') || null,
                     country: data.country,
                     timezone: data.timezone,
                     scheduledAt,
@@ -138,16 +136,15 @@ Galloways Insurance Team`;
                 updateData.email = data.email;
             if (data.phone)
                 updateData.phone = data.phone;
-            if (data.company !== undefined)
-                updateData.company = data.company;
+            if (data.company !== undefined || data.message !== undefined)
+                updateData.notes = [data.company, data.message].filter(Boolean).join('\n') || undefined;
             if (data.serviceType)
                 updateData.serviceType = data.serviceType;
             if (data.consultationDate)
                 updateData.consultationDate = data.consultationDate;
-            if (data.consultationTime)
-                updateData.consultationTime = data.consultationTime;
-            if (data.message)
-                updateData.message = data.message;
+            if (data.consultationTime) {
+                updateData.notes = (updateData.notes ? updateData.notes + '\n' : '') + data.consultationTime;
+            }
             if (data.country !== undefined)
                 updateData.country = data.country;
             if (data.timezone !== undefined)

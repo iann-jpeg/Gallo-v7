@@ -119,7 +119,7 @@ __decorate([
             callback(null, true);
         },
         limits: {
-            fileSize: 10 * 1024 * 1024,
+            fileSize: 10 * 1024 * 1024, // 10MB limit
         },
     })),
     __param(0, (0, common_1.Body)()),
@@ -147,4 +147,3 @@ exports.QuotesController = QuotesController = __decorate([
     (0, common_1.Controller)('quotes'),
     __metadata("design:paramtypes", [quotes_service_1.QuotesService])
 ], QuotesController);
-//# sourceMappingURL=quotes.controller.js.map

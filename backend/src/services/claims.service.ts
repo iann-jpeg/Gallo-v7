@@ -25,7 +25,7 @@ export class ClaimsService {
                 email: true,
               },
             },
-            documents: {
+            document: {
               select: {
                 id: true,
                 filename: true,
@@ -43,7 +43,7 @@ export class ClaimsService {
       // Add document URLs to claims
       const claimsWithUrls = claims.map((claim: any) => ({
         ...claim,
-        documentUrls: claim.documents.map((doc: any) => 
+        documentUrls: (claim.document || []).map((doc: any) => 
           `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`
         ),
       }));
@@ -74,7 +74,7 @@ export class ClaimsService {
               email: true,
             },
           },
-          documents: {
+          document: {
             select: {
               id: true,
               filename: true,
@@ -91,7 +91,7 @@ export class ClaimsService {
       // Add document URLs
       const claimWithUrls = {
         ...claim,
-        documentUrls: claim.documents.map((doc: any) => 
+        documentUrls: (claim.document || []).map((doc: any) => 
           `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/view/${doc.id}`
         ),
       };

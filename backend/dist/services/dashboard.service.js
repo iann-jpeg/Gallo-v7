@@ -49,7 +49,7 @@ let DashboardService = class DashboardService {
                     orderBy: { createdAt: 'desc' },
                     where: dateFilter,
                     include: {
-                        documents: true
+                        document: true
                     }
                 }),
                 this.prisma.outsourcingRequest.findMany({
@@ -129,7 +129,6 @@ let DashboardService = class DashboardService {
                         organizationName: true,
                         email: true,
                         services: true,
-                        budgetRange: true,
                         status: true,
                         createdAt: true
                     }

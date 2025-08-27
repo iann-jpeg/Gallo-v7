@@ -5,8 +5,8 @@ export declare class ProductsController {
     constructor(productsService: ProductsService);
     findAll(search?: string, page?: number, limit?: number): Promise<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -14,8 +14,8 @@ export declare class ProductsController {
     }[]>;
     findOne(id: string): Promise<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -23,8 +23,8 @@ export declare class ProductsController {
     } | null>;
     create(data: CreateProductDto): Promise<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -32,8 +32,8 @@ export declare class ProductsController {
     }>;
     update(id: string, data: UpdateProductDto): Promise<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -41,8 +41,8 @@ export declare class ProductsController {
     }>;
     remove(id: string): Promise<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];

@@ -30,6 +30,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
         try {
             await this.$connect();
             this.logger.log('✅ Aplin PostgreSQL connected successfully');
+            // Test connection with a simple query
             await this.$queryRaw `SELECT 1 as connection_test`;
             this.logger.log('✅ Database health check passed');
         }
@@ -74,4 +75,3 @@ exports.PrismaService = PrismaService = PrismaService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [])
 ], PrismaService);
-//# sourceMappingURL=prisma.service.js.map

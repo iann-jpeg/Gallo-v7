@@ -33,7 +33,7 @@ export class DashboardService {
       prisma.user.count(),
       prisma.claim.count({ where: { status: 'pending' } }),
       prisma.policy.count({ where: { status: 'active' } }),
-      prisma.payment.aggregate({ _sum: { amount: true } }).then((r) => r._sum.amount || 0),
+      prisma.payment.aggregate({ _sum: { amount: true } }).then((r: any) => r._sum.amount || 0),
       Promise.resolve(12), // TODO: Calculate conversion rate
       prisma.claim.findMany({ take: 10, orderBy: { createdAt: 'desc' } }),
       prisma.outsourcingRequest.findMany({ take: 10, orderBy: { createdAt: 'desc' } }),

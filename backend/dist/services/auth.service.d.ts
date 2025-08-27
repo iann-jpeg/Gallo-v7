@@ -9,22 +9,22 @@ export declare class AuthService {
         success: boolean;
         message: string;
         user: {
-            role: import(".prisma/client").$Enums.Role;
-            id: number;
             name: string;
-            email: string;
+            id: number;
             createdAt: Date;
+            email: string;
+            role: import(".prisma/client").$Enums.Role;
         };
     }>;
     registerAdmin(dto: RegisterDto): Promise<{
         success: boolean;
         message: string;
         user: {
-            role: import(".prisma/client").$Enums.Role;
-            id: number;
             name: string;
-            email: string;
+            id: number;
             createdAt: Date;
+            email: string;
+            role: import(".prisma/client").$Enums.Role;
         };
     }>;
     login(dto: LoginDto): Promise<{
@@ -33,11 +33,11 @@ export declare class AuthService {
             access_token: string;
             refresh_token: string;
             user: {
-                role: import(".prisma/client").$Enums.Role;
-                id: number;
                 name: string;
-                email: string;
+                id: number;
                 createdAt: Date;
+                email: string;
+                role: import(".prisma/client").$Enums.Role;
             };
         };
     }>;
@@ -50,22 +50,22 @@ export declare class AuthService {
         data: {
             access_token: string;
             user: {
-                role: import(".prisma/client").$Enums.Role;
-                id: number;
                 name: string;
+                id: number;
                 email: string;
+                role: import(".prisma/client").$Enums.Role;
             };
         };
     }>;
     getProfile(userId: number): Promise<{
         success: boolean;
         data: {
-            role: import(".prisma/client").$Enums.Role;
-            id: number;
             name: string;
-            email: string;
+            id: number;
             createdAt: Date;
             updatedAt: Date;
+            email: string;
+            role: import(".prisma/client").$Enums.Role;
         };
     }>;
     verifyToken(token: string): Promise<any>;
@@ -73,22 +73,22 @@ export declare class AuthService {
         success: boolean;
         message: string;
         user: {
-            role: import(".prisma/client").$Enums.Role;
-            id: number;
             name: string;
-            email: string;
+            id: number;
             createdAt: Date;
+            email: string;
+            role: import(".prisma/client").$Enums.Role;
         };
     }>;
     promoteUserToAdmin(userId: number, currentAdminId: number): Promise<{
         success: boolean;
         message: string;
         user: {
-            role: import(".prisma/client").$Enums.Role;
-            id: number;
             name: string;
-            email: string;
+            id: number;
             updatedAt: Date;
+            email: string;
+            role: import(".prisma/client").$Enums.Role;
         };
     }>;
     isAdmin(userId: number): Promise<boolean>;

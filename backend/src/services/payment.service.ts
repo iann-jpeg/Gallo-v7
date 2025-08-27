@@ -441,12 +441,13 @@ export class PaymentService {
     }
   }
 
-  private async simulatePaymentProcessing(paymentMethod: string): Promise<boolean> {
+  private async simulatePaymentProcessing(paymentMethod: string | null): Promise<boolean> {
     // Simulate different success rates for different payment methods
     const delay = Math.random() * 2000 + 1000; // 1-3 seconds
     await new Promise(resolve => setTimeout(resolve, delay));
 
-    switch (paymentMethod) {
+    const method = paymentMethod || 'unknown';
+    switch (method) {
       case 'mpesa':
         return Math.random() > 0.1; // 90% success rate
       case 'card':

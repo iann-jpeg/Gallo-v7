@@ -7,16 +7,18 @@ export declare class ResourcesController {
         success: boolean;
         message: any;
     } | {
-        description: string | null;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         category: string;
         title: string;
+        url: string | null;
         filePath: string | null;
         fileSize: number | null;
         adminOnly: boolean;
-        createdBy: number | null;
+        isPublic: boolean;
+        creatorId: number | null;
     }[]>;
     downloadResource(id: string, res: Response): Promise<void>;
 }

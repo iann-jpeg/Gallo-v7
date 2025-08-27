@@ -5,25 +5,23 @@ export declare class ConsultationsService {
     } | {
         success: boolean;
         consultation: {
-            message: string;
             name: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
+            email: string;
             phone: string;
             country: string | null;
             timezone: string | null;
-            scheduledAt: Date | null;
+            serviceInterest: string;
+            serviceType: string | null;
             company: string | null;
-            consultationDate: string;
-            consultationTime: string;
-            serviceType: string;
-            duration: number | null;
+            scheduledAt: Date | null;
+            consultationDate: Date | null;
             meetingLink: string | null;
-            meetingType: string | null;
+            duration: number | null;
             notes: string | null;
         };
     }>;
@@ -32,25 +30,23 @@ export declare class ConsultationsService {
         message: any;
     } | {
         consultations: {
-            message: string;
             name: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
+            email: string;
             phone: string;
             country: string | null;
             timezone: string | null;
-            scheduledAt: Date | null;
+            serviceInterest: string;
+            serviceType: string | null;
             company: string | null;
-            consultationDate: string;
-            consultationTime: string;
-            serviceType: string;
-            duration: number | null;
+            scheduledAt: Date | null;
+            consultationDate: Date | null;
             meetingLink: string | null;
-            meetingType: string | null;
+            duration: number | null;
             notes: string | null;
         }[];
         total: number;

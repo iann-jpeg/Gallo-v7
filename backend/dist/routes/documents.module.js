@@ -19,4 +19,3 @@ exports.DocumentsModule = DocumentsModule = __decorate([
         providers: [prisma_service_1.PrismaService],
     })
 ], DocumentsModule);
-//# sourceMappingURL=documents.module.js.map

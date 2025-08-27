@@ -1,6 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+  engineType    = "binary"
 }
 
 datasource db {
@@ -9,37 +10,43 @@ datasource db {
 }
 
 model Claim {
-  id             Int        @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   userId         Int?
   policyNumber   String
   claimType      String
   incidentDate   DateTime
   estimatedLoss  Float
   description    String
-  status         String     @default("pending")
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime
+  status         String    @default("pending")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   submitterEmail String?
   submitterName  String?
   submitterPhone String?
-  User           User?      @relation(fields: [userId], references: [id])
-  Document       Document[]
+  user           User?     @relation(fields: [userId], references: [id])
+  document       Document[]
+  payment        Payment[]
 }
 
 model Consultation {
-  id              Int       @id @default(autoincrement())
-  userId          Int?
-  name            String
-  email           String
-  phone           String
-  country         String
-  timezone        String
-  serviceInterest String
-  scheduledAt     DateTime?
-  status          String    @default("pending")
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime
-  User            User?     @relation(fields: [userId], references: [id])
+  id                 Int       @id @default(autoincrement())
+  userId             Int?
+  name               String
+  email              String
+  phone              String
+  country            String?
+  timezone           String?
+  serviceInterest    String
+  serviceType        String?
+  scheduledAt        DateTime?
+  consultationDate   DateTime?
+  meetingLink        String?
+  duration           Int?      @default(60)
+  notes              String?
+  status             String    @default("pending")
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  user               User?     @relation(fields: [userId], references: [id])
 }
 
 model DiasporaRequest {
@@ -54,24 +61,26 @@ model DiasporaRequest {
   scheduledAt     DateTime?
   status          String    @default("pending")
   createdAt       DateTime  @default(now())
-  updatedAt       DateTime
-  User            User?     @relation(fields: [userId], references: [id])
+  updatedAt       DateTime  @updatedAt
+  user            User?     @relation(fields: [userId], references: [id])
 }
 
 model Document {
-  id           Int      @id @default(autoincrement())
-  filename     String
-  originalName String
-  mimeType     String
-  size         Int
-  path         String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime
-  claimId      Int?
-  quoteId      Int?
-  content      Bytes?
-  Claim        Claim?   @relation(fields: [claimId], references: [id], onDelete: Cascade)
-  Quote        Quote?   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  id                 Int                 @id @default(autoincrement())
+  filename           String
+  originalName       String
+  mimeType           String
+  size               Int
+  path               String
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  claimId            Int?
+  quoteId            Int?
+  outsourcingId      Int?
+  content            Bytes?
+  claim              Claim?              @relation(fields: [claimId], references: [id], onDelete: Cascade)
+  quote              Quote?              @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  outsourcingRequest OutsourcingRequest? @relation(fields: [outsourcingId], references: [id], onDelete: Cascade)
 }
 
 model Product {
@@ -81,7 +90,7 @@ model Product {
   features    String[]
   category    String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime @updatedAt
 }
 
 model Quote {
@@ -100,23 +109,129 @@ model Quote {
   bestTime      String?
   status        String     @default("pending")
   createdAt     DateTime   @default(now())
-  updatedAt     DateTime
-  Document      Document[]
-  User          User?      @relation(fields: [userId], references: [id])
+  updatedAt     DateTime   @updatedAt
+  document      Document[]
+  user          User?      @relation(fields: [userId], references: [id])
+  payment       Payment[]
 }
 
 model User {
-  id              Int               @id @default(autoincrement())
-  name            String
-  email           String            @unique
-  password        String
-  role            Role              @default(USER)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime
-  Claim           Claim[]
-  Consultation    Consultation[]
-  DiasporaRequest DiasporaRequest[]
-  Quote           Quote[]
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  email              String               @unique
+  password           String
+  role               Role                 @default(USER)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  claim              Claim[]
+  consultation       Consultation[]
+  diasporaRequest    DiasporaRequest[]
+  quote              Quote[]
+  payment            Payment[]
+  policy             Policy[]
+  outsourcingRequest OutsourcingRequest[]
+  profile            Profile?
+  adminNote          AdminNote[]
+  resources          Resource[]           @relation("UserResources")
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  phone     String?
+  address   String?
+  city      String?
+  country   String?
+  company   String?
+  website   String?
+  bio       String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AdminNote {
+  id         Int      @id @default(autoincrement())
+  adminId    Int?
+  note       String
+  category   String   @default("general")
+  priority   String   @default("normal")
+  entityType String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  admin      User?    @relation(fields: [adminId], references: [id])
+}
+
+model Payment {
+  id            Int      @id @default(autoincrement())
+  userId        Int?
+  amount        Float
+  currency      String   @default("KES")
+  reference     String?  @unique
+  transactionId String?  @unique
+  status        String   @default("pending")
+  method        String?  // mpesa, bank, card
+  paymentMethod String?
+  clientName    String?
+  description   String?
+  metadata      Json?
+  claimId       Int?
+  quoteId       Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User?    @relation(fields: [userId], references: [id])
+  claim         Claim?   @relation(fields: [claimId], references: [id])
+  quote         Quote?   @relation(fields: [quoteId], references: [id])
+}
+
+model Policy {
+  id               Int      @id @default(autoincrement())
+  userId           Int?
+  policyNumber     String   @unique
+  policyType       String
+  coverageAmount   Float
+  premium          Float
+  startDate        DateTime
+  endDate          DateTime
+  status           String   @default("active")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User?    @relation(fields: [userId], references: [id])
+}
+
+model OutsourcingRequest {
+  id               Int        @id @default(autoincrement())
+  userId           Int?
+  title            String
+  description      String
+  category         String
+  email            String?
+  organizationName String?
+  services         String[]   @default([])
+  budget           Float?
+  timeline         String?
+  status           String     @default("open")
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  user             User?      @relation(fields: [userId], references: [id])
+  document         Document[]
+}
+
+model Resource {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  category     String
+  url          String?
+  filePath     String?
+  fileSize     Int?
+  adminOnly    Boolean  @default(false)
+  isPublic     Boolean  @default(true)
+  creatorId    Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  creator      User?    @relation("UserResources", fields: [creatorId], references: [id])
 }
 
 enum Role {

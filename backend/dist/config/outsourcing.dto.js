@@ -103,4 +103,3 @@ __decorate([
     (0, class_validator_1.IsIn)(['pending', 'in_progress', 'completed', 'cancelled']),
     __metadata("design:type", String)
 ], UpdateOutsourcingRequestDto.prototype, "status", void 0);
-//# sourceMappingURL=outsourcing.dto.js.map

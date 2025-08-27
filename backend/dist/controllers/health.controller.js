@@ -13,59 +13,101 @@ exports.HealthController = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const public_decorator_1 = require("../middleware/public.decorator");
-const dashboard_service_1 = require("../services/dashboard.service");
+const minimal_dashboard_service_1 = require("../services/minimal-dashboard.service");
 let HealthController = class HealthController {
-    constructor(prisma, dashboardService) {
+    constructor(prisma, minimalDashboard) {
         this.prisma = prisma;
-        this.dashboardService = dashboardService;
+        this.minimalDashboard = minimalDashboard;
     }
     async getHealth() {
         const startTime = Date.now();
         try {
-            const dbHealthy = await this.prisma.healthCheck();
+            let dbHealthy = false;
             let queryTest = false;
             try {
-                await this.prisma.user.count();
-                queryTest = true;
+                dbHealthy = await this.prisma.healthCheck();
             }
             catch (error) {
-                console.warn('Query test failed:', error);
+                console.warn('Database health check failed, trying basic query...');
+                try {
+                    await this.prisma.$queryRaw `SELECT 1`;
+                    dbHealthy = true;
+                }
+                catch (basicError) {
+                    console.error('Basic database query failed:', basicError);
+                }
+            }
+            if (dbHealthy) {
+                try {
+                    await this.prisma.user.count();
+                    queryTest = true;
+                }
+                catch (error) {
+                    console.warn('User count query failed, trying alternative...');
+                    try {
+                        await this.prisma.$queryRaw `SELECT COUNT(*) FROM "User"`;
+                        queryTest = true;
+                    }
+                    catch (altError) {
+                        console.warn('Alternative query failed:', altError);
+                    }
+                }
             }
             let dashboardHealthy = false;
+            let dashboardMessage = '';
             try {
-                await this.dashboardService.getDashboardStats({});
+                await this.minimalDashboard.getMinimalStats();
                 dashboardHealthy = true;
+                dashboardMessage = 'operational';
             }
             catch (error) {
-                console.warn('Dashboard service test failed:', error);
+                console.warn('Minimal dashboard service test failed:', error instanceof Error ? error.message : 'Unknown error');
+                dashboardHealthy = false;
+                dashboardMessage = 'using_fallback_operational';
             }
             const responseTime = Date.now() - startTime;
+            const isHealthy = dbHealthy && queryTest;
             return {
-                status: dbHealthy && queryTest ? 'healthy' : 'degraded',
+                status: isHealthy ? 'healthy' : 'degraded',
                 timestamp: new Date().toISOString(),
                 responseTime: `${responseTime}ms`,
                 services: {
                     database: {
                         status: dbHealthy ? 'up' : 'down',
                         connection: dbHealthy,
-                        queries: queryTest
+                        queries: queryTest,
+                        url_configured: !!process.env.DATABASE_URL
                     },
                     dashboard: {
-                        status: dashboardHealthy ? 'up' : 'down'
+                        status: dashboardHealthy ? 'up' : 'down',
+                        message: dashboardMessage,
+                        fallback_available: true
+                    },
+                    application: {
+                        status: 'up',
+                        memory_usage: process.memoryUsage(),
+                        uptime: process.uptime()
                     }
                 },
                 environment: process.env.NODE_ENV || 'development',
-                version: '1.0.0'
+                version: '1.0.0',
+                deployment: {
+                    platform: 'railway',
+                    tables_available: ['User', 'Claim', 'Quote', 'Consultation', 'DiasporaRequest', 'Document', 'Product'],
+                    tables_missing: ['Payment', 'Policy', 'OutsourcingRequest']
+                }
             };
         }
         catch (error) {
+            const responseTime = Date.now() - startTime;
             return {
                 status: 'unhealthy',
                 timestamp: new Date().toISOString(),
+                responseTime: `${responseTime}ms`,
                 error: error instanceof Error ? error.message : 'Unknown error',
                 services: {
-                    database: { status: 'down' },
-                    dashboard: { status: 'down' }
+                    database: { status: 'unknown' },
+                    application: { status: 'partial' }
                 }
             };
         }
@@ -73,12 +115,14 @@ let HealthController = class HealthController {
     async getDeepHealth() {
         const startTime = Date.now();
         try {
-            const [userCount, claimCount, quotesCount, consultationCount, paymentCount] = await Promise.all([
+            const [userCount, claimCount, quotesCount, consultationCount, diasporaCount, documentCount, productCount] = await Promise.all([
                 this.prisma.user.count().catch(() => 0),
                 this.prisma.claim.count().catch(() => 0),
                 this.prisma.quote.count().catch(() => 0),
                 this.prisma.consultation.count().catch(() => 0),
-                this.prisma.payment.count().catch(() => 0)
+                this.prisma.diasporaRequest.count().catch(() => 0),
+                this.prisma.document.count().catch(() => 0),
+                this.prisma.product.count().catch(() => 0)
             ]);
             const responseTime = Date.now() - startTime;
             return {
@@ -92,7 +136,9 @@ let HealthController = class HealthController {
                         claims: claimCount,
                         quotes: quotesCount,
                         consultations: consultationCount,
-                        payments: paymentCount
+                        diaspora: diasporaCount,
+                        documents: documentCount,
+                        products: productCount
                     }
                 },
                 performance: {
@@ -128,6 +174,6 @@ exports.HealthController = HealthController = __decorate([
     (0, common_1.Controller)('health'),
     (0, public_decorator_1.Public)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        dashboard_service_1.DashboardService])
+        minimal_dashboard_service_1.MinimalDashboardService])
 ], HealthController);
 //# sourceMappingURL=health.controller.js.map

@@ -44,7 +44,7 @@ let ClaimsService = class ClaimsService {
                                 email: true,
                             },
                         },
-                        documents: {
+                        document: {
                             select: {
                                 id: true,
                                 filename: true,
@@ -58,7 +58,7 @@ let ClaimsService = class ClaimsService {
                 }),
                 prisma.claim.count()
             ]);
-            const claimsWithUrls = claims.map(claim => (Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map(doc => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}`) })));
+            const claimsWithUrls = claims.map((claim) => (Object.assign(Object.assign({}, claim), { documentUrls: (claim.document || []).map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}`) })));
             return {
                 data: claimsWithUrls,
                 meta: {
@@ -85,7 +85,7 @@ let ClaimsService = class ClaimsService {
                             email: true,
                         },
                     },
-                    documents: {
+                    document: {
                         select: {
                             id: true,
                             filename: true,
@@ -99,7 +99,7 @@ let ClaimsService = class ClaimsService {
             });
             if (!claim)
                 throw new common_1.BadRequestException('Claim not found');
-            const claimWithUrls = Object.assign(Object.assign({}, claim), { documentUrls: claim.documents.map(doc => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}`) });
+            const claimWithUrls = Object.assign(Object.assign({}, claim), { documentUrls: (claim.document || []).map((doc) => `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}`) });
             return claimWithUrls;
         }
         catch (error) {
@@ -111,7 +111,7 @@ let ClaimsService = class ClaimsService {
             const claim = await prisma.claim.findUnique({
                 where: { id },
                 select: {
-                    documents: {
+                    document: {
                         select: {
                             id: true,
                             filename: true,
@@ -125,7 +125,7 @@ let ClaimsService = class ClaimsService {
             });
             if (!claim)
                 throw new common_1.NotFoundException('Claim not found');
-            const documentsWithUrls = claim.documents.map(doc => (Object.assign(Object.assign({}, doc), { url: `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}` })));
+            const documentsWithUrls = (claim.document || []).map((doc) => (Object.assign(Object.assign({}, doc), { url: `${process.env.API_BASE_URL || 'http://localhost:3001/api'}/documents/claims/${doc.filename}` })));
             return documentsWithUrls;
         }
         catch (error) {
@@ -184,7 +184,7 @@ let ClaimsService = class ClaimsService {
             const fullClaim = await prisma.claim.findUnique({
                 where: { id },
                 include: {
-                    documents: true
+                    document: true
                 }
             });
             const updatedFields = Object.keys(data).join(', ');

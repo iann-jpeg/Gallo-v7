@@ -29,7 +29,7 @@ let UsersController = class UsersController {
             return {
                 success: true,
                 data: users || [],
-                message: (users === null || users === void 0 ? void 0 : users.length) ? 'Users loaded successfully' : 'No users found'
+                message: users?.length ? 'Users loaded successfully' : 'No users found'
             };
         }
         catch (error) {
@@ -99,4 +99,3 @@ exports.UsersController = UsersController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);
-//# sourceMappingURL=users.controller.js.map

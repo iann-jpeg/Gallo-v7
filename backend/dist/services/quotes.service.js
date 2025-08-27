@@ -8,17 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuotesService = void 0;
 const common_1 = require("@nestjs/common");
@@ -28,9 +17,14 @@ const prisma = new client_1.PrismaClient();
 let QuotesService = class QuotesService {
     async createWithDocuments(data, documents) {
         try {
+            // Create the quote first
             const createdQuote = await prisma.quote.create({
-                data: Object.assign(Object.assign({}, data), { status: 'pending' })
+                data: {
+                    ...data,
+                    status: 'pending',
+                }
             });
+            // Save all uploaded documents and link to quote
             if (documents && documents.length > 0) {
                 for (const file of documents) {
                     await prisma.document.create({
@@ -45,6 +39,7 @@ let QuotesService = class QuotesService {
                     });
                 }
             }
+            // Send notifications to admin (optional, can be added here)
             return createdQuote;
         }
         catch (error) {
@@ -98,18 +93,24 @@ let QuotesService = class QuotesService {
     }
     async create(data) {
         try {
-            const _a = data, { documentPath } = _a, quoteData = __rest(_a, ["documentPath"]);
+            // Remove documentPath from the data before creating the quote
+            const { documentPath, ...quoteData } = data;
             let createdQuote;
             if (documentPath) {
+                // Create quote first
                 createdQuote = await prisma.quote.create({
-                    data: Object.assign(Object.assign({}, quoteData), { status: 'pending' })
+                    data: {
+                        ...quoteData,
+                        status: 'pending',
+                    }
                 });
+                // Create document and link to quote
                 await prisma.document.create({
                     data: {
                         filename: documentPath.split('/').pop() || documentPath,
                         originalName: documentPath.split('/').pop() || documentPath,
-                        mimeType: 'application/octet-stream',
-                        size: 0,
+                        mimeType: 'application/octet-stream', // Could be improved by passing actual mime type
+                        size: 0, // Could be improved by passing actual file size
                         path: documentPath,
                         quoteId: createdQuote.id,
                     }
@@ -117,9 +118,13 @@ let QuotesService = class QuotesService {
             }
             else {
                 createdQuote = await prisma.quote.create({
-                    data: Object.assign(Object.assign({}, quoteData), { status: 'pending' })
+                    data: {
+                        ...quoteData,
+                        status: 'pending',
+                    }
                 });
             }
+            // Send notifications to admin
             const adminEmail = process.env.ADMIN_EMAIL || 'admin@example.com';
             const subject = 'New Quote Submission';
             const text = `A new quote has been submitted:\n\n` +
@@ -150,7 +155,9 @@ let QuotesService = class QuotesService {
         try {
             const quote = await prisma.quote.update({
                 where: { id },
-                data: Object.assign({}, data)
+                data: {
+                    ...data,
+                }
             });
             return quote;
         }
@@ -183,4 +190,3 @@ exports.QuotesService = QuotesService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [email_service_1.EmailService])
 ], QuotesService);
-//# sourceMappingURL=quotes.service.js.map

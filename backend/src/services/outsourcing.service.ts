@@ -1,11 +1,10 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateOutsourcingRequestDto, UpdateOutsourcingRequestDto } from '../config/outsourcing.dto';
-
-const prisma = new PrismaClient();
 
 @Injectable()
 export class OutsourcingService {
+  constructor(private prisma: PrismaService) {}
 
   async findAll(page: number = 1, limit: number = 10, status?: string) {
     try {
@@ -13,7 +12,7 @@ export class OutsourcingService {
       const where = status ? { status } : {};
 
       const [requests, total] = await Promise.all([
-        prisma.outsourcingRequest.findMany({
+        this.prisma.outsourcingRequest.findMany({
           skip,
           take: limit,
           where,
@@ -22,10 +21,10 @@ export class OutsourcingService {
             user: {
               select: { id: true, name: true, email: true }
             },
-            documents: true
+            document: true
           }
         }),
-        prisma.outsourcingRequest.count({ where })
+        this.prisma.outsourcingRequest.count({ where })
       ]);
 
       return {
@@ -45,13 +44,13 @@ export class OutsourcingService {
 
   async findOne(id: number) {
     try {
-      const request = await prisma.outsourcingRequest.findUnique({
+      const request = await this.prisma.outsourcingRequest.findUnique({
         where: { id },
         include: {
           user: {
             select: { id: true, name: true, email: true }
           },
-          documents: true
+          document: true
         }
       });
 
@@ -71,19 +70,26 @@ export class OutsourcingService {
 
   async create(data: CreateOutsourcingRequestDto, document?: Express.Multer.File) {
     try {
-      const request = await prisma.outsourcingRequest.create({
-        data: {
-          ...data,
-          services: data.services || []
-        },
-        include: {
-          documents: true
-        }
+      // Map DTO fields to schema fields
+      const createData: any = {
+        title: data.organizationName,
+        description: data.natureOfOutsourcing || 'No description provided',
+        category: 'general',
+        email: data.email,
+        organizationName: data.organizationName,
+        services: data.services,
+        budget: data.budgetRange ? parseFloat(data.budgetRange.replace(/[^0-9.-]+/g, '')) || undefined : undefined,
+        status: 'pending'
+      };
+
+      const request = await this.prisma.outsourcingRequest.create({
+        data: createData,
+        include: { document: true }
       });
 
       // If a document was uploaded, save it to the documents table
       if (document) {
-        await prisma.document.create({
+        await this.prisma.document.create({
           data: {
             filename: document.filename,
             originalName: document.originalname,
@@ -137,7 +143,7 @@ Galloways Insurance Team`;
 
   async update(id: number, data: UpdateOutsourcingRequestDto) {
     try {
-      const existingRequest = await prisma.outsourcingRequest.findUnique({
+      const existingRequest = await this.prisma.outsourcingRequest.findUnique({
         where: { id }
       });
 
@@ -145,17 +151,14 @@ Galloways Insurance Team`;
         throw new NotFoundException(`Outsourcing request with ID ${id} not found`);
       }
 
-      const updatedRequest = await prisma.outsourcingRequest.update({
+      const updatedRequest = await this.prisma.outsourcingRequest.update({
         where: { id },
-        data: {
-          ...data,
-          services: data.services || existingRequest.services
-        },
+        data: data,
         include: {
           user: {
             select: { id: true, name: true, email: true }
           },
-          documents: true
+          document: true
         }
       });
 
@@ -175,7 +178,7 @@ Galloways Insurance Team`;
 
   async remove(id: number) {
     try {
-      const existingRequest = await prisma.outsourcingRequest.findUnique({
+      const existingRequest = await this.prisma.outsourcingRequest.findUnique({
         where: { id }
       });
 
@@ -183,7 +186,7 @@ Galloways Insurance Team`;
         throw new NotFoundException(`Outsourcing request with ID ${id} not found`);
       }
 
-      await prisma.outsourcingRequest.delete({
+      await this.prisma.outsourcingRequest.delete({
         where: { id }
       });
 
@@ -207,7 +210,7 @@ Galloways Insurance Team`;
         throw new BadRequestException('Invalid status provided');
       }
 
-      const updatedRequest = await prisma.outsourcingRequest.update({
+      const updatedRequest = await this.prisma.outsourcingRequest.update({
         where: { id },
         data: { status },
         include: {

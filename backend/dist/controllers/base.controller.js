@@ -21,4 +21,3 @@ class BaseController {
     }
 }
 exports.BaseController = BaseController;
-//# sourceMappingURL=base.controller.js.map

@@ -10,34 +10,35 @@ export declare class OutsourcingController {
                 id: number;
                 email: string;
             } | null;
-            documents: {
-                path: string;
-                filename: string;
+            document: {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
                 claimId: number | null;
                 quoteId: number | null;
-                content: Uint8Array | null;
                 outsourcingId: number | null;
+                content: Uint8Array | null;
             }[];
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         })[];
         pagination: {
             page: number;
@@ -52,67 +53,69 @@ export declare class OutsourcingController {
             id: number;
             email: string;
         } | null;
-        documents: {
-            path: string;
-            filename: string;
+        document: {
             id: number;
             createdAt: Date;
             updatedAt: Date;
+            filename: string;
             originalName: string;
             mimeType: string;
             size: number;
+            path: string;
             claimId: number | null;
             quoteId: number | null;
-            content: Uint8Array | null;
             outsourcingId: number | null;
+            content: Uint8Array | null;
         }[];
     } & {
-        location: string;
-        status: string;
         id: number;
-        email: string;
+        userId: number | null;
+        description: string;
+        status: string;
         createdAt: Date;
         updatedAt: Date;
-        userId: number | null;
-        organizationName: string;
-        coreFunctions: string | null;
-        address: string | null;
+        email: string | null;
+        category: string;
+        budget: number | null;
+        title: string;
+        organizationName: string | null;
         services: string[];
-        natureOfOutsourcing: string;
-        budgetRange: string;
+        budgetRange: string | null;
+        timeline: string | null;
     }>;
     create(createOutsourcingRequestDto: CreateOutsourcingRequestDto, document?: Express.Multer.File): Promise<{
         success: boolean;
         message: string;
         data: {
-            documents: {
-                path: string;
-                filename: string;
+            document: {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
                 claimId: number | null;
                 quoteId: number | null;
-                content: Uint8Array | null;
                 outsourcingId: number | null;
+                content: Uint8Array | null;
             }[];
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         };
     }>;
     update(id: string, updateOutsourcingRequestDto: UpdateOutsourcingRequestDto): Promise<{
@@ -124,34 +127,35 @@ export declare class OutsourcingController {
                 id: number;
                 email: string;
             } | null;
-            documents: {
-                path: string;
-                filename: string;
+            document: {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
                 claimId: number | null;
                 quoteId: number | null;
-                content: Uint8Array | null;
                 outsourcingId: number | null;
+                content: Uint8Array | null;
             }[];
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         };
     }>;
     remove(id: string): Promise<{
@@ -170,19 +174,20 @@ export declare class OutsourcingController {
                 email: string;
             } | null;
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         };
     }>;
 }

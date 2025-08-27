@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 let AdminGuard = class AdminGuard {
     canActivate(context) {
         const request = context.switchToHttp().getRequest();
+        // Allow requests from allowed origins based on environment
         const allowedOrigins = process.env.NODE_ENV === 'development'
             ? ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173']
             : ['https://galloways.co.ke', 'https://www.galloways.co.ke', 'https://app.galloways.co.ke'];
@@ -22,4 +23,3 @@ exports.AdminGuard = AdminGuard;
 exports.AdminGuard = AdminGuard = __decorate([
     (0, common_1.Injectable)()
 ], AdminGuard);
-//# sourceMappingURL=admin.guard.js.map

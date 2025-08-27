@@ -19,4 +19,3 @@ exports.ResourceModule = ResourceModule = __decorate([
         providers: [resource_service_1.ResourceService],
     })
 ], ResourceModule);
-//# sourceMappingURL=resource.module.js.map

@@ -1,5 +1,8 @@
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateOutsourcingRequestDto, UpdateOutsourcingRequestDto } from '../config/outsourcing.dto';
 export declare class OutsourcingService {
+    private prisma;
+    constructor(prisma: PrismaService);
     findAll(page?: number, limit?: number, status?: string): Promise<{
         data: ({
             user: {
@@ -7,34 +10,35 @@ export declare class OutsourcingService {
                 id: number;
                 email: string;
             } | null;
-            documents: {
-                path: string;
-                filename: string;
+            document: {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
                 claimId: number | null;
                 quoteId: number | null;
-                content: Uint8Array | null;
                 outsourcingId: number | null;
+                content: Uint8Array | null;
             }[];
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         })[];
         pagination: {
             page: number;
@@ -49,67 +53,69 @@ export declare class OutsourcingService {
             id: number;
             email: string;
         } | null;
-        documents: {
-            path: string;
-            filename: string;
+        document: {
             id: number;
             createdAt: Date;
             updatedAt: Date;
+            filename: string;
             originalName: string;
             mimeType: string;
             size: number;
+            path: string;
             claimId: number | null;
             quoteId: number | null;
-            content: Uint8Array | null;
             outsourcingId: number | null;
+            content: Uint8Array | null;
         }[];
     } & {
-        location: string;
-        status: string;
         id: number;
-        email: string;
+        userId: number | null;
+        description: string;
+        status: string;
         createdAt: Date;
         updatedAt: Date;
-        userId: number | null;
-        organizationName: string;
-        coreFunctions: string | null;
-        address: string | null;
+        email: string | null;
+        category: string;
+        budget: number | null;
+        title: string;
+        organizationName: string | null;
         services: string[];
-        natureOfOutsourcing: string;
-        budgetRange: string;
+        budgetRange: string | null;
+        timeline: string | null;
     }>;
     create(data: CreateOutsourcingRequestDto, document?: Express.Multer.File): Promise<{
         success: boolean;
         message: string;
         data: {
-            documents: {
-                path: string;
-                filename: string;
+            document: {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
                 claimId: number | null;
                 quoteId: number | null;
-                content: Uint8Array | null;
                 outsourcingId: number | null;
+                content: Uint8Array | null;
             }[];
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         };
     }>;
     update(id: number, data: UpdateOutsourcingRequestDto): Promise<{
@@ -121,34 +127,35 @@ export declare class OutsourcingService {
                 id: number;
                 email: string;
             } | null;
-            documents: {
-                path: string;
-                filename: string;
+            document: {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
                 claimId: number | null;
                 quoteId: number | null;
-                content: Uint8Array | null;
                 outsourcingId: number | null;
+                content: Uint8Array | null;
             }[];
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         };
     }>;
     remove(id: number): Promise<{
@@ -165,19 +172,20 @@ export declare class OutsourcingService {
                 email: string;
             } | null;
         } & {
-            location: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
-            organizationName: string;
-            coreFunctions: string | null;
-            address: string | null;
+            email: string | null;
+            category: string;
+            budget: number | null;
+            title: string;
+            organizationName: string | null;
             services: string[];
-            natureOfOutsourcing: string;
-            budgetRange: string;
+            budgetRange: string | null;
+            timeline: string | null;
         };
     }>;
 }

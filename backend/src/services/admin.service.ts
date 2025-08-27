@@ -200,12 +200,7 @@ export class AdminService {
             user: {
               select: {
                 name: true,
-                email: true,
-                profile: {
-                  select: {
-                    phone: true
-                  }
-                }
+                email: true
               }
             }
           }
@@ -655,8 +650,8 @@ export class AdminService {
             updatedAt: true,
             _count: {
               select: {
-                claims: true,
-                quotes: true
+                claim: true,
+                quote: true
               }
             }
           }
@@ -763,9 +758,7 @@ export class AdminService {
         data: {
           note: `User status changed to: ${status}`,
           entityType: 'USER_STATUS_UPDATE',
-          entityId: userId.toString(),
-          adminId: 1, // This should be the current admin's ID
-          isPrivate: false
+          adminId: 1 // This should be the current admin's ID
         }
       });
 
@@ -952,9 +945,7 @@ export class AdminService {
         data: {
           note: `Claim status updated to: ${status}`,
           entityType: 'CLAIM_STATUS_UPDATE',
-          entityId: claimId.toString(),
-          adminId: adminId ?? null,
-          isPrivate: false
+          adminId: adminId ?? null
         }
       });
 
@@ -996,7 +987,7 @@ export class AdminService {
               }
             }
           },
-          documents: {
+          document: {
             select: {
               id: true,
               filename: true,
@@ -1265,9 +1256,7 @@ export class AdminService {
         data: {
           note: `Consultation status updated to: ${status}`,
           entityType: 'CONSULTATION_STATUS_UPDATE',
-          entityId: consultationId.toString(),
-          adminId: adminId ?? null,
-          isPrivate: false
+          adminId: adminId ?? null
         }
       });
 
@@ -1352,9 +1341,7 @@ export class AdminService {
         data: {
           note: `Meeting scheduled for ${meetingData.meetingDate} at ${meetingData.meetingTime}. Type: ${meetingData.meetingType}${meetingData.notes ? `. Notes: ${meetingData.notes}` : ''}`,
           entityType: 'MEETING_SCHEDULED',
-          entityId: consultationId.toString(),
-          adminId: null, // You can pass adminId if available
-          isPrivate: false
+          adminId: null // You can pass adminId if available
         }
       });
 
@@ -1451,9 +1438,7 @@ export class AdminService {
         data: {
           note: `WhatsApp meeting details sent to ${(consultation.user?.name ?? 'Client')} at ${userPhone}`,
           entityType: 'WHATSAPP_SENT',
-          entityId: consultationId.toString(),
-          adminId: null,
-          isPrivate: false
+          adminId: null
         }
       });
 
@@ -1560,7 +1545,7 @@ export class AdminService {
               email: true
             }
           },
-          documents: true
+          document: true
         }
       });
 
@@ -2426,7 +2411,6 @@ export class AdminService {
         where: { id },
         data: {
           status,
-          ...(notes && { adminNotes: notes }),
           updatedAt: new Date()
         },
         include: {
@@ -2439,6 +2423,21 @@ export class AdminService {
           }
         }
       });
+
+      // If administrative notes were provided, create an AdminNote record
+      if (notes) {
+        try {
+          await this.prisma.adminNote.create({
+            data: {
+              note: notes,
+              entityType: 'OUTSOURCING_STATUS_UPDATE',
+              adminId: null
+            }
+          });
+        } catch (noteErr) {
+          console.error('Failed to create admin note for outsourcing status update:', noteErr);
+        }
+      }
 
       return {
         success: true,

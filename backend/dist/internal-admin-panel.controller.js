@@ -109,18 +109,20 @@ let AdminPanelSocketService = class AdminPanelSocketService {
                 orderBy: { createdAt: 'desc' },
                 include: {
                     user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            email: true,
+                        include: {
                             profile: {
                                 select: {
                                     phone: true
                                 }
                             }
+                        },
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true
                         }
                     },
-                    documents: {
+                    document: {
                         select: {
                             id: true,
                             filename: true,
@@ -182,8 +184,8 @@ let AdminPanelSocketService = class AdminPanelSocketService {
                     updatedAt: true,
                     _count: {
                         select: {
-                            payments: true,
-                            claims: true
+                            payment: true,
+                            claim: true
                         }
                     }
                 }

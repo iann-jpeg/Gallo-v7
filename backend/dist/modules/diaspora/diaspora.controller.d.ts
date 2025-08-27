@@ -9,17 +9,17 @@ export declare class DiasporaController {
         success: boolean;
         diaspora: {
             name: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
+            email: string;
             phone: string;
             country: string;
             timezone: string;
-            scheduledAt: Date | null;
             serviceInterest: string;
+            scheduledAt: Date | null;
         };
     }>;
     getDiasporaRequests(): Promise<{
@@ -28,17 +28,17 @@ export declare class DiasporaController {
     } | {
         diaspora: {
             name: string;
-            status: string;
             id: number;
-            email: string;
+            userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            userId: number | null;
+            email: string;
             phone: string;
             country: string;
             timezone: string;
-            scheduledAt: Date | null;
             serviceInterest: string;
+            scheduledAt: Date | null;
         }[];
         total: number;
     }>;

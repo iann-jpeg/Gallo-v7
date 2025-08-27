@@ -1,24 +1,60 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PdfService = void 0;
 const common_1 = require("@nestjs/common");
-const PDFKit = require("pdfkit");
+const PDFKit = __importStar(require("pdfkit"));
 let PdfService = class PdfService {
     async generateDashboardReport(data, res) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         const doc = new PDFKit();
+        // Set response headers
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=dashboard-report.pdf');
+        // Pipe the PDF to response
         doc.pipe(res);
+        // Add header
         doc.fontSize(20).text('Galloways Insurance - Admin Dashboard Report', 50, 50);
         doc.fontSize(14).text(`Generated on: ${new Date().toLocaleDateString()}`, 50, 80);
         let yPosition = 120;
+        // Summary Statistics
         doc.fontSize(16).text('Summary Statistics', 50, yPosition);
         yPosition += 30;
         doc.fontSize(12)
@@ -29,26 +65,27 @@ let PdfService = class PdfService {
             .text(`Total Payments: ${data.totalPayments}`, 250, yPosition);
         yPosition += 20;
         doc.text(`Total Diaspora Requests: ${data.totalDiasporaRequests}`, 50, yPosition)
-            .text(`Monthly Revenue: KSh ${((_a = data.monthlyRevenue) === null || _a === void 0 ? void 0 : _a.toLocaleString()) || 0}`, 250, yPosition);
+            .text(`Monthly Revenue: KSh ${data.monthlyRevenue?.toLocaleString() || 0}`, 250, yPosition);
         yPosition += 40;
-        if (((_c = (_b = data.allSubmissions) === null || _b === void 0 ? void 0 : _b.claims) === null || _c === void 0 ? void 0 : _c.length) > 0) {
+        // Claims Section
+        if (data.allSubmissions?.claims?.length > 0) {
             doc.fontSize(16).text('Claims Details', 50, yPosition);
             yPosition += 30;
             data.allSubmissions.claims.forEach((claim, index) => {
-                var _a;
-                if (yPosition > 700) {
+                if (yPosition > 700) { // Add new page if needed
                     doc.addPage();
                     yPosition = 50;
                 }
                 doc.fontSize(10)
                     .text(`${index + 1}. Policy: ${claim.policyNumber} | Client: ${claim.clientEmail}`, 50, yPosition)
-                    .text(`   Incident: ${claim.incidentType} | Amount: KSh ${((_a = claim.claimAmount) === null || _a === void 0 ? void 0 : _a.toLocaleString()) || 0}`, 50, yPosition + 15)
+                    .text(`   Incident: ${claim.incidentType} | Amount: KSh ${claim.claimAmount?.toLocaleString() || 0}`, 50, yPosition + 15)
                     .text(`   Status: ${claim.status} | Date: ${new Date(claim.createdAt).toLocaleDateString()}`, 50, yPosition + 30);
                 yPosition += 50;
             });
             yPosition += 20;
         }
-        if (((_e = (_d = data.allSubmissions) === null || _d === void 0 ? void 0 : _d.outsourcing) === null || _e === void 0 ? void 0 : _e.length) > 0) {
+        // Outsourcing Section
+        if (data.allSubmissions?.outsourcing?.length > 0) {
             if (yPosition > 600) {
                 doc.addPage();
                 yPosition = 50;
@@ -68,7 +105,8 @@ let PdfService = class PdfService {
             });
             yPosition += 20;
         }
-        if (((_g = (_f = data.allSubmissions) === null || _f === void 0 ? void 0 : _f.consultations) === null || _g === void 0 ? void 0 : _g.length) > 0) {
+        // Consultations Section
+        if (data.allSubmissions?.consultations?.length > 0) {
             if (yPosition > 600) {
                 doc.addPage();
                 yPosition = 50;
@@ -88,7 +126,8 @@ let PdfService = class PdfService {
             });
             yPosition += 20;
         }
-        if (((_j = (_h = data.allSubmissions) === null || _h === void 0 ? void 0 : _h.payments) === null || _j === void 0 ? void 0 : _j.length) > 0) {
+        // Payments Section
+        if (data.allSubmissions?.payments?.length > 0) {
             if (yPosition > 600) {
                 doc.addPage();
                 yPosition = 50;
@@ -96,20 +135,20 @@ let PdfService = class PdfService {
             doc.fontSize(16).text('Payments', 50, yPosition);
             yPosition += 30;
             data.allSubmissions.payments.forEach((payment, index) => {
-                var _a;
                 if (yPosition > 700) {
                     doc.addPage();
                     yPosition = 50;
                 }
                 doc.fontSize(10)
                     .text(`${index + 1}. Policy: ${payment.policyNumber} | Client: ${payment.clientEmail}`, 50, yPosition)
-                    .text(`   Amount: KSh ${((_a = payment.amount) === null || _a === void 0 ? void 0 : _a.toLocaleString()) || 0} | Method: ${payment.paymentMethod}`, 50, yPosition + 15)
+                    .text(`   Amount: KSh ${payment.amount?.toLocaleString() || 0} | Method: ${payment.paymentMethod}`, 50, yPosition + 15)
                     .text(`   Status: ${payment.status} | Date: ${new Date(payment.createdAt).toLocaleDateString()}`, 50, yPosition + 30);
                 yPosition += 50;
             });
             yPosition += 20;
         }
-        if (((_l = (_k = data.allSubmissions) === null || _k === void 0 ? void 0 : _k.diaspora) === null || _l === void 0 ? void 0 : _l.length) > 0) {
+        // Diaspora Requests Section
+        if (data.allSubmissions?.diaspora?.length > 0) {
             if (yPosition > 600) {
                 doc.addPage();
                 yPosition = 50;
@@ -128,6 +167,7 @@ let PdfService = class PdfService {
                 yPosition += 50;
             });
         }
+        // Finalize the PDF
         doc.end();
     }
 };
@@ -135,4 +175,3 @@ exports.PdfService = PdfService;
 exports.PdfService = PdfService = __decorate([
     (0, common_1.Injectable)()
 ], PdfService);
-//# sourceMappingURL=pdf.service.js.map

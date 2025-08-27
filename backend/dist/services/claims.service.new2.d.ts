@@ -7,35 +7,7 @@ export declare class ClaimsService {
         page?: number;
         limit?: number;
     }): Promise<{
-        data: {
-            documentUrls: string[];
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
-            documents: {
-                filename: string;
-                id: number;
-                createdAt: Date;
-                originalName: string;
-                mimeType: string;
-                size: number;
-            }[];
-            description: string;
-            status: string;
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            userId: number | null;
-            policyNumber: string;
-            claimType: string;
-            incidentDate: Date;
-            estimatedLoss: number;
-            submitterEmail: string | null;
-            submitterName: string | null;
-            submitterPhone: string | null;
-        }[];
+        data: any[];
         meta: {
             total: number;
             page: number;
@@ -46,69 +18,61 @@ export declare class ClaimsService {
     findOne(id: number): Promise<{
         documentUrls: string[];
         user: {
-            name: string;
             id: number;
+            name: string;
             email: string;
         } | null;
-        documents: {
-            filename: string;
+        document: {
             id: number;
             createdAt: Date;
+            filename: string;
             originalName: string;
             mimeType: string;
             size: number;
         }[];
-        description: string;
         status: string;
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
         submitterEmail: string | null;
         submitterName: string | null;
         submitterPhone: string | null;
     }>;
-    getClaimDocuments(id: number): Promise<{
-        url: string;
-        filename: string;
-        id: number;
-        createdAt: Date;
-        originalName: string;
-        mimeType: string;
-        size: number;
-    }[]>;
+    getClaimDocuments(id: number): Promise<any[]>;
     create(data: CreateClaimDto & {
         documentDetails?: any[];
     }): Promise<{
-        description: string;
         status: string;
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
         submitterEmail: string | null;
         submitterName: string | null;
         submitterPhone: string | null;
     }>;
     update(id: number, data: any): Promise<{
-        description: string;
         status: string;
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
         submitterEmail: string | null;
         submitterName: string | null;
         submitterPhone: string | null;

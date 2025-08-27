@@ -61,7 +61,7 @@ export class DashboardService {
           orderBy: { createdAt: 'desc' },
           where: dateFilter,
           include: {
-            documents: true
+            document: true
           }
         }),
         
@@ -158,7 +158,6 @@ export class DashboardService {
             organizationName: true,
             email: true,
             services: true,
-            budgetRange: true,
             status: true,
             createdAt: true
           }

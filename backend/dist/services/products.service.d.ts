@@ -5,8 +5,8 @@ export declare class ProductsService {
         limit?: number;
     }): Promise<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -14,8 +14,8 @@ export declare class ProductsService {
     }[]>;
     findOne(id: number): import(".prisma/client").Prisma.Prisma__ProductClient<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -23,8 +23,8 @@ export declare class ProductsService {
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     create(data: any): import(".prisma/client").Prisma.Prisma__ProductClient<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -32,8 +32,8 @@ export declare class ProductsService {
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: number, data: any): import(".prisma/client").Prisma.Prisma__ProductClient<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
@@ -41,8 +41,8 @@ export declare class ProductsService {
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: number): import(".prisma/client").Prisma.Prisma__ProductClient<{
         name: string;
-        description: string;
         id: number;
+        description: string;
         createdAt: Date;
         updatedAt: Date;
         features: string[];
