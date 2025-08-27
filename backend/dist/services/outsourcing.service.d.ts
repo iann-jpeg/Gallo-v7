@@ -37,7 +37,6 @@ export declare class OutsourcingService {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         })[];
         pagination: {
@@ -80,7 +79,6 @@ export declare class OutsourcingService {
         title: string;
         organizationName: string | null;
         services: string[];
-        budgetRange: string | null;
         timeline: string | null;
     }>;
     create(data: CreateOutsourcingRequestDto, document?: Express.Multer.File): Promise<{
@@ -114,7 +112,6 @@ export declare class OutsourcingService {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         };
     }>;
@@ -154,7 +151,6 @@ export declare class OutsourcingService {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         };
     }>;
@@ -184,7 +180,6 @@ export declare class OutsourcingService {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         };
     }>;

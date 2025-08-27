@@ -18,18 +18,17 @@ export declare class DashboardService {
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
-                    claimId: number | null;
-                    quoteId: number | null;
                     filename: string;
                     originalName: string;
                     mimeType: string;
                     size: number;
                     path: string;
+                    claimId: number | null;
+                    quoteId: number | null;
                     outsourcingId: number | null;
                     content: Uint8Array | null;
                 }[];
             } & {
-                status: string;
                 id: number;
                 userId: number | null;
                 policyNumber: string;
@@ -37,6 +36,7 @@ export declare class DashboardService {
                 incidentDate: Date;
                 estimatedLoss: number;
                 description: string;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
                 submitterEmail: string | null;
@@ -44,35 +44,33 @@ export declare class DashboardService {
                 submitterPhone: string | null;
             })[];
             outsourcing: {
-                status: string;
                 id: number;
                 userId: number | null;
                 description: string;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
-                title: string;
-                category: string;
                 email: string | null;
+                category: string;
+                budget: number | null;
+                title: string;
                 organizationName: string | null;
                 services: string[];
-                budgetRange: string | null;
-                budget: number | null;
                 timeline: string | null;
             }[];
             consultations: {
-                status: string;
+                name: string;
                 id: number;
                 userId: number | null;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
-                name: string;
                 email: string;
                 phone: string;
                 country: string | null;
                 timezone: string | null;
                 serviceInterest: string;
                 serviceType: string | null;
-                company: string | null;
                 scheduledAt: Date | null;
                 consultationDate: Date | null;
                 meetingLink: string | null;
@@ -80,13 +78,15 @@ export declare class DashboardService {
                 notes: string | null;
             }[];
             payments: {
-                status: string;
-                amount: number;
                 id: number;
                 userId: number | null;
                 description: string | null;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
+                claimId: number | null;
+                quoteId: number | null;
+                amount: number;
                 currency: string;
                 reference: string | null;
                 transactionId: string | null;
@@ -94,16 +94,14 @@ export declare class DashboardService {
                 paymentMethod: string | null;
                 clientName: string | null;
                 metadata: import("@prisma/client/runtime/library").JsonValue | null;
-                claimId: number | null;
-                quoteId: number | null;
             }[];
             diaspora: {
-                status: string;
+                name: string;
                 id: number;
                 userId: number | null;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
-                name: string;
                 email: string;
                 phone: string;
                 country: string;

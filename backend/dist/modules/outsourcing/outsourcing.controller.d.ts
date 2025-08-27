@@ -20,7 +20,6 @@ export declare class OutsourcingController {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         };
     }>;
@@ -41,7 +40,6 @@ export declare class OutsourcingController {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         }[];
         total: number;

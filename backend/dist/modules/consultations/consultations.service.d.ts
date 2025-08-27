@@ -17,7 +17,6 @@ export declare class ConsultationsService {
             timezone: string | null;
             serviceInterest: string;
             serviceType: string | null;
-            company: string | null;
             scheduledAt: Date | null;
             consultationDate: Date | null;
             meetingLink: string | null;
@@ -42,7 +41,6 @@ export declare class ConsultationsService {
             timezone: string | null;
             serviceInterest: string;
             serviceType: string | null;
-            company: string | null;
             scheduledAt: Date | null;
             consultationDate: Date | null;
             meetingLink: string | null;

@@ -436,7 +436,6 @@ export declare class AdminService {
                 timezone: string | null;
                 serviceInterest: string;
                 serviceType: string | null;
-                company: string | null;
                 scheduledAt: Date | null;
                 consultationDate: Date | null;
                 meetingLink: string | null;
@@ -493,7 +492,6 @@ export declare class AdminService {
             timezone: string | null;
             serviceInterest: string;
             serviceType: string | null;
-            company: string | null;
             scheduledAt: Date | null;
             consultationDate: Date | null;
             meetingLink: string | null;
@@ -529,7 +527,6 @@ export declare class AdminService {
             timezone: string | null;
             serviceInterest: string;
             serviceType: string | null;
-            company: string | null;
             scheduledAt: Date | null;
             consultationDate: Date | null;
             meetingLink: string | null;
@@ -579,7 +576,6 @@ export declare class AdminService {
                 timezone: string | null;
                 serviceInterest: string;
                 serviceType: string | null;
-                company: string | null;
                 scheduledAt: Date | null;
                 consultationDate: Date | null;
                 meetingLink: string | null;
@@ -1147,7 +1143,6 @@ export declare class AdminService {
                 title: string;
                 organizationName: string | null;
                 services: string[];
-                budgetRange: string | null;
                 timeline: string | null;
             })[];
             totalCount: number;
@@ -1190,7 +1185,6 @@ export declare class AdminService {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         };
         message?: undefined;
@@ -1222,7 +1216,6 @@ export declare class AdminService {
             title: string;
             organizationName: string | null;
             services: string[];
-            budgetRange: string | null;
             timeline: string | null;
         };
         message: string;

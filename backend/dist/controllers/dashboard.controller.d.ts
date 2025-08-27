@@ -75,7 +75,6 @@ export declare class DashboardController extends BaseController {
                     title: string;
                     organizationName: string | null;
                     services: string[];
-                    budgetRange: string | null;
                     timeline: string | null;
                 }[];
                 consultations: {
@@ -91,7 +90,6 @@ export declare class DashboardController extends BaseController {
                     timezone: string | null;
                     serviceInterest: string;
                     serviceType: string | null;
-                    company: string | null;
                     scheduledAt: Date | null;
                     consultationDate: Date | null;
                     meetingLink: string | null;

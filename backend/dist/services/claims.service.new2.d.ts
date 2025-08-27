@@ -18,8 +18,8 @@ export declare class ClaimsService {
     findOne(id: number): Promise<{
         documentUrls: string[];
         user: {
-            id: number;
             name: string;
+            id: number;
             email: string;
         } | null;
         document: {
@@ -30,7 +30,6 @@ export declare class ClaimsService {
             mimeType: string;
             size: number;
         }[];
-        status: string;
         id: number;
         userId: number | null;
         policyNumber: string;
@@ -38,6 +37,7 @@ export declare class ClaimsService {
         incidentDate: Date;
         estimatedLoss: number;
         description: string;
+        status: string;
         createdAt: Date;
         updatedAt: Date;
         submitterEmail: string | null;
@@ -48,7 +48,6 @@ export declare class ClaimsService {
     create(data: CreateClaimDto & {
         documentDetails?: any[];
     }): Promise<{
-        status: string;
         id: number;
         userId: number | null;
         policyNumber: string;
@@ -56,6 +55,7 @@ export declare class ClaimsService {
         incidentDate: Date;
         estimatedLoss: number;
         description: string;
+        status: string;
         createdAt: Date;
         updatedAt: Date;
         submitterEmail: string | null;
@@ -63,7 +63,6 @@ export declare class ClaimsService {
         submitterPhone: string | null;
     }>;
     update(id: number, data: any): Promise<{
-        status: string;
         id: number;
         userId: number | null;
         policyNumber: string;
@@ -71,6 +70,7 @@ export declare class ClaimsService {
         incidentDate: Date;
         estimatedLoss: number;
         description: string;
+        status: string;
         createdAt: Date;
         updatedAt: Date;
         submitterEmail: string | null;

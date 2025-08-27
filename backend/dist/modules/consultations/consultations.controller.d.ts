@@ -20,7 +20,6 @@ export declare class ConsultationsController {
             timezone: string | null;
             serviceInterest: string;
             serviceType: string | null;
-            company: string | null;
             scheduledAt: Date | null;
             consultationDate: Date | null;
             meetingLink: string | null;
@@ -45,7 +44,6 @@ export declare class ConsultationsController {
             timezone: string | null;
             serviceInterest: string;
             serviceType: string | null;
-            company: string | null;
             scheduledAt: Date | null;
             consultationDate: Date | null;
             meetingLink: string | null;
