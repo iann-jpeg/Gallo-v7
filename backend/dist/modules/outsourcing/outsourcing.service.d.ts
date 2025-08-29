@@ -5,10 +5,10 @@ export declare class OutsourcingService {
     } | {
         success: boolean;
         outsourcing: {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;
@@ -25,10 +25,10 @@ export declare class OutsourcingService {
         message: any;
     } | {
         outsourcing: {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;

@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogIn, UserPlus, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { authService, api } from "@/lib/api";
+import { authService } from "@/lib/api";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -71,10 +71,7 @@ const Auth = () => {
         password: data.password,
       });
       
-      if (response.access_token) {
-        // Store the token
-        api.setToken(response.access_token);
-        
+      if (response.success) {
         toast({
           title: "Success",
           description: "Signed in successfully!",

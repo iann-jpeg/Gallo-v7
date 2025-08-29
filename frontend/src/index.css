@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;500;600;700&display=swap');
 
-/* Tailwind CSS base styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -107,9 +106,7 @@ All colors MUST be HSL.
 
 @layer base {
   * {
-    border-color: hsl(var(--border));
-    border-width: 1px;
-    border-style: solid;
+    box-sizing: border-box;
   }
 
   body {
@@ -297,16 +294,18 @@ All colors MUST be HSL.
   /* Advanced Gradient Text */
   .gradient-text {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
   .gradient-text-primary {
     background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #06B6D4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
   /* Scroll Animations */

@@ -9,9 +9,9 @@ export declare class ConsultationsService {
     }): Promise<{
         data: {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -35,9 +35,9 @@ export declare class ConsultationsService {
     }>;
     findOne(id: number): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -57,9 +57,9 @@ export declare class ConsultationsService {
         message: string;
         data: {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -77,9 +77,9 @@ export declare class ConsultationsService {
     }>;
     update(id: number, data: UpdateConsultationDto): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -96,9 +96,9 @@ export declare class ConsultationsService {
     }>;
     remove(id: number): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;

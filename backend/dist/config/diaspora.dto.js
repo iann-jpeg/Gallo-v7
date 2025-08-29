@@ -86,3 +86,4 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateDiasporaDto.prototype, "status", void 0);
+//# sourceMappingURL=diaspora.dto.js.map

@@ -3,16 +3,6 @@
 Production-ready NestJS backend for insurance platform.
 
 ## Features
-- JWT authentication (register, login, logout, refresh)
-- Role-based access (admin, user)
-- CRUD APIs: Products, Claims, Quotes, Consultations, DiasporaRequests, Users
-- Validation, error handling, logging, rate-limiting, security middleware
-- Prisma ORM (PostgreSQL)
-- Health check endpoint
-- Swagger/OpenAPI docs
-- ESLint + Prettier
-- Dockerfile + docker-compose
-- Seed script for sample data
 
 ## Setup
 1. Copy `.env.example` to `.env` and fill in secrets
@@ -22,12 +12,11 @@ Production-ready NestJS backend for insurance platform.
 5. Run `yarn start:dev` or `npm run start:dev`
 
 ## Docs
-- Swagger: `/docs`
-- Health: `/health`
 
 ## TODO
-- Replace secrets in `.env`
-- Customize business logic as needed
+This backend is now deprecated. The frontend connects directly to Supabase for all data and storage operations.
+
+All references to Railway, Neon, Prisma, and admin scripts have been removed.
 
 # Galloways Admin Backend
 

@@ -17,6 +17,7 @@ import {
   Download,
   RefreshCw
 } from "lucide-react";
+import api from "@/lib/api";
 
 export function AdminAnalytics() {
   const [analyticsData, setAnalyticsData] = useState<any>(null);
@@ -30,8 +31,7 @@ export function AdminAnalytics() {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/analytics?period=${period}`);
-      const result = await response.json();
+      const result = await api.adminService.getAnalytics(period);
       
       if (result.success) {
         setAnalyticsData(result.data);

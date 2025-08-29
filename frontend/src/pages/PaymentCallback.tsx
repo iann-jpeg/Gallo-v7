@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { paymentsService } from "@/lib/api";
 
 export default function PaymentCallback() {
   const [searchParams] = useSearchParams();
@@ -26,22 +27,14 @@ export default function PaymentCallback() {
       }
 
       try {
-        const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api';
-        const response = await fetch(`${apiUrl}/payments/verify/${paymentReference}`, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
+        const response = await paymentsService.verifyPayment(paymentReference);
         
-        const data = await response.json();
-        
-        if (data.success && data.status === 'success') {
+        if (response.success && response.data.status === 'success') {
           setStatus('success');
           setMessage('Payment completed successfully! You will receive a confirmation email shortly.');
         } else {
           setStatus('failed');
-          setMessage(data.message || 'Payment verification failed');
+          setMessage(response.data?.message || response.error || 'Payment verification failed');
         }
       } catch (error) {
         console.error('Payment verification error:', error);

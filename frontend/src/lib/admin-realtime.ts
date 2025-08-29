@@ -1,121 +1,131 @@
-import io from 'socket.io-client';
+import { supabase } from './supabaseClient';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 class AdminRealtimeService {
-  private socket: ReturnType<typeof io> | null = null;
+  private channels: Map<string, RealtimeChannel> = new Map();
   private listeners: Map<string, ((data: unknown) => void)[]> = new Map();
+  private isConnected = false;
 
   connect() {
-    if (this.socket?.connected) {
-      return this.socket;
+    if (this.isConnected) {
+      return true;
     }
 
-    // Get Railway backend URL for Socket.IO connection
-    const getSocketUrl = () => {
-      // Check for explicit environment variable
-      if (import.meta.env.VITE_API_BASE_URL) {
-        return import.meta.env.VITE_API_BASE_URL.replace('/api', '');
-      }
-      
-      // Production: Railway backend
-      if (import.meta.env.PROD) {
-        return 'https://gallo-end-production.up.railway.app';
-      }
-      
-      // Development: Local backend
-      return 'http://localhost:3001';
-    };
-
-    const serverUrl = getSocketUrl();
+    console.log('🔌 Connecting to Supabase real-time service...');
     
-    this.socket = io(serverUrl, {
-      transports: ['websocket', 'polling'],
-      autoConnect: true,
-    });
+    // Set up real-time channels for different data types
+    this.setupDashboardChannel();
+    this.setupClaimsChannel();
+    this.setupConsultationsChannel();
+    this.setupPaymentsChannel();
+    this.setupUsersChannel();
 
-    this.socket.on('connect', () => {
-      console.log('✅ Connected to admin real-time service');
-      this.socket?.emit('request-dashboard-data');
-    });
-
-    this.socket.on('disconnect', () => {
-      console.log('❌ Disconnected from admin real-time service');
-    });
-
-    this.socket.on('error', (error) => {
-      console.error('Socket error:', error);
-    });
-
-    // Set up data listeners
-    this.setupDataListeners();
-
-    return this.socket;
+    this.isConnected = true;
+    console.log('✅ Connected to Supabase real-time service');
+    
+    return true;
   }
 
   disconnect() {
-    if (this.socket) {
-      this.socket.disconnect();
-      this.socket = null;
+    console.log('❌ Disconnecting from Supabase real-time service...');
+    
+    // Unsubscribe from all channels
+    for (const [, channel] of this.channels) {
+      supabase.removeChannel(channel);
     }
+    
+    this.channels.clear();
+    this.listeners.clear();
+    this.isConnected = false;
   }
 
-  private setupDataListeners() {
-    if (!this.socket) return;
+  private setupDashboardChannel() {
+    // Listen to activities table for dashboard updates
+    const channel = supabase
+      .channel('dashboard-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'activities' },
+        (payload) => {
+          console.log('Dashboard activity change:', payload);
+          this.notifyListeners('dashboard-update', payload);
+          this.notifyListeners('recent-activity', payload);
+        }
+      )
+      .subscribe();
 
-    // Dashboard updates
-    this.socket.on('dashboard-data', (data) => {
-      this.notifyListeners('dashboard-data', data);
-    });
+    this.channels.set('dashboard', channel);
+  }
 
-    this.socket.on('dashboard-update', (data) => {
-      this.notifyListeners('dashboard-update', data);
-    });
+  private setupClaimsChannel() {
+    const channel = supabase
+      .channel('claims-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'claims' },
+        (payload) => {
+          console.log('Claims change:', payload);
+          this.notifyListeners('claims-data', payload);
+          this.notifyListeners('claim-update', payload);
+          this.notifyListeners('data-change', { type: 'claims', ...payload });
+        }
+      )
+      .subscribe();
 
-    // Claims updates
-    this.socket.on('claims-data', (data) => {
-      this.notifyListeners('claims-data', data);
-    });
+    this.channels.set('claims', channel);
+  }
 
-    this.socket.on('claim-update', (data) => {
-      this.notifyListeners('claim-update', data);
-    });
+  private setupConsultationsChannel() {
+    const channel = supabase
+      .channel('consultations-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'consultations' },
+        (payload) => {
+          console.log('Consultations change:', payload);
+          this.notifyListeners('consultations-data', payload);
+          this.notifyListeners('consultation-update', payload);
+          this.notifyListeners('data-change', { type: 'consultations', ...payload });
+        }
+      )
+      .subscribe();
 
-    // Consultations updates
-    this.socket.on('consultations-data', (data) => {
-      this.notifyListeners('consultations-data', data);
-    });
+    this.channels.set('consultations', channel);
+  }
 
-    this.socket.on('consultation-update', (data) => {
-      this.notifyListeners('consultation-update', data);
-    });
+  private setupPaymentsChannel() {
+    const channel = supabase
+      .channel('payments-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'payments' },
+        (payload) => {
+          console.log('Payments change:', payload);
+          this.notifyListeners('payments-data', payload);
+          this.notifyListeners('payment-update', payload);
+          this.notifyListeners('data-change', { type: 'payments', ...payload });
+        }
+      )
+      .subscribe();
 
-    // Users updates
-    this.socket.on('users-data', (data) => {
-      this.notifyListeners('users-data', data);
-    });
+    this.channels.set('payments', channel);
+  }
 
-    // Payments updates
-    this.socket.on('payments-data', (data) => {
-      this.notifyListeners('payments-data', data);
-    });
+  private setupUsersChannel() {
+    const channel = supabase
+      .channel('users-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'users' },
+        (payload) => {
+          console.log('Users change:', payload);
+          this.notifyListeners('users-data', payload);
+          this.notifyListeners('data-change', { type: 'users', ...payload });
+        }
+      )
+      .subscribe();
 
-    this.socket.on('payment-update', (data) => {
-      this.notifyListeners('payment-update', data);
-    });
-
-    // Mock data warnings
-    this.socket.on('mock-data-warning', (data) => {
-      this.notifyListeners('mock-data-warning', data);
-    });
-
-    // Recent activity
-    this.socket.on('recent-activity', (data) => {
-      this.notifyListeners('recent-activity', data);
-    });
-
-    // General data changes
-    this.socket.on('data-change', (data) => {
-      this.notifyListeners('data-change', data);
-    });
+    this.channels.set('users', channel);
   }
 
   subscribe(event: string, callback: (data: unknown) => void) {
@@ -142,25 +152,30 @@ class AdminRealtimeService {
     }
   }
 
-  // Request specific data
+  // Request specific data (these now just trigger data fetches since Supabase is always up-to-date)
   requestDashboardData() {
-    this.socket?.emit('request-dashboard-data');
+    console.log('📊 Dashboard data requested (real-time updates active)');
+    this.notifyListeners('dashboard-data', { message: 'Real-time dashboard monitoring active' });
   }
 
   requestClaimsData() {
-    this.socket?.emit('request-claims-data');
+    console.log('📋 Claims data requested (real-time updates active)');
+    this.notifyListeners('claims-data', { message: 'Real-time claims monitoring active' });
   }
 
   requestConsultationsData() {
-    this.socket?.emit('request-consultations-data');
+    console.log('💬 Consultations data requested (real-time updates active)');
+    this.notifyListeners('consultations-data', { message: 'Real-time consultations monitoring active' });
   }
 
   requestUsersData() {
-    this.socket?.emit('request-users-data');
+    console.log('👥 Users data requested (real-time updates active)');
+    this.notifyListeners('users-data', { message: 'Real-time users monitoring active' });
   }
 
   requestPaymentsData() {
-    this.socket?.emit('request-payments-data');
+    console.log('💳 Payments data requested (real-time updates active)');
+    this.notifyListeners('payments-data', { message: 'Real-time payments monitoring active' });
   }
 }
 

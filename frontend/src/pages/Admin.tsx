@@ -26,10 +26,8 @@ export default function Admin() {
     // Set admin token for API calls
     localStorage.setItem('admin_token', 'admin-access-token');
     
-    // Refresh the admin API client with the new token
-    import('@/lib/api').then(({ adminApi }) => {
-      adminApi.setToken('admin-access-token');
-    });
+    // Note: Using Supabase for authentication, no token needed for API
+    console.log("Admin access configured");
   }, []);
 
   // Enhanced tab switching with smooth transitions

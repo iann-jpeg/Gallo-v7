@@ -31,3 +31,4 @@ exports.DiasporaService = DiasporaService;
 exports.DiasporaService = DiasporaService = __decorate([
     (0, common_1.Injectable)()
 ], DiasporaService);
+//# sourceMappingURL=diaspora.service.js.map

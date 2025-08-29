@@ -19,27 +19,27 @@ export declare class ClaimsController {
         success: boolean;
         data: {
             documentUrls: string[];
+            document: {
+                filename: string;
+                id: number;
+                createdAt: Date;
+                originalName: string;
+                mimeType: string;
+                size: number;
+            }[];
             user: {
                 name: string;
                 id: number;
                 email: string;
             } | null;
-            document: {
-                id: number;
-                createdAt: Date;
-                filename: string;
-                originalName: string;
-                mimeType: string;
-                size: number;
-            }[];
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -51,14 +51,14 @@ export declare class ClaimsController {
         success: boolean;
         message: string;
         data: {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -70,14 +70,14 @@ export declare class ClaimsController {
         success: boolean;
         message: string;
         data: {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;

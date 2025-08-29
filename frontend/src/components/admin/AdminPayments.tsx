@@ -39,18 +39,23 @@ export function AdminPayments() {
   const fetchPayments = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams({
-        search,
-        page: currentPage.toString(),
-        limit: '20'
-      });
-      
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/payments?${params}`);
-      const result = await response.json();
+      const result = await adminService.getAllPayments(currentPage, 20);
       
       if (result.success) {
-        setPayments(result.data.payments);
-        setTotalPages(result.data.pagination.totalPages);
+        let filteredPayments = result.data;
+        
+        // Apply search filter if search term exists
+        if (search.trim()) {
+          filteredPayments = result.data.filter((payment: any) =>
+            payment.reference?.toLowerCase().includes(search.toLowerCase()) ||
+            payment.amount?.toString().includes(search) ||
+            payment.status?.toLowerCase().includes(search.toLowerCase())
+          );
+        }
+        
+        setPayments(filteredPayments);
+        // Calculate total pages based on count
+        setTotalPages(Math.ceil((result.count || 0) / 20));
       }
     } catch (error) {
       console.error('Failed to fetch payments:', error);
@@ -61,8 +66,7 @@ export function AdminPayments() {
 
   const fetchPaymentStats = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/payments/stats`);
-      const result = await response.json();
+      const result = await adminService.getPaymentStats();
       
       if (result.success) {
         setPaymentStats(result.data);

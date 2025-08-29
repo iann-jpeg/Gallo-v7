@@ -36,3 +36,4 @@ exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
     (0, common_1.Injectable)()
 ], ProductsService);
+//# sourceMappingURL=products.service.js.map

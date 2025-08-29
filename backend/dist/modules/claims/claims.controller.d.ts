@@ -8,14 +8,14 @@ export declare class ClaimsController {
     } | {
         success: boolean;
         claim: {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -28,14 +28,14 @@ export declare class ClaimsController {
         message: any;
     } | {
         claims: {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -45,14 +45,14 @@ export declare class ClaimsController {
         total: number;
     }>;
     getClaim(id: string): Promise<{
+        description: string;
+        status: string;
         id: number;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        description: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         submitterEmail: string | null;
@@ -68,14 +68,14 @@ export declare class ClaimsController {
     } | {
         success: boolean;
         claim: {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;

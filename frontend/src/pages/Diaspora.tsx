@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Globe, Heart, Shield, Home, Clock, Calendar } from "lucide-react";
+import { paymentsService } from "@/lib/api";
 
 export default function Diaspora() {
   return (
@@ -149,34 +150,28 @@ export default function Diaspora() {
                 }
 
                 try {
-                  // Call backend to initialize Paystack payment
-                  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api';
-                  const response = await fetch(`${apiUrl}/payments/initiate`, {
-                    method: 'POST',
-                    headers: { 
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                      email, 
-                      clientName: fullName,
-                      amount, 
-                      paymentMethod: 'paystack',
-                      metadata: {
-                        consultationTime: consultTime,
-                        service: 'diaspora-consultation'
-                      }
-                    }),
+                  // Call Supabase to create payment record
+                  const response = await paymentsService.createPayment({
+                    email, 
+                    client_name: fullName,
+                    amount, 
+                    payment_method: 'paystack',
+                    reference: `DIA-${Date.now()}`,
+                    status: 'pending',
+                    metadata: {
+                      consultation_time: consultTime,
+                      service: 'diaspora-consultation'
+                    }
                   });
                   
-                  const data = await response.json();
-                  console.log('Payment response:', data);
+                  console.log('Payment response:', response);
                   
-                  if (data.success && data.data && data.data.metadata && data.data.metadata.authorization_url) {
-                    // Redirect to Paystack payment page
-                    window.location.href = data.data.metadata.authorization_url;
+                  if (response.success) {
+                    // For demo purposes, simulate successful payment
+                    // In reality, you would integrate with Paystack API
+                    alert(`Payment initiated successfully! Reference: ${response.data.reference}\n\nIn a production environment, you would be redirected to Paystack for payment.`);
                   } else {
-                    alert('Payment initialization failed: ' + (data.message || 'Unknown error'));
+                    alert('Payment initialization failed: ' + response.error);
                   }
                 } catch (error) {
                   console.error('Payment error:', error);

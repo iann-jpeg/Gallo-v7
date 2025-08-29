@@ -9,9 +9,9 @@ export declare class ConsultationsController {
         success: boolean;
         consultation: {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -33,9 +33,9 @@ export declare class ConsultationsController {
     } | {
         consultations: {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;

@@ -5,9 +5,11 @@ export declare class QuotesService {
     } | {
         success: boolean;
         quote: {
+            location: string | null;
+            details: string | null;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -15,10 +17,8 @@ export declare class QuotesService {
             product: string;
             firstName: string;
             lastName: string;
-            location: string | null;
             budget: string | null;
             coverage: string | null;
-            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         };
@@ -28,9 +28,11 @@ export declare class QuotesService {
         message: any;
     } | {
         quotes: {
+            location: string | null;
+            details: string | null;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -38,10 +40,8 @@ export declare class QuotesService {
             product: string;
             firstName: string;
             lastName: string;
-            location: string | null;
             budget: string | null;
             coverage: string | null;
-            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         }[];

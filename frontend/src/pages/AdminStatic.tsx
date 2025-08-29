@@ -18,6 +18,7 @@ import {
   WifiOff
 } from "lucide-react";
 import { Toaster } from "sonner";
+import { adminService, dashboardService } from "@/lib/api";
 
 interface StaticAdminData {
   totalUsers: number;
@@ -59,45 +60,40 @@ export default function StaticAdmin() {
 
   const testBackendConnection = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_BASE_URL 
-        ? `${import.meta.env.VITE_API_BASE_URL}/api/health`
-        : 'https://api.galloways.co.ke/api/health';
+      logger.log("🌐 Testing Supabase connection");
       
-      logger.log(`🌐 Testing connection to: ${apiUrl}`);
+      const response = await adminService.getSystemHealth();
       
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
-      if (response.ok) {
+      if (response.success) {
         setConnectionStatus('connected');
-        logger.log("✅ Backend connected - Loading live data");
+        logger.log("✅ Supabase connected - Loading live data");
         loadLiveData();
       } else {
         setConnectionStatus('offline');
-        logger.log("⚠️ Backend offline - Using static data");
+        logger.log("⚠️ Supabase offline - Using static data");
       }
     } catch (error) {
       setConnectionStatus('offline');
-      logger.log("🔌 Backend unavailable - Operating in offline mode");
+      logger.log("🔌 Supabase unavailable - Operating in offline mode");
     }
   };
 
   const loadLiveData = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_BASE_URL 
-        ? `${import.meta.env.VITE_API_BASE_URL}/api`
-        : 'https://api.galloways.co.ke/api';
-      
-      const response = await fetch(`${apiUrl}/dashboard/stats`);
-      if (response.ok) {
-        const liveData = await response.json();
-        setAdminData(liveData);
-        logger.log("📊 Live data loaded from backend");
+      const response = await dashboardService.getStats();
+      if (response.success) {
+        setAdminData({
+          totalUsers: response.data.totalUsers || 0,
+          totalClaims: response.data.totalClaims || 0,
+          totalQuotes: response.data.totalQuotes || 0,
+          totalRevenue: response.data.totalRevenue || 0,
+          pendingClaims: response.data.pendingClaims || 0,
+          recentActivity: response.data.recentActivity || []
+        });
+        logger.log("📊 Live data loaded from Supabase");
       }
     } catch (error) {
-      logger.log("📊 Using static data - backend unavailable");
+      logger.log("📊 Using static data - Supabase unavailable");
       loadStaticData();
     }
   };

@@ -1,0 +1,15 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm run start:prod"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+
+[variables]
+NODE_ENV = "production"
+PORT = "8080"
+PRISMA_CLIENT_ENGINE_TYPE = "library"
+PRISMA_CLI_QUERY_ENGINE_TYPE = "library"

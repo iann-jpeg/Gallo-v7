@@ -19,17 +19,13 @@ const base_controller_1 = require("./base.controller");
 let PaymentsController = class PaymentsController extends base_controller_1.BaseController {
     async initiateSTKPush(data) {
         try {
-            // Simulate M-PESA STK Push integration
-            // In a real implementation, you would integrate with Safaricom's M-PESA API
             if (!data.phone || !data.amount) {
                 throw new common_1.BadRequestException('Phone number and amount are required');
             }
-            // Validate phone number format
             const phoneRegex = /^(\+254|254|0)?7\d{8}$/;
             if (!phoneRegex.test(data.phone)) {
                 throw new common_1.BadRequestException('Invalid phone number format. Use format: +254712345678');
             }
-            // Normalize phone number
             let normalizedPhone = data.phone;
             if (normalizedPhone.startsWith('0')) {
                 normalizedPhone = '254' + normalizedPhone.substring(1);
@@ -37,10 +33,8 @@ let PaymentsController = class PaymentsController extends base_controller_1.Base
             else if (normalizedPhone.startsWith('+254')) {
                 normalizedPhone = normalizedPhone.substring(1);
             }
-            // Simulate STK push
             const checkoutRequestId = `STK_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
             console.log(`M-PESA STK Push initiated for ${normalizedPhone}, Amount: ${data.amount}, Description: ${data.description}`);
-            // Simulate async payment processing
             setTimeout(() => {
                 console.log(`Payment callback received for ${checkoutRequestId}: SUCCESS`);
             }, 5000);
@@ -59,9 +53,7 @@ let PaymentsController = class PaymentsController extends base_controller_1.Base
     }
     async checkPaymentStatus(checkoutRequestId) {
         try {
-            // In a real implementation, you would query M-PESA API for transaction status
-            // Simulate successful payment after some time
-            const isOldRequest = Date.now() - parseInt(checkoutRequestId.split('_')[1]) > 30000; // 30 seconds
+            const isOldRequest = Date.now() - parseInt(checkoutRequestId.split('_')[1]) > 30000;
             if (isOldRequest) {
                 return this.handleSuccess({
                     resultCode: '0',
@@ -90,21 +82,13 @@ let PaymentsController = class PaymentsController extends base_controller_1.Base
             if (!data.name || !data.phone || !data.amount || !data.consultationType || !data.consultationDate || !data.consultationTime) {
                 throw new common_1.BadRequestException('All fields are required for consultation payment');
             }
-            // First initiate M-PESA payment
             const stkResponse = await this.initiateSTKPush({
                 phone: data.phone,
                 amount: data.amount,
                 description: `Galloways Consultation - ${data.consultationType} on ${data.consultationDate}`
             });
-            // Store consultation booking (in real app, save to database)
             const bookingRef = `GC-${Date.now().toString().slice(-8)}`;
-            console.log('Consultation booking created:', {
-                bookingRef,
-                ...data,
-                paymentStatus: 'PENDING',
-                createdAt: new Date()
-            });
-            // Simulate booking confirmation after payment
+            console.log('Consultation booking created:', Object.assign(Object.assign({ bookingRef }, data), { paymentStatus: 'PENDING', createdAt: new Date() }));
             setTimeout(() => {
                 console.log(`Consultation ${bookingRef} confirmed after successful payment`);
             }, 10000);
@@ -121,19 +105,9 @@ let PaymentsController = class PaymentsController extends base_controller_1.Base
     }
     async createPayment(data) {
         try {
-            // Generic payment creation for other services
             const paymentRef = `GAL-${Date.now().toString().slice(-8)}`;
-            console.log('Generic payment created:', {
-                paymentRef,
-                ...data,
-                status: 'PENDING',
-                createdAt: new Date()
-            });
-            return this.handleSuccess({
-                paymentRef,
-                status: 'PENDING',
-                ...data
-            }, 'Payment record created successfully');
+            console.log('Generic payment created:', Object.assign(Object.assign({ paymentRef }, data), { status: 'PENDING', createdAt: new Date() }));
+            return this.handleSuccess(Object.assign({ paymentRef, status: 'PENDING' }, data), 'Payment record created successfully');
         }
         catch (error) {
             return this.handleError(error);
@@ -176,3 +150,4 @@ __decorate([
 exports.PaymentsController = PaymentsController = __decorate([
     (0, common_1.Controller)('payments')
 ], PaymentsController);
+//# sourceMappingURL=payments.controller.js.map

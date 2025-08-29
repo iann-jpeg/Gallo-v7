@@ -3,7 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
+import { setupDatabase } from "./lib/database-setup";
+import { testSupabaseConnection } from "./lib/api";
 
 // Lazy load components for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -33,12 +35,41 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  // Auto-setup database on app start
+  useEffect(() => {
+    const initDatabase = async () => {
+      try {
+        console.log('🔧 Initializing database...');
+        
+        // Test Supabase connection first
+        console.log('🚀 Testing Supabase connection...');
+        await testSupabaseConnection();
+        
+        const result = await setupDatabase();
+        if (result.success) {
+          console.log('✅ Database initialization successful!');
+        } else {
+          console.warn('⚠️ Database initialization issue:', result.message);
+        }
+      } catch (error) {
+        console.error('❌ Database initialization error:', error);
+      }
+    };
+    
+    initDatabase();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <HashRouter>
+        <HashRouter 
+          future={{ 
+            v7_startTransition: true, 
+            v7_relativeSplatPath: true 
+          }}
+        >
           <Suspense fallback={
             <div className="flex items-center justify-center min-h-screen">
               <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>

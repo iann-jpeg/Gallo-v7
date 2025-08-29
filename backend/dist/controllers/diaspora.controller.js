@@ -82,3 +82,4 @@ exports.DiasporaController = DiasporaController = __decorate([
     (0, common_1.Controller)('diaspora'),
     __metadata("design:paramtypes", [diaspora_service_1.DiasporaService])
 ], DiasporaController);
+//# sourceMappingURL=diaspora.controller.js.map

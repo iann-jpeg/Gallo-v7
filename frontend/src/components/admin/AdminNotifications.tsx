@@ -19,6 +19,7 @@ import {
   Trash2,
   RefreshCw
 } from "lucide-react";
+import { adminService } from "@/lib/api";
 
 export function AdminNotifications() {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -37,8 +38,7 @@ export function AdminNotifications() {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/notifications`);
-      const result = await response.json();
+      const result = await adminService.getNotifications();
       
       if (result.success) {
         setNotifications(result.data.notifications);
@@ -54,19 +54,12 @@ export function AdminNotifications() {
     e.preventDefault();
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/notifications`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          note: `${newNotification.title}: ${newNotification.message}`,
-          entityType: 'SYSTEM',
-          entityId: null
-        })
-      });
+      const result = await adminService.createNotification(
+        newNotification.title, 
+        newNotification.message
+      );
       
-      if (response.ok) {
+      if (result.success) {
         setNewNotification({ title: '', message: '', type: 'info' });
         setShowCreateForm(false);
         fetchNotifications();
@@ -78,9 +71,7 @@ export function AdminNotifications() {
 
   const handleMarkAsRead = async (id: number) => {
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/admin/notifications/${id}/read`, {
-        method: 'PUT'
-      });
+      await adminService.markNotificationAsRead(id);
       fetchNotifications();
     } catch (error) {
       console.error('Failed to mark notification as read:', error);

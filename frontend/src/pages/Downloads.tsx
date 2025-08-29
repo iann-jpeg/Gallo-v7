@@ -13,12 +13,15 @@ import {
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { resourcesService } from "@/lib/api";
 
 interface DownloadableFile {
-  filename: string;
-  displayName: string;
+  id: string;
+  title: string;
   description: string;
   category: string;
+  file_url: string;
+  file_name: string;
 }
 
 const Downloads = () => {
@@ -40,22 +43,14 @@ const Downloads = () => {
 
   const loadDownloadableFiles = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/static/downloads`, {
-        method: 'GET',
-      });
+      const response = await resourcesService.getResources();
 
-      if (!response.ok) {
-        throw new Error('Failed to load downloadable files');
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to load resources');
       }
 
-      const data = await response.json();
-      
-      if (data.success) {
-        setFiles(data.data);
-        setFilteredFiles(data.data);
-      } else {
-        throw new Error(data.message || 'Failed to load files');
-      }
+      setFiles(response.data || []);
+      setFilteredFiles(response.data || []);
     } catch (error) {
       console.error("Error loading downloadable files:", error);
       toast({
@@ -74,7 +69,7 @@ const Downloads = () => {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(file => 
-        file.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        file.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         file.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         file.category.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -88,48 +83,32 @@ const Downloads = () => {
     setFilteredFiles(filtered);
   };
 
-  const handleDownload = async (filename: string, displayName: string) => {
+  const handleDownload = async (fileId: string, fileName: string) => {
     try {
-      setDownloadingFiles(prev => [...prev, filename]);
+      setDownloadingFiles(prev => [...prev, fileId]);
 
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://api.galloways.co.ke/api'}/static/downloads/${filename}`, {
-        method: 'GET',
-      });
+      const response = await resourcesService.downloadResource(fileId);
 
-      if (!response.ok) {
-        throw new Error('Failed to download file');
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to get download URL');
       }
 
-      // Create a blob from the response
-      const blob = await response.blob();
-      
-      // Create a temporary URL for the blob
-      const url = window.URL.createObjectURL(blob);
-      
-      // Create a temporary anchor element and trigger the download
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      
-      // Clean up
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      // Open the file URL in a new tab for download
+      window.open(response.data.file_url, '_blank');
       
       toast({
         title: "Success",
-        description: `${displayName} downloaded successfully!`,
+        description: `${fileName} download initiated!`,
       });
     } catch (error) {
       console.error("Error downloading file:", error);
       toast({
         title: "Download Error",
-        description: `Failed to download ${displayName}. Please try again.`,
+        description: `Failed to download ${fileName}. Please try again.`,
         variant: "destructive",
       });
     } finally {
-      setDownloadingFiles(prev => prev.filter(f => f !== filename));
+      setDownloadingFiles(prev => prev.filter(f => f !== fileId));
     }
   };
 
@@ -238,7 +217,7 @@ const Downloads = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredFiles.map((file) => (
-              <Card key={file.filename} className="hover:shadow-lg transition-shadow">
+              <Card key={file.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <FileText className="h-8 w-8 text-primary flex-shrink-0" />
@@ -247,7 +226,7 @@ const Downloads = () => {
                     </Badge>
                   </div>
                   <CardTitle className="text-lg leading-tight">
-                    {file.displayName}
+                    {file.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -255,12 +234,12 @@ const Downloads = () => {
                     {file.description}
                   </p>
                   <Button
-                    onClick={() => handleDownload(file.filename, file.displayName)}
-                    disabled={downloadingFiles.includes(file.filename)}
+                    onClick={() => handleDownload(file.id, file.title)}
+                    disabled={downloadingFiles.includes(file.id)}
                     className="w-full"
                     size="sm"
                   >
-                    {downloadingFiles.includes(file.filename) ? (
+                    {downloadingFiles.includes(file.id) ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                         Downloading...
@@ -268,7 +247,7 @@ const Downloads = () => {
                     ) : (
                       <>
                         <Download className="h-4 w-4 mr-2" />
-                        Download PDF
+                        Download File
                       </>
                     )}
                   </Button>

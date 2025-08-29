@@ -3,9 +3,11 @@ import { CreateQuoteDto, UpdateQuoteDto } from '../config/quote.dto';
 export declare class QuotesService {
     private readonly emailService;
     createWithDocuments(data: CreateQuoteDto, documents?: Express.Multer.File[]): Promise<{
+        location: string | null;
+        details: string | null;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -13,10 +15,8 @@ export declare class QuotesService {
         product: string;
         firstName: string;
         lastName: string;
-        location: string | null;
         budget: string | null;
         coverage: string | null;
-        details: string | null;
         contactMethod: string;
         bestTime: string | null;
     }>;
@@ -26,9 +26,11 @@ export declare class QuotesService {
         limit?: number;
     }): Promise<{
         data: {
+            location: string | null;
+            details: string | null;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -36,10 +38,8 @@ export declare class QuotesService {
             product: string;
             firstName: string;
             lastName: string;
-            location: string | null;
             budget: string | null;
             coverage: string | null;
-            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         }[];
@@ -51,9 +51,11 @@ export declare class QuotesService {
         };
     }>;
     findOne(id: number): Promise<{
+        location: string | null;
+        details: string | null;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -61,17 +63,17 @@ export declare class QuotesService {
         product: string;
         firstName: string;
         lastName: string;
-        location: string | null;
         budget: string | null;
         coverage: string | null;
-        details: string | null;
         contactMethod: string;
         bestTime: string | null;
     }>;
     create(data: CreateQuoteDto): Promise<{
+        location: string | null;
+        details: string | null;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -79,17 +81,17 @@ export declare class QuotesService {
         product: string;
         firstName: string;
         lastName: string;
-        location: string | null;
         budget: string | null;
         coverage: string | null;
-        details: string | null;
         contactMethod: string;
         bestTime: string | null;
     }>;
     update(id: number, data: UpdateQuoteDto): Promise<{
+        location: string | null;
+        details: string | null;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -97,17 +99,17 @@ export declare class QuotesService {
         product: string;
         firstName: string;
         lastName: string;
-        location: string | null;
         budget: string | null;
         coverage: string | null;
-        details: string | null;
         contactMethod: string;
         bestTime: string | null;
     }>;
     remove(id: number): Promise<{
+        location: string | null;
+        details: string | null;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -115,10 +117,8 @@ export declare class QuotesService {
         product: string;
         firstName: string;
         lastName: string;
-        location: string | null;
         budget: string | null;
         coverage: string | null;
-        details: string | null;
         contactMethod: string;
         bestTime: string | null;
     }>;

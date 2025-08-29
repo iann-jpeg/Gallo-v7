@@ -10,17 +10,17 @@ export declare class ResourceService {
                 email: string;
             } | null;
         } & {
-            id: number;
+            url: string | null;
             description: string;
+            id: number;
+            isPublic: boolean;
             createdAt: Date;
             updatedAt: Date;
             category: string;
             title: string;
-            url: string | null;
             filePath: string | null;
             fileSize: number | null;
             adminOnly: boolean;
-            isPublic: boolean;
             creatorId: number | null;
         })[];
         pagination: {
@@ -33,8 +33,8 @@ export declare class ResourceService {
     findPublicResources(category?: string): Promise<{
         success: boolean;
         data: {
-            id: number;
             description: string;
+            id: number;
             createdAt: Date;
             category: string;
             title: string;
@@ -49,17 +49,17 @@ export declare class ResourceService {
             email: string;
         } | null;
     } & {
-        id: number;
+        url: string | null;
         description: string;
+        id: number;
+        isPublic: boolean;
         createdAt: Date;
         updatedAt: Date;
         category: string;
         title: string;
-        url: string | null;
         filePath: string | null;
         fileSize: number | null;
         adminOnly: boolean;
-        isPublic: boolean;
         creatorId: number | null;
     }>;
     create(data: CreateResourceDto, file?: Express.Multer.File, createdBy?: number): Promise<{
@@ -72,17 +72,17 @@ export declare class ResourceService {
                 email: string;
             } | null;
         } & {
-            id: number;
+            url: string | null;
             description: string;
+            id: number;
+            isPublic: boolean;
             createdAt: Date;
             updatedAt: Date;
             category: string;
             title: string;
-            url: string | null;
             filePath: string | null;
             fileSize: number | null;
             adminOnly: boolean;
-            isPublic: boolean;
             creatorId: number | null;
         };
     }>;
@@ -96,17 +96,17 @@ export declare class ResourceService {
                 email: string;
             } | null;
         } & {
-            id: number;
+            url: string | null;
             description: string;
+            id: number;
+            isPublic: boolean;
             createdAt: Date;
             updatedAt: Date;
             category: string;
             title: string;
-            url: string | null;
             filePath: string | null;
             fileSize: number | null;
             adminOnly: boolean;
-            isPublic: boolean;
             creatorId: number | null;
         };
     }>;

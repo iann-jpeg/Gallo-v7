@@ -8,10 +8,12 @@ export declare class PaymentsController {
     } | {
         success: boolean;
         payment: {
-            id: number;
-            userId: number | null;
+            method: string | null;
             description: string | null;
             status: string;
+            id: number;
+            metadata: import("@prisma/client/runtime/library").JsonValue | null;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             claimId: number | null;
@@ -20,10 +22,8 @@ export declare class PaymentsController {
             currency: string;
             reference: string | null;
             transactionId: string | null;
-            method: string | null;
             paymentMethod: string | null;
             clientName: string | null;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
         };
     }>;
     processPayment(id: string, body: any): Promise<{
@@ -32,10 +32,12 @@ export declare class PaymentsController {
     } | {
         success: boolean;
         payment: {
-            id: number;
-            userId: number | null;
+            method: string | null;
             description: string | null;
             status: string;
+            id: number;
+            metadata: import("@prisma/client/runtime/library").JsonValue | null;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             claimId: number | null;
@@ -44,10 +46,8 @@ export declare class PaymentsController {
             currency: string;
             reference: string | null;
             transactionId: string | null;
-            method: string | null;
             paymentMethod: string | null;
             clientName: string | null;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
         };
     }>;
     getPaymentStatus(id: string): Promise<{

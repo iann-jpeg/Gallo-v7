@@ -29,7 +29,6 @@ let RolesGuard = class RolesGuard {
         if (!user) {
             throw new common_1.ForbiddenException('User not authenticated');
         }
-        // Check if user has any of the required roles
         const hasRole = requiredRoles.some((role) => user.role === role);
         if (!hasRole) {
             throw new common_1.ForbiddenException(`Access denied. Required roles: ${requiredRoles.join(', ')}`);
@@ -42,3 +41,4 @@ exports.RolesGuard = RolesGuard = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [core_1.Reflector])
 ], RolesGuard);
+//# sourceMappingURL=roles.guard.js.map

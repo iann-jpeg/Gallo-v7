@@ -5,9 +5,9 @@ export declare class DiasporaController {
     constructor(diasporaService: DiasporaService);
     findAll(page?: number, limit?: number): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -19,9 +19,9 @@ export declare class DiasporaController {
     }[]>;
     findOne(id: string): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -33,9 +33,9 @@ export declare class DiasporaController {
     } | null>;
     create(data: CreateDiasporaDto): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -47,9 +47,9 @@ export declare class DiasporaController {
     }>;
     update(id: string, data: UpdateDiasporaDto): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;
@@ -61,9 +61,9 @@ export declare class DiasporaController {
     }>;
     remove(id: string): Promise<{
         name: string;
+        status: string;
         id: number;
         userId: number | null;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         email: string;

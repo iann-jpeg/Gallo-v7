@@ -5,30 +5,30 @@ export declare class OutsourcingController {
     constructor(outsourcingService: OutsourcingService);
     findAll(page?: number, limit?: number, status?: string): Promise<{
         data: ({
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
             document: {
+                path: string;
+                filename: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
-                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 outsourcingId: number | null;
                 content: Uint8Array | null;
             }[];
+            user: {
+                name: string;
+                id: number;
+                email: string;
+            } | null;
         } & {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;
@@ -47,30 +47,30 @@ export declare class OutsourcingController {
         };
     }>;
     findOne(id: string): Promise<{
-        user: {
-            name: string;
-            id: number;
-            email: string;
-        } | null;
         document: {
+            path: string;
+            filename: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            filename: string;
             originalName: string;
             mimeType: string;
             size: number;
-            path: string;
             claimId: number | null;
             quoteId: number | null;
             outsourcingId: number | null;
             content: Uint8Array | null;
         }[];
+        user: {
+            name: string;
+            id: number;
+            email: string;
+        } | null;
     } & {
-        id: number;
-        userId: number | null;
         description: string;
         status: string;
+        id: number;
+        userId: number | null;
         createdAt: Date;
         updatedAt: Date;
         email: string | null;
@@ -86,24 +86,24 @@ export declare class OutsourcingController {
         message: string;
         data: {
             document: {
+                path: string;
+                filename: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
-                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 outsourcingId: number | null;
                 content: Uint8Array | null;
             }[];
         } & {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;
@@ -119,30 +119,30 @@ export declare class OutsourcingController {
         success: boolean;
         message: string;
         data: {
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
             document: {
+                path: string;
+                filename: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
-                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 outsourcingId: number | null;
                 content: Uint8Array | null;
             }[];
+            user: {
+                name: string;
+                id: number;
+                email: string;
+            } | null;
         } & {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;
@@ -170,10 +170,10 @@ export declare class OutsourcingController {
                 email: string;
             } | null;
         } & {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;

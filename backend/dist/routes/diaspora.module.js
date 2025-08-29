@@ -19,3 +19,4 @@ exports.DiasporaModule = DiasporaModule = __decorate([
         providers: [diaspora_service_1.DiasporaService],
     })
 ], DiasporaModule);
+//# sourceMappingURL=diaspora.module.js.map

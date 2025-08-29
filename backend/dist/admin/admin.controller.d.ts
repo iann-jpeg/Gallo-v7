@@ -197,14 +197,14 @@ export declare class AdminController {
             users: {
                 name: string;
                 id: number;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                role: import(".prisma/client").$Enums.Role;
                 _count: {
                     claim: number;
                     quote: number;
                 };
+                createdAt: Date;
+                updatedAt: Date;
+                email: string;
+                role: import(".prisma/client").$Enums.Role;
             }[];
             pagination: {
                 total: number;
@@ -289,14 +289,14 @@ export declare class AdminController {
                     email: string;
                 } | null;
             } & {
+                description: string;
+                status: string;
                 id: number;
                 userId: number | null;
                 policyNumber: string;
                 claimType: string;
                 incidentDate: Date;
                 estimatedLoss: number;
-                description: string;
-                status: string;
                 createdAt: Date;
                 updatedAt: Date;
                 submitterEmail: string | null;
@@ -334,6 +334,14 @@ export declare class AdminController {
     } | {
         success: boolean;
         data: {
+            document: {
+                filename: string;
+                id: number;
+                createdAt: Date;
+                originalName: string;
+                mimeType: string;
+                size: number;
+            }[];
             user: {
                 name: string;
                 id: number;
@@ -342,23 +350,15 @@ export declare class AdminController {
                     phone: string | null;
                 } | null;
             } | null;
-            document: {
-                id: number;
-                createdAt: Date;
-                filename: string;
-                originalName: string;
-                mimeType: string;
-                size: number;
-            }[];
         } & {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -400,14 +400,14 @@ export declare class AdminController {
                 email: string;
             } | null;
         } & {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -442,9 +442,9 @@ export declare class AdminController {
                 } | null;
             } & {
                 name: string;
+                status: string;
                 id: number;
                 userId: number | null;
-                status: string;
                 createdAt: Date;
                 updatedAt: Date;
                 email: string;
@@ -498,9 +498,9 @@ export declare class AdminController {
             } | null;
         } & {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -533,9 +533,9 @@ export declare class AdminController {
             } | null;
         } & {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -589,9 +589,9 @@ export declare class AdminController {
                 } | null;
             } & {
                 name: string;
+                status: string;
                 id: number;
                 userId: number | null;
-                status: string;
                 createdAt: Date;
                 updatedAt: Date;
                 email: string;
@@ -665,9 +665,11 @@ export declare class AdminController {
                     email: string;
                 } | null;
             } & {
+                location: string | null;
+                details: string | null;
+                status: string;
                 id: number;
                 userId: number | null;
-                status: string;
                 createdAt: Date;
                 updatedAt: Date;
                 email: string;
@@ -675,10 +677,8 @@ export declare class AdminController {
                 product: string;
                 firstName: string;
                 lastName: string;
-                location: string | null;
                 budget: string | null;
                 coverage: string | null;
-                details: string | null;
                 contactMethod: string;
                 bestTime: string | null;
             })[];
@@ -708,29 +708,31 @@ export declare class AdminController {
     getQuoteById(id: number): Promise<{
         success: boolean;
         data: {
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
             document: {
+                path: string;
+                filename: string;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
-                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 outsourcingId: number | null;
                 content: Uint8Array | null;
             }[];
+            user: {
+                name: string;
+                id: number;
+                email: string;
+            } | null;
         } & {
+            location: string | null;
+            details: string | null;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -738,10 +740,8 @@ export declare class AdminController {
             product: string;
             firstName: string;
             lastName: string;
-            location: string | null;
             budget: string | null;
             coverage: string | null;
-            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         };
@@ -754,9 +754,11 @@ export declare class AdminController {
     updateQuoteStatus(id: number, status: string): Promise<{
         success: boolean;
         data: {
+            location: string | null;
+            details: string | null;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -764,10 +766,8 @@ export declare class AdminController {
             product: string;
             firstName: string;
             lastName: string;
-            location: string | null;
             budget: string | null;
             coverage: string | null;
-            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         };
@@ -790,9 +790,9 @@ export declare class AdminController {
                 } | null;
             } & {
                 name: string;
+                status: string;
                 id: number;
                 userId: number | null;
-                status: string;
                 createdAt: Date;
                 updatedAt: Date;
                 email: string;
@@ -835,9 +835,9 @@ export declare class AdminController {
             } | null;
         } & {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -857,9 +857,9 @@ export declare class AdminController {
         success: boolean;
         data: {
             name: string;
+            status: string;
             id: number;
             userId: number | null;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
@@ -887,10 +887,12 @@ export declare class AdminController {
                     email: string;
                 } | null;
             } & {
-                id: number;
-                userId: number | null;
+                method: string | null;
                 description: string | null;
                 status: string;
+                id: number;
+                metadata: import("@prisma/client/runtime/library").JsonValue | null;
+                userId: number | null;
                 createdAt: Date;
                 updatedAt: Date;
                 claimId: number | null;
@@ -899,10 +901,8 @@ export declare class AdminController {
                 currency: string;
                 reference: string | null;
                 transactionId: string | null;
-                method: string | null;
                 paymentMethod: string | null;
                 clientName: string | null;
-                metadata: import("@prisma/client/runtime/library").JsonValue | null;
             })[];
             pagination: {
                 currentPage: number;
@@ -1051,10 +1051,10 @@ export declare class AdminController {
                     email: string;
                 } | null;
             } & {
-                id: number;
-                userId: number | null;
                 description: string;
                 status: string;
+                id: number;
+                userId: number | null;
                 createdAt: Date;
                 updatedAt: Date;
                 email: string | null;
@@ -1093,10 +1093,10 @@ export declare class AdminController {
                 email: string;
             } | null;
         } & {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;
@@ -1124,10 +1124,10 @@ export declare class AdminController {
                 email: string;
             } | null;
         } & {
-            id: number;
-            userId: number | null;
             description: string;
             status: string;
+            id: number;
+            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
             email: string | null;

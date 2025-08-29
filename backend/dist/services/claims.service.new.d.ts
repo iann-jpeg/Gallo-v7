@@ -7,14 +7,14 @@ export declare class ClaimsService {
         limit?: number;
     }): Promise<{
         data: {
+            description: string;
+            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            description: string;
-            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -29,14 +29,14 @@ export declare class ClaimsService {
         };
     }>;
     findOne(id: number): Promise<{
+        description: string;
+        status: string;
         id: number;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        description: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         submitterEmail: string | null;
@@ -44,14 +44,14 @@ export declare class ClaimsService {
         submitterPhone: string | null;
     }>;
     create(data: any): Promise<{
+        description: string;
+        status: string;
         id: number;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        description: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         submitterEmail: string | null;
@@ -59,14 +59,14 @@ export declare class ClaimsService {
         submitterPhone: string | null;
     }>;
     update(id: number, data: any): Promise<{
+        description: string;
+        status: string;
         id: number;
         userId: number | null;
         policyNumber: string;
         claimType: string;
         incidentDate: Date;
         estimatedLoss: number;
-        description: string;
-        status: string;
         createdAt: Date;
         updatedAt: Date;
         submitterEmail: string | null;
