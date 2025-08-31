@@ -288,19 +288,76 @@ const Products = () => {
               {products.map((product, index) => {
                 const IconComponent = product.icon;
                 const imageSrc = productImages[product.title];
+                if (product.title === "Pension") {
+                  return (
+                    <>
+                      <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-600 rounded">
+                        <h3 className="text-lg font-bold mb-2 text-blue-800">Pension Scheme Information</h3>
+                        <ul className="text-sm text-blue-900 mb-2 ml-4 list-disc">
+                          <li><strong>Name of scheme/Fund:</strong> Boresha Maisha IPP</li>
+                          <li><strong>Name of Scheme:</strong> Liberty Life Assurance Kenya Ltd</li>
+                          <li><strong>Account Name:</strong> Liberty Life Assurance Kenya Ltd</li>
+                          <li><strong>Account No.:</strong> 0100000105443</li>
+                          <li><strong>Bank:</strong> Stanbic Bank: Chiromo Branch</li>
+                          <li><strong>Contact Person:</strong> Eunice K Omwoyo</li>
+                          <li><strong>Email:</strong> Eunice.Omwoyo@libertylife.co.ke</li>
+                          <li><strong>Scheme Certificate No.:</strong> RBA/SC/1097</li>
+                        </ul>
+                      </div>
+                      <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+                        <CardHeader>
+                          <div className="mb-4 p-4 bg-muted rounded-lg border">
+                            <h3 className="text-lg font-bold mb-2 text-primary">Pension Information</h3>
+                            <ul className="mb-2 text-sm text-muted-foreground list-disc ml-4">
+                              {product.info?.map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          {imageSrc && (
+                            <img
+                              src={imageSrc}
+                              alt={product.title + " image"}
+                              className="w-full h-56 object-cover rounded-xl mb-6 border-2 border-primary"
+                            />
+                          )}
+                          <div className="w-fit p-3 rounded-full bg-gray-100 mb-4">
+                            <IconComponent className={`h-8 w-8 ${product.color}`} />
+                          </div>
+                          <CardTitle className="text-xl">{product.title}</CardTitle>
+                          <CardDescription>{product.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="mb-4 p-4 bg-muted rounded-lg border">
+                            <h4 className="text-md font-semibold mb-2 text-primary">Downloads</h4>
+                            <ul className="mb-2 text-sm text-muted-foreground list-disc ml-4">
+                              {product.downloads?.map((form, idx) => (
+                                <li key={idx}>
+                                  <a href={form.url} download className="text-blue-600 underline font-medium">{form.label}</a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <ul className="space-y-2 mb-6">
+                            {product.features.map((feature, featureIndex) => (
+                              <li key={featureIndex} className="flex items-center space-x-2">
+                                <CheckCircle className="h-4 w-4 text-accent" />
+                                <span className="text-sm">{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          <Button variant="outline" className="w-full" asChild>
+                            <Link to="/quotes">Get Quote</Link>
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </>
+                  );
+                }
+                // ...existing code for other products...
                 return (
                   <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
                     <CardHeader>
-                      {product.title === "Pension" && (
-                        <div className="mb-4 p-4 bg-muted rounded-lg border">
-                          <h3 className="text-lg font-bold mb-2 text-primary">Pension Information</h3>
-                          <ul className="mb-2 text-sm text-muted-foreground list-disc ml-4">
-                            {product.info?.map((item, idx) => (
-                              <li key={idx}>{item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
                       {imageSrc && (
                         <img
                           src={imageSrc}
@@ -315,18 +372,6 @@ const Products = () => {
                       <CardDescription>{product.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      {product.title === "Pension" && (
-                        <div className="mb-4 p-4 bg-muted rounded-lg border">
-                          <h4 className="text-md font-semibold mb-2 text-primary">Downloads</h4>
-                          <ul className="mb-2 text-sm text-muted-foreground list-disc ml-4">
-                            {product.downloads?.map((form, idx) => (
-                              <li key={idx}>
-                                <a href={form.url} download className="text-blue-600 underline font-medium">{form.label}</a>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
                       <ul className="space-y-2 mb-6">
                         {product.features.map((feature, featureIndex) => (
                           <li key={featureIndex} className="flex items-center space-x-2">

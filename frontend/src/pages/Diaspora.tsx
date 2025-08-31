@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { DialogContent, DialogTrigger, Dialog } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ export default function Diaspora() {
             </p>
             <Button size="lg" variant="secondary" className="px-8 py-3" onClick={() => {
               // Open WhatsApp with predefined message
-              const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "+254712345678";
+              const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || "+254720769993";
               const message = encodeURIComponent("Hello! I'm interested in diaspora insurance services. Could you please provide me with more information?");
               window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
             }}>
@@ -81,9 +81,21 @@ export default function Diaspora() {
                       </li>
                     ))}
                   </ul>
-                  <Button variant="outline" className="w-full">
-                    Learn More
-                  </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" className="w-full">Learn More</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <h4 className="text-lg font-bold mb-2">About {service.title}</h4>
+                        <p className="text-sm text-muted-foreground mb-2">{service.description}</p>
+                        <ul className="list-disc pl-5 text-sm">
+                          {service.features.slice(0,2).map((feature, idx) => (
+                            <li key={idx}>{feature}</li>
+                          ))}
+                        </ul>
+                        <p className="mt-2 text-xs text-primary">Contact us for more details on {service.title} for diaspora clients.</p>
+                      </DialogContent>
+                    </Dialog>
                 </Card>
               ))}
             </div>
