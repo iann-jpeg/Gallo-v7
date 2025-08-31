@@ -5,23 +5,23 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, TrendingUp, FileCheck, Users, BookOpen, Monitor, Building, Heart, Truck, Landmark } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Fragment, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ConsultationBookingForm from "@/components/forms/ConsultationBookingForm";
 import BrochureDownload from "@/components/forms/BrochureDownload";
 import { paymentsService } from "@/lib/api";
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Consultancy() {
   const [isPaymentLoading, setIsPaymentLoading] = useState(false);
   const { toast } = useToast();
+  const [openServiceIdx, setOpenServiceIdx] = useState<number | null>(null);
 
   const handleMPesaPayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsPaymentLoading(true);
-    
     try {
       const formData = new FormData(e.target as HTMLFormElement);
       const paymentData = {
@@ -32,33 +32,27 @@ export default function Consultancy() {
         consultationDate: formData.get('date') as string,
         consultationTime: formData.get('time') as string,
       };
-
       if (!paymentData.phone || !paymentData.name || !paymentData.consultationDate) {
         throw new Error('Please fill in all required fields');
       }
-
-      // Validate phone format
       const phoneRegex = /^(\+254|0)?7\d{8}$/;
       if (!phoneRegex.test(paymentData.phone)) {
         throw new Error('Please enter a valid Kenyan phone number (format: +254712345678 or 0712345678)');
       }
-
-      // Initiate M-PESA STK push
-      const response = await paymentsService.payForConsultation(paymentData);
-      
+      await paymentsService.createPayment({
+        ...paymentData,
+        type: 'mpesa-consultation',
+      });
       toast({
         title: "M-PESA Payment Initiated",
         description: `Payment request sent to ${paymentData.phone}. Please check your phone and enter your M-PESA PIN to complete the payment.`,
       });
-
-      // You could add polling here to check payment status
       setTimeout(() => {
         toast({
           title: "Payment Successful!",
           description: "Your consultation has been booked. You'll receive a confirmation SMS with booking details.",
         });
-      }, 10000); // Simulate payment completion after 10 seconds
-
+      }, 10000);
     } catch (error: any) {
       console.error('M-PESA payment error:', error);
       toast({
@@ -73,7 +67,6 @@ export default function Consultancy() {
 
   const handleProjectConsultationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
     try {
       const formData = new FormData(e.target as HTMLFormElement);
       const projectData = {
@@ -85,22 +78,16 @@ export default function Consultancy() {
         serviceType: 'project-based-consultation',
         status: 'PENDING'
       };
-
-      // You could create a separate service for this or use consultations
       await paymentsService.createPayment({
         ...projectData,
         type: 'project-consultation',
-        amount: 0, // To be determined based on project scope
+        amount: 0,
       });
-
       toast({
         title: "Project Consultation Request Submitted",
         description: "Thank you for your request. Our team will review your project requirements and get back to you within 24-48 hours with a tailored proposal.",
       });
-
-      // Reset form
       (e.target as HTMLFormElement).reset();
-
     } catch (error: any) {
       console.error('Project consultation error:', error);
       toast({
@@ -110,10 +97,118 @@ export default function Consultancy() {
       });
     }
   };
+
+  const serviceDetails = [
+    {
+      title: "Risk Assessment",
+      details: (
+        <div>
+          <h2 className="text-xl font-bold mb-2">Risk Assessment</h2>
+          <ul className="list-disc ml-6 mb-2">
+            <li>Comprehensive evaluation of business and personal risks</li>
+            <li>Enterprise risk analysis and vulnerability assessment</li>
+            <li>Actionable mitigation strategies</li>
+          </ul>
+          <h3 className="font-semibold mb-1">Benefits:</h3>
+          <ul className="list-disc ml-6">
+            <li>Identify exposures before they become losses</li>
+            <li>Tailored recommendations for your unique needs</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      title: "Corporate Structuring",
+      details: (
+        <div>
+          <h2 className="text-xl font-bold mb-2">Corporate Structuring</h2>
+          <ul className="list-disc ml-6 mb-2">
+            <li>Optimize insurance coverage for businesses</li>
+            <li>Cost management and policy structuring</li>
+            <li>Benefits design for staff and stakeholders</li>
+          </ul>
+          <h3 className="font-semibold mb-1">Why Choose Us?</h3>
+          <ul className="list-disc ml-6">
+            <li>Expert guidance on policy selection</li>
+            <li>Maximize value for your insurance spend</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      title: "Claims Audits",
+      details: (
+        <div>
+          <h2 className="text-xl font-bold mb-2">Claims Audits</h2>
+          <ul className="list-disc ml-6 mb-2">
+            <li>Review and analysis of claims settlements</li>
+            <li>Process improvement and documentation audit</li>
+          </ul>
+          <h3 className="font-semibold mb-1">Key Points:</h3>
+          <ul className="list-disc ml-6">
+            <li>Ensure fair settlements</li>
+            <li>Identify areas for improvement</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      title: "Policy Reviews",
+      details: (
+        <div>
+          <h2 className="text-xl font-bold mb-2">Policy Reviews</h2>
+          <ul className="list-disc ml-6 mb-2">
+            <li>Coverage gap analysis and policy comparison</li>
+            <li>Cost-benefit analysis and renewal strategy</li>
+          </ul>
+          <h3 className="font-semibold mb-1">Why Review?</h3>
+          <ul className="list-disc ml-6">
+            <li>Identify gaps and overlaps</li>
+            <li>Optimize your insurance portfolio</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      title: "Workshops & Training",
+      details: (
+        <div>
+          <h2 className="text-xl font-bold mb-2">Workshops & Training</h2>
+          <ul className="list-disc ml-6 mb-2">
+            <li>Insurance literacy and claims management</li>
+            <li>Risk awareness and best practices</li>
+          </ul>
+          <h3 className="font-semibold mb-1">Who Should Attend?</h3>
+          <ul className="list-disc ml-6">
+            <li>Individuals and organizations seeking insurance knowledge</li>
+            <li>Staff training for compliance and efficiency</li>
+          </ul>
+        </div>
+      )
+    },
+    {
+      title: "Online Training",
+      details: (
+        <div>
+          <h2 className="text-xl font-bold mb-2">Online Training</h2>
+          <ul className="list-disc ml-6 mb-2">
+            <li>Self-paced learning and interactive modules</li>
+            <li>Certification programs and resource library</li>
+          </ul>
+          <h3 className="font-semibold mb-1">Advantages:</h3>
+          <ul className="list-disc ml-6">
+            <li>Flexible access from anywhere</li>
+            <li>Up-to-date content from industry experts</li>
+          </ul>
+        </div>
+      )
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
+    <div>
       <Header />
-      <main className="pt-20">
+      <main>
         {/* Hero Section */}
         <section className="py-20 px-4 bg-gradient-to-r from-primary to-primary/90">
           <div className="max-w-7xl mx-auto text-center">
@@ -160,7 +255,6 @@ export default function Consultancy() {
                 Leverage our 14+ years of expertise to make informed insurance decisions
               </p>
             </div>
-
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {[
                 {
@@ -214,121 +308,89 @@ export default function Consultancy() {
                       </li>
                     ))}
                   </ul>
-                  <Button variant="outline" className="w-full">
-                    Learn More
-                  </Button>
+                  <Dialog open={openServiceIdx === index} onOpenChange={open => setOpenServiceIdx(open ? index : null)}>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="w-full" aria-label={`Learn more about ${service.title}`}>
+                        Learn More
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-lg animate-fade-in">
+                      {serviceDetails[index].details}
+                    </DialogContent>
+                  </Dialog>
                 </Card>
               ))}
             </div>
-          </div>
-        </section>
 
-        {/* Industry Solutions */}
-        <section className="py-20 px-4 bg-muted/50">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Industry-Specific Solutions
-              </h2>
-              <p className="text-muted-foreground">
-                Tailored consultancy services for various industry sectors
-              </p>
-            </div>
-
-            {/* Financial Services Section */}
-            <div className="mb-12">
-              <h3 className="text-2xl font-bold text-center mb-8">Financial Services & Banking</h3>
-              <Card className="p-6 mb-8">
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center">
-                    <Landmark className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="text-xl font-semibold mb-2">Credit File Insurance Underwriting & De-risking</h4>
-                    <p className="text-muted-foreground">Comprehensive insurance solutions for all banking financial products</p>
-                  </div>
+            {/* Financial Services & Banking */}
+            <h3 className="text-2xl font-bold text-center mb-8">Financial Services & Banking</h3>
+            <Card className="p-6 mb-8">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center">
+                  <Landmark className="w-6 h-6 text-primary" />
                 </div>
-                
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                  {[
-                    "Asset Finance", "Trade Finance", "Project Finance", "Mortgage Finance", 
-                    "Business Loans", "Corporate Loans", "Revolving Fund Loans", "Cash Cover Loans",
-                    "Bank Guarantee Loans", "Overdraft Loans", "Working Capital Loans", 
-                    "Import Based Asset Finance", "SME Loans (Lower, Medium & Upper)", "Agricultural Loans"
-                  ].map((service, idx) => (
-                    <Badge key={idx} variant="secondary" className="text-xs">
-                      {service}
-                    </Badge>
-                  ))}
+                <div>
+                  <h4 className="text-xl font-semibold mb-2">Credit File Insurance Underwriting & De-risking</h4>
+                  <p className="text-muted-foreground">Comprehensive insurance solutions for all banking financial products</p>
                 </div>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h5 className="font-semibold mb-3">Advisory Services</h5>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-start">
-                        <span className="w-2 h-2 bg-primary rounded-full mr-3 mt-2"></span>
-                        Advising on appropriate sanctioned insurance conditions on offer letters
-                      </li>
-                      <li className="flex items-start">
-                        <span className="w-2 h-2 bg-primary rounded-full mr-3 mt-2"></span>
-                        Appropriate insurance on bank securities
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h5 className="font-semibold mb-3">Insurance Scrutiny</h5>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-start">
-                        <span className="w-2 h-2 bg-primary rounded-full mr-3 mt-2"></span>
-                        Scrutinizing existing customer insurances for bank facilities
-                      </li>
-                      <li className="flex items-start">
-                        <span className="w-2 h-2 bg-primary rounded-full mr-3 mt-2"></span>
-                        Ensuring underwriting thresholds meet cover scope, terms & conditions
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </Card>
-            </div>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {[
+                  "Asset Finance", "Trade Finance", "Project Finance", "Mortgage Finance", 
+                  "Business Loans", "Corporate Loans", "Revolving Fund Loans", "Cash Cover Loans",
+                  "Bank Guarantee Loans", "Overdraft Loans", "Working Capital Loans", 
+                  "Import Based Asset Finance", "SME Loans (Lower, Medium & Upper)", "Agricultural Loans"
+                ].map((product, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs mr-1 mb-1">
+                    {product}
+                  </Badge>
+                ))}
+              </div>
+              <ul className="space-y-2">
+                <li className="flex items-center">
+                  <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                  Ensuring underwriting thresholds meet cover scope, terms & conditions
+                </li>
+              </ul>
+            </Card>
 
             {/* NGOs Section */}
             <div className="mb-12">
               <h3 className="text-2xl font-bold text-center mb-8">NGOs & Development Organizations</h3>
               <Card className="p-6 mb-8">
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center">
-                    <Heart className="w-6 h-6 text-primary" />
+                <div>
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="bg-primary/10 rounded-lg w-12 h-12 flex items-center justify-center">
+                      <Heart className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-semibold mb-2">Insurance Risk Mitigation on Target Social Segments</h4>
+                      <p className="text-muted-foreground">Tailored insurance solutions aligned with NGO core strategies, innovation and objectives</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-xl font-semibold mb-2">Insurance Risk Mitigation on Target Social Segments</h4>
-                    <p className="text-muted-foreground">Tailored insurance solutions aligned with NGO core strategies, innovation and objectives</p>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[
+                      { category: "Education NGOs", icon: <BookOpen className="w-4 h-4" /> },
+                      { category: "Agricultural NGOs", icon: <Building className="w-4 h-4" /> },
+                      { category: "Health NGOs", icon: <Heart className="w-4 h-4" /> },
+                      { category: "Social Change NGOs", icon: <Users className="w-4 h-4" /> },
+                      { category: "Technical Support NGOs", icon: <Monitor className="w-4 h-4" /> },
+                      { category: "Youth NGOs", icon: <Users className="w-4 h-4" /> },
+                      { category: "Business International NGOs", icon: <Building className="w-4 h-4" /> },
+                      { category: "Advocacy NGOs", icon: <Shield className="w-4 h-4" /> },
+                      { category: "Natural Environment NGOs", icon: <Building className="w-4 h-4" /> },
+                      { category: "Human Rights Campaigns", icon: <Shield className="w-4 h-4" /> },
+                      { category: "Development Projects NGOs", icon: <Building className="w-4 h-4" /> },
+                      { category: "Asset Management NGOs", icon: <TrendingUp className="w-4 h-4" /> }
+                    ].map((ngo, idx) => (
+                      <Card key={idx} className="p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="text-primary">{ngo.icon}</div>
+                          <h5 className="font-medium text-sm">{ngo.category}</h5>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
-                </div>
-                
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[
-                    { category: "Education NGOs", icon: <BookOpen className="w-4 h-4" /> },
-                    { category: "Agricultural NGOs", icon: <Building className="w-4 h-4" /> },
-                    { category: "Health NGOs", icon: <Heart className="w-4 h-4" /> },
-                    { category: "Social Change NGOs", icon: <Users className="w-4 h-4" /> },
-                    { category: "Technical Support NGOs", icon: <Monitor className="w-4 h-4" /> },
-                    { category: "Youth NGOs", icon: <Users className="w-4 h-4" /> },
-                    { category: "Business International NGOs", icon: <Building className="w-4 h-4" /> },
-                    { category: "Advocacy NGOs", icon: <Shield className="w-4 h-4" /> },
-                    { category: "Natural Environment NGOs", icon: <Building className="w-4 h-4" /> },
-                    { category: "Human Rights Campaigns", icon: <Shield className="w-4 h-4" /> },
-                    { category: "Development Projects NGOs", icon: <Building className="w-4 h-4" /> },
-                    { category: "Asset Management NGOs", icon: <TrendingUp className="w-4 h-4" /> }
-                  ].map((ngo, idx) => (
-                    <Card key={idx} className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="text-primary">{ngo.icon}</div>
-                        <h5 className="font-medium text-sm">{ngo.category}</h5>
-                      </div>
-                    </Card>
-                  ))}
                 </div>
               </Card>
             </div>
@@ -387,123 +449,7 @@ export default function Consultancy() {
           </div>
         </section>
 
-        {/* Consultation Process */}
-        <section className="py-20 px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Our Consultation Process
-              </h2>
-              <p className="text-muted-foreground">
-                A structured approach to delivering expert advisory services
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-4 gap-8">
-              {[
-                {
-                  step: 1,
-                  title: "Initial Assessment",
-                  description: "We conduct a comprehensive review of your current situation and requirements"
-                },
-                {
-                  step: 2,
-                  title: "Analysis & Research",
-                  description: "Our experts analyze your needs and research the best solutions in the market"
-                },
-                {
-                  step: 3,
-                  title: "Recommendations",
-                  description: "We present tailored recommendations with clear rationale and implementation plans"
-                },
-                {
-                  step: 4,
-                  title: "Implementation Support",
-                  description: "We provide ongoing support during implementation and post-implementation review"
-                }
-              ].map((step, index) => (
-                <Card key={index} className="p-6 text-center">
-                  <div className="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4 text-lg font-bold">
-                    {step.step}
-                  </div>
-                  <h3 className="font-semibold mb-3">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Expert Team Highlight */}
-        <section className="py-20 px-4 bg-muted/50">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                Led by Industry Experts
-              </h2>
-              <p className="text-muted-foreground">
-                Our consultancy services are backed by qualified professionals
-              </p>
-            </div>
-
-            <Card className="p-8">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <h3 className="text-2xl font-bold mb-4">William Sialuma Analo</h3>
-                  <div className="space-y-3">
-                    <Badge variant="outline" className="mr-2">Diploma by CII London</Badge>
-                    <Badge variant="outline" className="mr-2">14+ Years Experience</Badge>
-                    <Badge variant="outline">Senior Insurance Consultant</Badge>
-                  </div>
-                  <p className="text-muted-foreground mt-6 mb-6">
-                    With over 14 years of experience in the insurance industry and professional qualifications from the Chartered Insurance Institute London, William brings deep expertise in risk management, insurance structuring, and regulatory compliance.
-                  </p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                      Expert in Corporate Insurance Structuring
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                      Specialized in Risk Assessment & Management
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                      Professional Training & Workshop Facilitation
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                      Regulatory Compliance & Policy Analysis
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-8 text-center">
-                  <div className="w-32 h-32 bg-primary/20 rounded-full mx-auto mb-6 flex items-center justify-center">
-                    <Users className="w-16 h-16 text-primary" />
-                  </div>
-                  <h4 className="font-semibold mb-2">Book a Personal Consultation</h4>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Get expert advice tailored to your specific needs
-                  </p>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button className="w-full">
-                        Schedule Meeting
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                      <ConsultationBookingForm />
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </section>
-
         {/* CTA Section */}
-        {/* Local Consultation Payment Section (M-PESA) */}
-        {/* Project-Based Consultation Button & Modal */}
         <div className="max-w-4xl mx-auto mt-8 text-center">
           <Dialog>
             <DialogTrigger asChild>
@@ -606,7 +552,6 @@ export default function Consultancy() {
                     <Input id="time" name="time" type="time" required />
                   </div>
                 </div>
-                {/* M-PESA Payment Integration */}
                 <Button 
                   size="lg" 
                   className="w-full bg-gold text-primary font-bold"
@@ -620,7 +565,6 @@ export default function Consultancy() {
                 </div>
               </form>
             </Card>
-            {/* ...existing CTA section below... */}
             <div className="mt-12 text-center">
               <h2 className="text-3xl font-bold text-foreground mb-6">Ready to Optimize Your Insurance Strategy?</h2>
               <p className="text-muted-foreground mb-8 text-lg">Let our expert consultants help you navigate the complex world of insurance and risk management</p>

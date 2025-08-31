@@ -7,14 +7,15 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Products", href: "/products" },
-    { name: "Claims", href: "/claims" },
-    { name: "Diaspora", href: "/diaspora" },
-    { name: "Consultancy", href: "/consultancy" },
-    { name: "Quotes", href: "/quotes" },
-    { name: "Outsourcing", href: "/outsourcing" },
-    { name: "Downloads", href: "/downloads" },
+  { name: "Home", href: "/" },
+  { name: "Products", href: "/products" },
+  { name: "Claims", href: "/claims" },
+  // Pension tab removed
+  { name: "Diaspora", href: "/diaspora" },
+  { name: "Consultancy", href: "/consultancy" },
+  { name: "Quotes", href: "/quotes" },
+  { name: "Outsourcing", href: "/outsourcing" },
+  { name: "Downloads", href: "/downloads" },
   ];
 
   return (
@@ -26,7 +27,7 @@ const Header = () => {
         <div className="flex justify-between items-center py-4">
           <Link to="/" className="flex items-center space-x-2" style={{ alignItems: 'center' }}>
             <img
-              src="/galloways logo.jpg"
+              src={"/dist/galloways logo.jpg"}
               alt="Galloways Logo"
               className="h-44 w-44 object-cover rounded-full mr-8 drop-shadow-lg bg-transparent border-4 border-white"
               style={{ background: 'transparent', mixBlendMode: 'multiply', marginBottom: '2.5rem' }}

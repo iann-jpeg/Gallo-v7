@@ -245,6 +245,12 @@ export default function Claims() {
                       <option value="Property">Property</option>
                       <option value="Travel">Travel</option>
                       <option value="Life">Life</option>
+                      <option value="Public liability">Public liability</option>
+                      <option value="Fidelity guarantee">Fidelity guarantee</option>
+                      <option value="Worksmen compensation accident">Worksmen compensation accident</option>
+                      <option value="Windscreen and window damage">Windscreen and window damage</option>
+                      <option value="Motor entertainment">Motor entertainment</option>
+                      <option value="Motor theft">Motor theft</option>
                     </select>
                   </div>
                 </div>

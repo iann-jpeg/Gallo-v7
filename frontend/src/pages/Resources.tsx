@@ -89,6 +89,8 @@ const Resources = () => {
     }
   });
   const [activities, setActivities] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState("all");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -352,84 +354,139 @@ Generated on: ${new Date().toLocaleString()}
     </Card>
   );
 
+  // Example resources data (should be fetched from server in production)
+  const resources = [
+    { name: "Contractors All Risk Proposal", category: "Contractors", url: "/resources/contractors-all-risk-proposal.pdf", type: "form" },
+    { name: "Personal Accident Proposal Form", category: "Claims", url: "/resources/personal-accident-proposal.pdf", type: "form" },
+    { name: "Livestock Insurance Form", category: "Livestock", url: "/resources/livestock-insurance-form.pdf", type: "form", description: "Covers loss of insured livestock due to specified risks." },
+    { name: "Veterinary Insurance Form", category: "Veterinary", url: "/resources/veterinary-insurance-form.pdf", type: "form", description: "Supports coverage for veterinary costs." },
+    { name: "Medical - Individual", category: "Medical", url: "/resources/medical-individual-form.pdf", type: "form", description: "For individual health policy applications." },
+    { name: "Medical - Group", category: "Medical", url: "/resources/medical-group-form.pdf", type: "form", description: "For group health insurance applications." },
+    // Add more resources as needed
+  ];
+
+  const filteredResources = resources.filter(r =>
+    (category === "all" || r.category === category) &&
+    (r.name.toLowerCase().includes(searchTerm.toLowerCase()) || (r.description && r.description.toLowerCase().includes(searchTerm.toLowerCase())))
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* Admin Header */}
-      <div className="bg-primary text-primary-foreground py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-              <p className="text-sm opacity-90">Welcome back, {profile?.full_name}</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleExportPDF}
-                className="flex items-center gap-2"
-              >
-                <FileText className="h-4 w-4" />
-                Export PDF Report
-              </Button>
-              <Badge variant="secondary">{profile?.role}</Badge>
-              <Button variant="secondary" size="sm" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
-              </Button>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <section className="mb-12">
+          <h1 className="text-3xl font-bold mb-4 text-primary">Resources</h1>
+          <p className="text-muted-foreground mb-6">Download forms, PDFs, and documents for claims, quotes, and insurance products. Use the search and category filter for quick access.</p>
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <input
+              type="text"
+              placeholder="Search resources..."
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              className="border rounded px-4 py-2 w-full md:w-1/2"
+            />
+            <select
+              value={category}
+              onChange={e => setCategory(e.target.value)}
+              className="border rounded px-4 py-2 w-full md:w-1/4"
+            >
+              <option value="all">All Categories</option>
+              <option value="Contractors">Contractors</option>
+              <option value="Claims">Claims</option>
+              <option value="Livestock">Livestock</option>
+              <option value="Veterinary">Veterinary</option>
+              <option value="Medical">Medical</option>
+            </select>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredResources.length > 0 ? filteredResources.map((r, i) => (
+              <Card key={i} className="p-6 flex flex-col justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold mb-2">{r.name}</h2>
+                  {r.description && <p className="text-sm text-muted-foreground mb-2">{r.description}</p>}
+                  <span className="inline-block bg-primary/10 text-primary px-2 py-1 rounded text-xs mb-2">{r.category}</span>
+                </div>
+                <a href={r.url} download className="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 text-center font-medium">Download</a>
+              </Card>
+            )) : (
+              <p className="text-muted-foreground col-span-3">No resources found for your search.</p>
+            )}
+          </div>
+        </section>
+
+        {/* Admin Header */}
+        <div className="bg-primary text-primary-foreground py-4">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+                <p className="text-sm opacity-90">Welcome back, {profile?.full_name}</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  className="flex items-center gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  Export PDF Report
+                </Button>
+                <Badge variant="secondary">{profile?.role}</Badge>
+                <Button variant="secondary" size="sm" onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Dashboard Stats */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <StatsCard
-              title="Total Claims"
-              value={stats.totalClaims}
-              icon={<FileText className="h-6 w-6" />}
-              trend="+12%"
-            />
-            <StatsCard
-              title="Total Quotes"
-              value={stats.totalQuotes}
-              icon={<DollarSign className="h-6 w-6" />}
-              trend="+8%"
-            />
-            <StatsCard
-              title="Consultations"
-              value={stats.totalConsultations}
-              icon={<Users className="h-6 w-6" />}
-              trend="+15%"
-            />
-            <StatsCard
-              title="Pending Claims"
-              value={stats.pendingClaims}
-              icon={<AlertCircle className="h-6 w-6" />}
-              trend="-5%"
-            />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatsCard
+            title="Total Claims"
+            value={stats.totalClaims}
+            icon={<FileText className="h-6 w-6" />}
+            trend="+12%"
+          />
+          <StatsCard
+            title="Total Quotes"
+            value={stats.totalQuotes}
+            icon={<DollarSign className="h-6 w-6" />}
+            trend="+8%"
+          />
+          <StatsCard
+            title="Consultations"
+            value={stats.totalConsultations}
+            icon={<Users className="h-6 w-6" />}
+            trend="+15%"
+          />
+          <StatsCard
+            title="Pending Claims"
+            value={stats.pendingClaims}
+            icon={<AlertCircle className="h-6 w-6" />}
+            trend="-5%"
+          />
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <StatsCard
-              title="Outsourcing Requests"
-              value={stats.totalOutsourcingRequests}
-              icon={<FileText className="h-6 w-6" />}
-            />
-            <StatsCard
-              title="Payments"
-              value={stats.totalPayments}
-              icon={<DollarSign className="h-6 w-6" />}
-            />
-            <StatsCard
-              title="Diaspora Requests"
-              value={stats.totalDiasporaRequests}
-              icon={<Users className="h-6 w-6" />}
-            />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <StatsCard
+            title="Outsourcing Requests"
+            value={stats.totalOutsourcingRequests}
+            icon={<FileText className="h-6 w-6" />}
+          />
+          <StatsCard
+            title="Payments"
+            value={stats.totalPayments}
+            icon={<DollarSign className="h-6 w-6" />}
+          />
+          <StatsCard
+            title="Diaspora Requests"
+            value={stats.totalDiasporaRequests}
+            icon={<Users className="h-6 w-6" />}
+          />
+        </div>
 
         {/* Revenue & Conversion */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -748,7 +805,6 @@ Generated on: ${new Date().toLocaleString()}
           </TabsContent>
         </Tabs>
       </main>
-
       <Footer />
     </div>
   );

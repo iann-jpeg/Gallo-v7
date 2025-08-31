@@ -30,7 +30,11 @@ const ExpertTeam = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2 text-sm">
                       <CheckCircle className="h-4 w-4 text-accent" />
-                      <span>Diploma by the Chartered Insurance Institute of London by qualifications.</span>
+                      <span>Chartered Insurance Diploma by the Chartered Insurance Institute of London by qualifications.</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <CheckCircle className="h-4 w-4 text-accent" />
+                      <span>Certified claim specialist and certified specialist in insurance commercial contract wording by the Chartered Insurance Institute of London.</span>
                     </div>
                     <div className="flex items-center space-x-2 text-sm">
                       <CheckCircle className="h-4 w-4 text-accent" />

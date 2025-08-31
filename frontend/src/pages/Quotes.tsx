@@ -82,32 +82,34 @@ export default function Quotes() {
 	const [refNum, setRefNum] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 
-	const insuranceProductOptions = [
-			"Political Violence Proposal",
-			"Contractors Plant and Machinery",
-			"Carriers Legal Liability Insurance",
-			"Public Liability",
-			"Professional Indemnity Proposal Form (General)",
-			"Professional Indemnity Proposal Form (Engineers/Architects)",
-			"Professional Indemnity Insurance Proposal Form (Medical Practitioners)",
-			"Professional Indemnity Insurance Proposal Form (Accountants/Auditors)",
-			"Professional Indemnity Insurance Proposal Form (Lawyers/Advocates)",
-			"Machinery Breakdown/Damage",
-			"Equimed Application Form (Medical Insurance)",
-			"Fire Insurance Proposal Form",
-			"Contractual Liability Proposal Form",
-			"Domestic Package Insurance",
-			"Goods in Transit Insurance",
-			"Money Insurance",
-			"Group Personal Accident Proposal Form",
-			"All Risk Proposal Form",
-			"Work Injury Benefits Act (WIBA) Proposal Form",
-			"Fidelity Guarantee Insurance Proposal Form",
-			"Electronic Equipment Insurance Proposal Form",
-			"Travel Insurance Proposal Form",
-			"Burglary Insurance Proposal Form",
-			"Erection All Risks Insurance Proposal Form",
-	];
+const insuranceProductOptions = [
+	"Marine Insurance",
+	"Motor Insurance Application Form",
+	"Political Violence Proposal",
+	"Contractors Plant and Machinery",
+	"Carriers Legal Liability Insurance",
+	"Public Liability",
+	"Professional Indemnity Proposal Form (General)",
+	"Professional Indemnity Proposal Form (Engineers/Architects)",
+	"Professional Indemnity Insurance Proposal Form (Medical Practitioners)",
+	"Professional Indemnity Insurance Proposal Form (Accountants/Auditors)",
+	"Professional Indemnity Insurance Proposal Form (Lawyers/Advocates)",
+	"Machinery Breakdown/Damage",
+	"Equimed Application Form (Medical Insurance)",
+	"Fire Insurance Proposal Form",
+	"Contractual Liability Proposal Form",
+	"Domestic Package Insurance",
+	"Goods in Transit Insurance",
+	"Money Insurance",
+	"Group Personal Accident Proposal Form",
+	"All Risk Proposal Form",
+	"Work Injury Benefits Act (WIBA) Proposal Form",
+	"Fidelity Guarantee Insurance Proposal Form",
+	"Electronic Equipment Insurance Proposal Form",
+	"Travel Insurance Proposal Form",
+	"Burglary Insurance Proposal Form",
+	"Erection All Risks Insurance Proposal Form",
+];
 
 	const handleProductChange = (e) => {
 		setSelectedProduct(e.target.value);
@@ -116,6 +118,56 @@ export default function Quotes() {
 
 	// Product field definitions
 	const productFields = {
+
+		// Marine Insurance instructions
+		"Marine Insurance": [
+			<div className="mb-6 p-4 bg-muted rounded border border-primary">
+				<h3 className="text-lg font-bold mb-2 text-primary">Marine Insurance</h3>
+				<ul className="mb-2 text-sm text-muted-foreground list-disc ml-4">
+					<li>Cover for perils of the sea</li>
+					<li>Fire, collusion, theft, etc.</li>
+				</ul>
+				<div className="font-semibold mb-2">Requirements:</div>
+				<ul className="list-disc ml-6 text-muted-foreground text-sm">
+					<li>Profoma invoice</li>
+					<li>Import declaration form</li>
+					<li>Bill of lading (sea)</li>
+					<li>Airwaybill (air)</li>
+					<li>CR 12</li>
+					<li>Certificate of incorporation</li>
+					<li>KRA pin certificate</li>
+				</ul>
+			</div>
+		],
+		"Motor Insurance Application Form": [
+			{ label: "Full Customer Name", id: "customerName", type: "text", required: true },
+			{ label: "Address", id: "address", type: "text", required: true },
+			{ label: "P.O. Box", id: "poBox", type: "text" },
+			{ label: "Code", id: "code", type: "text" },
+			{ label: "Tel", id: "tel", type: "text" },
+			{ label: "E-mail", id: "email", type: "email" },
+			{ label: "Mobile No.", id: "mobileNo", type: "text" },
+			{ label: "Policy Period From", id: "policyFrom", type: "date" },
+			{ label: "Policy Period To", id: "policyTo", type: "date" },
+			{ label: "Registration Marks (Number Plate)", id: "registrationMarks", type: "text" },
+			{ label: "Make of Vehicle", id: "makeOfVehicle", type: "text" },
+			{ label: "Chassis Number", id: "chassisNumber", type: "text" },
+			{ label: "Engine Number", id: "engineNumber", type: "text" },
+			{ label: "Type of Body", id: "typeOfBody", type: "text" },
+			{ label: "Cubic Capacity", id: "cubicCapacity", type: "text" },
+			{ label: "Seating Capacity", id: "seatingCapacity", type: "text" },
+			{ label: "Sum Insured (KES)", id: "sumInsured", type: "number" },
+			{ label: "Scope of Cover", id: "scopeOfCover", type: "checkboxes", options: ["Comprehensive", "Third Party Only"] },
+			{ label: "Other Cover Extensions", id: "otherCoverExtensions", type: "checkboxes", options: ["Material Damage Excess Protector", "Theft Excess Protector", "Political Violence and Terrorism (PVT)", "Courtesy Car", "AA Membership", "Others"] },
+			{ label: "Use of the Vehicle", id: "useOfVehicle", type: "checkboxes", options: ["Private Own Use", "Commercial General Cartage", "Commercial Own Goods", "PSV Matatu", "PSV Motorcycle", "Taxi / Private Hire Self Drive", "Private Hire (Chauffer Driven)", "Tours", "Uber", "Institutional Vehicle", "Hearse", "Oil Tanker", "Others"] },
+			{ label: "Names of Authorized Drivers", id: "authorizedDrivers", type: "textarea" },
+			{ label: "Declaration Name of Applicant", id: "declarationName", type: "text", required: true },
+			{ label: "Signature", id: "signature", type: "text", required: true },
+			{ label: "ID No.", id: "idNo", type: "text" },
+			{ label: "PIN Number", id: "pinNumber", type: "text" },
+			{ label: "Issued By (Galloways Staff)", id: "issuedBy", type: "text" },
+			{ label: "Mode of Payment", id: "modeOfPayment", type: "text" },
+		],
 			"Political Violence Proposal": [
 				{ label: "Proposer and all subsidiary companies", id: "proposerSubsidiaries", type: "text", required: true },
 				{ label: "Proposer mailing address", id: "proposerAddress", type: "text", required: true },
@@ -982,38 +1034,97 @@ export default function Quotes() {
 							<p className="mb-8 text-center text-muted-foreground">
 								Please download the required form, fill it in, and upload it for processing. Ensure you have all necessary attachments as listed in the requirements guide. If you need help, contact our support team.
 							</p>
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-								<div className="p-6 bg-card rounded-lg shadow">
-									<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
-										{insuranceIcons["Livestock Insurance Proposal Form"]}
-										Livestock Insurance Form
-									</h3>
-									<a href="/forms/livestock_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
-										<FileDown className="mr-2 h-5 w-5" /> Download Livestock Insurance Form
-									</a>
-									<div className="font-semibold mb-2">Instructions:</div>
-									<ul className="list-disc ml-6 text-muted-foreground">
-										<li>Download and fill in the Livestock Insurance Form.</li>
-										<li>Attach a veterinary health valuation certificate (from a certified vet).</li>
-										<li>Upload the completed form and attachments for processing.</li>
-									</ul>
-								</div>
-								<div className="p-6 bg-card rounded-lg shadow">
-									<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
-										{insuranceIcons["Equimed Application Form (Medical Insurance)"]}
-										Medical Insurance Form
-									</h3>
-									<a href="/forms/medical_insurance_form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
-										<FileDown className="mr-2 h-5 w-5" /> Download Medical Insurance Form
-									</a>
-									<div className="font-semibold mb-2">Instructions:</div>
-									<ul className="list-disc ml-6 text-muted-foreground">
-										<li>Download and fill in the Medical Insurance Form.</li>
-										<li>Attach all required documents as listed in the form (ID, KRA PIN, dependants' details, medical history, etc.).</li>
-										<li>Upload the completed form and attachments for processing.</li>
-									</ul>
-								</div>
-							</div>
+											<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+												{/* Livestock Category */}
+												<div className="p-6 bg-card rounded-lg shadow">
+													<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
+														{insuranceIcons["Livestock Insurance Proposal Form"]}
+														Livestock Insurance Category
+													</h3>
+													<a href="/forms/livestock_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Livestock Insurance Proposal Form
+													</a>
+													<a href="/forms/veterinary_health_valuation_form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Veterinary Form
+													</a>
+													<div className="font-semibold mb-2">Instructions:</div>
+													<ul className="list-disc ml-6 text-muted-foreground">
+														<li>Download and fill in the Livestock Insurance Proposal Form.</li>
+														<li>Attach a veterinary health valuation certificate (from a certified vet).</li>
+														<li>Upload the completed form and attachments for processing.</li>
+													</ul>
+												</div>
+												{/* Medical Category */}
+												<div className="p-6 bg-card rounded-lg shadow">
+													<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
+														{insuranceIcons["Equimed Application Form (Medical Insurance)"]}
+														Medical Insurance Category
+													</h3>
+													<a href="/forms/medical_insurance_individual.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Medical Insurance - Individual
+													</a>
+													<a href="/forms/medical_insurance_group.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Medical Insurance - Group
+													</a>
+													<div className="font-semibold mb-2">Instructions:</div>
+													<ul className="list-disc ml-6 text-muted-foreground">
+														<li>Download and fill in the Medical Insurance Form.</li>
+														<li>Attach all required documents as listed in the form.</li>
+														<li>Upload the completed form and attachments for processing.</li>
+													</ul>
+												</div>
+												{/* Crop Insurance */}
+												<div className="p-6 bg-card rounded-lg shadow">
+													<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
+														{insuranceIcons["All Risks Insurance"]}
+														Crop Insurance
+													</h3>
+													<a href="/forms/crop_insurance_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Crop Insurance Proposal Form
+													</a>
+													<div className="font-semibold mb-2">Instructions:</div>
+													<ul className="list-disc ml-6 text-muted-foreground">
+														<li>Download and fill in the Crop Insurance Proposal Form.</li>
+														<li>Attach all required documents as listed in the form.</li>
+														<li>Upload the completed form and attachments for processing.</li>
+													</ul>
+												</div>
+												{/* Greenhouse Insurance */}
+												<div className="p-6 bg-card rounded-lg shadow">
+													<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
+														{insuranceIcons["Domestic Package (Write-Up Wording)"]}
+														Greenhouse Insurance
+													</h3>
+													<a href="/forms/greenhouse_insurance_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Greenhouse Insurance Proposal Form
+													</a>
+													<div className="font-semibold mb-2">Instructions:</div>
+													<ul className="list-disc ml-6 text-muted-foreground">
+														<li>Download and fill in the Greenhouse Insurance Proposal Form.</li>
+														<li>Attach all required documents as listed in the form.</li>
+														<li>Upload the completed form and attachments for processing.</li>
+													</ul>
+												</div>
+												{/* Poultry Category */}
+												<div className="p-6 bg-card rounded-lg shadow">
+													<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
+														{insuranceIcons["Poultry Proposal Form"]}
+														Poultry Insurance Category
+													</h3>
+													<a href="/forms/poultry_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Poultry Insurance Proposal Form
+													</a>
+													<a href="/forms/veterinary_health_valuation_form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+														<FileDown className="mr-2 h-5 w-5" /> Download Veterinary Form
+													</a>
+													<div className="font-semibold mb-2">Instructions:</div>
+													<ul className="list-disc ml-6 text-muted-foreground">
+														<li>Download and fill in the Poultry Insurance Proposal Form.</li>
+														<li>Attach a veterinary health valuation certificate (from a certified vet).</li>
+														<li>Upload the completed form and attachments for processing.</li>
+													</ul>
+												</div>
+											</div>
 						</div>
 					)}
 					{tab === "quote" && (
@@ -1156,9 +1267,14 @@ export default function Quotes() {
 										<Label htmlFor="product">Insurance Product *</Label>
 									<select id="product" name="product" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" required value={selectedProduct} onChange={handleProductChange}>
 											<option value="">Select insurance product</option>
-											{insuranceProductOptions.map((option) => (
-												<option key={option} value={option}>{option}</option>
-											))}
+											{insuranceProductOptions
+												.filter((option) => typeof option === "string")
+												.map((option) => {
+													const strOption = option as string;
+													return (
+														<option key={strOption} value={strOption}>{strOption}</option>
+													);
+												})}
 										</select>
 									</div>
 									{/* Dynamic Product-Specific Section */}

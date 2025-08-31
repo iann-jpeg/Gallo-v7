@@ -1,16 +1,16 @@
 const TrustedPartners = () => {
   const partners = [
-    { name: "UAP", img: "/LOGOS/UAP.png" },
-    { name: "BRITAM", img: "/LOGOS/BRITAM.jpeg" },
-    { name: "CIC", img: "/LOGOS/CIC.jpeg" },
-    { name: "LIBERTY", img: "/LOGOS/LIBERTY.png" },
-    { name: "HERITAGE", img: "/LOGOS/HERTAGE.jpeg" },
-    { name: "MADISON", img: "/LOGOS/MADISON.jpeg" },
-    { name: "JUBILEE", img: "/LOGOS/JUBILEE.jpeg" },
-    { name: "GA", img: "/LOGOS/GA.png" },
-    { name: "NCBA", img: "/LOGOS/NCBA.png" },
-    { name: "AMACO", img: "/LOGOS/AMACO.jpeg" },
-    { name: "MAYFAIR", img: "/LOGOS/MAYFAIR.jpeg" }
+    { name: "UAP", img: "/dist/LOGOS/UAP.png" },
+    { name: "BRITAM", img: "/dist/LOGOS/BRITAM.jpeg" },
+    { name: "CIC", img: "/dist/LOGOS/CIC.jpeg" },
+    { name: "LIBERTY", img: "/dist/LOGOS/LIBERTY.png" },
+    { name: "HERITAGE", img: "/dist/LOGOS/HERTAGE.jpeg" },
+    { name: "MADISON", img: "/dist/LOGOS/MADISON.jpeg" },
+    { name: "JUBILEE", img: "/dist/LOGOS/JUBILEE.jpeg" },
+    { name: "GA", img: "/dist/LOGOS/GA.png" },
+    { name: "NCBA", img: "/dist/LOGOS/NCBA.png" },
+    { name: "AMACO", img: "/dist/LOGOS/AMACO.jpeg" },
+    { name: "MAYFAIR", img: "/dist/LOGOS/MAYFAIR.jpeg" }
   ];
 
   return (
