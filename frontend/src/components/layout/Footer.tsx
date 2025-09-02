@@ -68,19 +68,23 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4" />
-                <span className="text-sm">Gallowayunderwritting@gmail.com</span>
+                  <span className="text-sm">underwriting@galloways.co.ke</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4" />
-                <span className="text-sm">Gallowaysquotations@gmail.com</span>
+                  <span className="text-sm">quotations@galloways.co.ke</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4" />
-                <span className="text-sm">Gallowayscustomerservice@gmail.com</span>
+                  <span className="text-sm">customerservice@galloways.co.ke</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4" />
-                <span className="text-sm">Gallowaysclaims@gmail.com</span>
+                  <span className="text-sm">Claims@galloways.co.ke</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="h-4 w-4" />
+                  <span className="text-sm">info@galloways.co.ke</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-4 w-4" />
