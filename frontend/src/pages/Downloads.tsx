@@ -1,295 +1,46 @@
-import { useState, useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { 
-  Download,
-  FileText,
-  Search,
-  Filter,
-  CheckCircle
-} from "lucide-react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import { resourcesService } from "@/lib/api";
+import React from "react";
 
-interface DownloadableFile {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  file_url: string;
-  file_name: string;
-}
+const downloadForms = [
+  // Claims Forms
+  { label: "Workmen's Compensation Accident Claim Form", url: "/dist/Downloads/Workmen's_Compenstion_Accident_Claim_Form_-_ammended.pdf" },
+  { label: "Windscreen & Window Damage Claim Form", url: "/dist/Downloads/Windscreen & window damage claim form.pdf" },
+  { label: "Public Liability (Third Party) Claim Form", url: "/dist/Downloads/Public_Liability_(THIRDPARTY)_Claim_Form.pdf" },
+  { label: "Personal Accident Claim Form", url: "/dist/Downloads/Personal_Accident_Claim_Form.pdf" },
+  { label: "Motor Entertainment System Claim Form", url: "/dist/Downloads/Motor_Entertainment_System_Claim_Form.pdf" },
+  { label: "Motor Theft Claim Form", url: "/dist/Downloads/Motor Theft Claim Form.pdf" },
+  { label: "Machinery Breakdown Extra Damage Claim Form", url: "/dist/Downloads/Machinery_Breakdown_Extr_Damage-Claim_Form.pdf" },
+  { label: "Fidelity Guarantee Claim Forms", url: "/dist/Downloads/Fidelity_Guarantee_Claim_Forms.pdf" },
+  // Quotes & Insurance Forms
+  { label: "Pension Brochure", url: "/dist/Downloads/pension brochure.pdf" },
+  { label: "Pension Application Form", url: "/dist/Downloads/pension application form.pdf" },
+  { label: "Medical Insurance - Individual", url: "/dist/Downloads/Medical Insurance - individual.pdf" },
+  { label: "Medical Insurance - Group", url: "/dist/Downloads/medical Insurance - group.pdf" },
+  { label: "Group Medical Insurance", url: "/dist/Downloads/group_medical_insurance.pdf" },
+  { label: "Livestock Insurance Proposal Form", url: "/dist/Downloads/Livestock_Insurance_Proposal_Form.pdf" },
+  { label: "Livestock Veterinary Form", url: "/dist/Downloads/Livestock Vetenary.pdf" },
+  { label: "Vet Health and Valuation Poultry", url: "/dist/Downloads/vet health and valuation poultry.pdf" },
+  { label: "Poultry Proposal Form", url: "/dist/Downloads/poultry proposal form.pdf" },
+  { label: "Greenhouse Insurance Proposal Form", url: "/dist/Downloads/greenhouse insurance proposal form.pdf" },
+  { label: "Crop Insurance Proposal Form", url: "/dist/Downloads/crop insurance proposal form.pdf" },
+];
 
-const Downloads = () => {
-  const [files, setFiles] = useState<DownloadableFile[]>([]);
-  const [filteredFiles, setFilteredFiles] = useState<DownloadableFile[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [downloadingFiles, setDownloadingFiles] = useState<string[]>([]);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    loadDownloadableFiles();
-  }, []);
-
-  useEffect(() => {
-    filterFiles();
-  }, [searchTerm, selectedCategory, files]);
-
-  const loadDownloadableFiles = async () => {
-    try {
-      const response = await resourcesService.getResources();
-
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to load resources');
-      }
-
-      setFiles(response.data || []);
-      setFilteredFiles(response.data || []);
-    } catch (error) {
-      console.error("Error loading downloadable files:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load downloadable files. Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const filterFiles = () => {
-    let filtered = files;
-
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(file => 
-        file.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        file.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        file.category.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by category
-    if (selectedCategory !== "All") {
-      filtered = filtered.filter(file => file.category === selectedCategory);
-    }
-
-    setFilteredFiles(filtered);
-  };
-
-  const handleDownload = async (fileId: string, fileName: string) => {
-    try {
-      setDownloadingFiles(prev => [...prev, fileId]);
-
-      const response = await resourcesService.downloadResource(fileId);
-
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to get download URL');
-      }
-
-      // Open the file URL in a new tab for download
-      window.open(response.data.file_url, '_blank');
-      
-      toast({
-        title: "Success",
-        description: `${fileName} download initiated!`,
-      });
-    } catch (error) {
-      console.error("Error downloading file:", error);
-      toast({
-        title: "Download Error",
-        description: `Failed to download ${fileName}. Please try again.`,
-        variant: "destructive",
-      });
-    } finally {
-      setDownloadingFiles(prev => prev.filter(f => f !== fileId));
-    }
-  };
-
-  const getUniqueCategories = () => {
-    const categories = [...new Set(files.map(file => file.category))];
-    return ["All", ...categories.sort()];
-  };
-
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      'Motor Insurance': 'bg-blue-100 text-blue-800',
-      'General Insurance': 'bg-green-100 text-green-800',
-      'Commercial Insurance': 'bg-purple-100 text-purple-800',
-      'Livestock Insurance': 'bg-yellow-100 text-yellow-800',
-      'Medical Insurance': 'bg-red-100 text-red-800',
-      'Personal Insurance': 'bg-pink-100 text-pink-800',
-      'Liability Insurance': 'bg-orange-100 text-orange-800',
-      'Workers Compensation': 'bg-indigo-100 text-indigo-800',
-      'Documentation': 'bg-gray-100 text-gray-800',
-    };
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="flex items-center justify-center h-96">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-            <p className="mt-4 text-muted-foreground">Loading downloadable forms...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
+const Downloads: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      {/* Hero Section */}
-      <div className="bg-primary text-primary-foreground py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Insurance Forms & Documents</h1>
-            <p className="text-xl opacity-90 max-w-3xl mx-auto">
-              Download the forms and documents you need for your insurance claims, applications, and policy management. 
-              All forms are current and ready to use.
-            </p>
+    <div className="max-w-4xl mx-auto py-12 px-4">
+      <h1 className="text-3xl font-bold mb-8 text-center text-primary">Download Forms</h1>
+      <p className="mb-6 text-center text-muted-foreground">
+        All available claim, quote, and insurance forms are listed below for download. Click any link to download the PDF.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {downloadForms.map((form, idx) => (
+          <div key={idx} className="p-4 bg-card rounded shadow flex items-center justify-between">
+            <span className="font-medium text-primary">{form.label}</span>
+            <a href={form.url} download className="ml-4 px-3 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors">
+              Download
+            </a>
           </div>
-        </div>
+        ))}
       </div>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Search and Filter Controls */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search forms by name, description, or category..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Filter className="h-5 w-5 text-muted-foreground mt-2 mr-2" />
-              {getUniqueCategories().map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className="text-xs"
-                >
-                  {category}
-                  {category !== "All" && (
-                    <span className="ml-1 text-xs opacity-75">
-                      ({files.filter(f => f.category === category).length})
-                    </span>
-                  )}
-                </Button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="mt-4 text-sm text-muted-foreground">
-            Showing {filteredFiles.length} of {files.length} forms
-          </div>
-        </div>
-
-        {/* Files Grid */}
-        {filteredFiles.length === 0 ? (
-          <div className="text-center py-12">
-            <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No forms found</h3>
-            <p className="text-muted-foreground">
-              {searchTerm || selectedCategory !== "All" 
-                ? "Try adjusting your search or filter criteria" 
-                : "No forms available at the moment"}
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredFiles.map((file) => (
-              <Card key={file.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <FileText className="h-8 w-8 text-primary flex-shrink-0" />
-                    <Badge className={getCategoryColor(file.category)}>
-                      {file.category}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg leading-tight">
-                    {file.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                    {file.description}
-                  </p>
-                  <Button
-                    onClick={() => handleDownload(file.id, file.title)}
-                    disabled={downloadingFiles.includes(file.id)}
-                    className="w-full"
-                    size="sm"
-                  >
-                    {downloadingFiles.includes(file.id) ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Downloading...
-                      </>
-                    ) : (
-                      <>
-                        <Download className="h-4 w-4 mr-2" />
-                        Download File
-                      </>
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {/* Information Section */}
-        <div className="mt-16 bg-muted rounded-lg p-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-4">Important Information</h2>
-            <div className="text-left space-y-4">
-              <div className="bg-background p-4 rounded border">
-                <h3 className="font-semibold mb-2">📋 Form Completion</h3>
-                <p className="text-sm text-muted-foreground">
-                  Please ensure all forms are completely filled out with accurate information. 
-                  Incomplete forms may delay processing.
-                </p>
-              </div>
-              <div className="bg-background p-4 rounded border">
-                <h3 className="font-semibold mb-2">📎 Required Documents</h3>
-                <p className="text-sm text-muted-foreground">
-                  Some forms may require additional supporting documents. Please refer to the 
-                  documentation guide for complete requirements.
-                </p>
-              </div>
-              <div className="bg-background p-4 rounded border">
-                <h3 className="font-semibold mb-2">📧 Submission</h3>
-                <p className="text-sm text-muted-foreground">
-                  Completed forms can be submitted via email, our online portal, or delivered 
-                  to any of our branch offices.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <Footer />
     </div>
   );
 };

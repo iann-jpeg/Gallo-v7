@@ -19,7 +19,7 @@ const PaymentFailure = lazy(() => import("./pages/PaymentFailure"));
 const PaymentCallback = lazy(() => import("./pages/PaymentCallback"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Resources = lazy(() => import("./pages/Resources"));
-const Downloads = lazy(() => import("./pages/Downloads"));
+// Downloads page removed
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -58,7 +58,7 @@ function App() {
               <Route path="/payment/callback" element={<PaymentCallback />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/resources" element={<Resources />} />
-              <Route path="/downloads" element={<Downloads />} />
+              {/* Downloads page removed */}
               <Route path="/admin/*" element={<Admin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

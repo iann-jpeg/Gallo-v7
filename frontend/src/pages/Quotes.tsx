@@ -119,25 +119,27 @@ const insuranceProductOptions = [
 	// Product field definitions
 	const productFields = {
 
-		// Marine Insurance instructions
 		"Marine Insurance": [
-			<div className="mb-6 p-4 bg-muted rounded border border-primary">
-				<h3 className="text-lg font-bold mb-2 text-primary">Marine Insurance</h3>
-				<ul className="mb-2 text-sm text-muted-foreground list-disc ml-4">
-					<li>Cover for perils of the sea</li>
-					<li>Fire, collusion, theft, etc.</li>
-				</ul>
-				<div className="font-semibold mb-2">Requirements:</div>
-				<ul className="list-disc ml-6 text-muted-foreground text-sm">
-					<li>Profoma invoice</li>
-					<li>Import declaration form</li>
-					<li>Bill of lading (sea)</li>
-					<li>Airwaybill (air)</li>
-					<li>CR 12</li>
-					<li>Certificate of incorporation</li>
-					<li>KRA pin certificate</li>
-				</ul>
-			</div>
+			{ label: "Full Name", id: "fullName", type: "text", required: true },
+			{ label: "ID/Passport Number", id: "idPassport", type: "text", required: true },
+			{ label: "PIN Number", id: "pinNumber", type: "text" },
+			{ label: "Occupation", id: "occupation", type: "text" },
+			{ label: "Postal Address", id: "postalAddress", type: "text" },
+			{ label: "Postal Code", id: "postalCode", type: "number" },
+			{ label: "Town", id: "town", type: "text" },
+			{ label: "Email Address", id: "email", type: "email" },
+			{ label: "Telephone/Mobile", id: "phone", type: "text" },
+			{ label: "Category of Cargo", id: "cargoCategory", type: "checkboxes", options: ["Chemicals/Pharmaceuticals", "Food", "Machinery/Vehicles", "Textile", "Other"] },
+			{ label: "Other Cargo Category Details", id: "otherCargoDetails", type: "text", showIf: { field: "cargoCategory", value: "Other" } },
+			{ label: "Cargo Description", id: "cargoDescription", type: "textarea" },
+			{ label: "Select Packaging Type(s)", id: "packagingTypes", type: "checkboxes", options: ["Containerized", "Non-containerized", "Boxes", "Cartons", "Bags", "Drums", "Bottled", "Crates", "Locked", "Bulk", "Container", "Conveyance"] },
+			{ label: "Name of Vessel", id: "vesselName", type: "text" },
+			{ label: "Voyage Start Date", id: "voyageStartDate", type: "date" },
+			{ label: "Voyage End Date", id: "voyageEndDate", type: "date" },
+			{ label: "Port of Loading", id: "portOfLoading", type: "text" },
+			{ label: "Port of Discharge", id: "portOfDischarge", type: "text" },
+			{ label: "Final Destination", id: "finalDestination", type: "text" },
+			{ label: "Declaration", id: "declaration", type: "checkbox", options: ["I declare that the above information is true and complete, and that I have withheld no material information regarding this proposal."] },
 		],
 		"Motor Insurance Application Form": [
 			{ label: "Full Customer Name", id: "customerName", type: "text", required: true },
@@ -1035,16 +1037,17 @@ const insuranceProductOptions = [
 								Please download the required form, fill it in, and upload it for processing. Ensure you have all necessary attachments as listed in the requirements guide. If you need help, contact our support team.
 							</p>
 											<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+												
 												{/* Livestock Category */}
 												<div className="p-6 bg-card rounded-lg shadow">
 													<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
 														{insuranceIcons["Livestock Insurance Proposal Form"]}
 														Livestock Insurance Category
 													</h3>
-													<a href="/forms/livestock_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/Livestock_Insurance_Proposal_Form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Livestock Insurance Proposal Form
 													</a>
-													<a href="/forms/veterinary_health_valuation_form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/Livestock Vetenary.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Veterinary Form
 													</a>
 													<div className="font-semibold mb-2">Instructions:</div>
@@ -1060,10 +1063,10 @@ const insuranceProductOptions = [
 														{insuranceIcons["Equimed Application Form (Medical Insurance)"]}
 														Medical Insurance Category
 													</h3>
-													<a href="/forms/medical_insurance_individual.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/Medical Insurance - individual.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Medical Insurance - Individual
 													</a>
-													<a href="/forms/medical_insurance_group.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/group_medical_insurance.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Medical Insurance - Group
 													</a>
 													<div className="font-semibold mb-2">Instructions:</div>
@@ -1079,7 +1082,7 @@ const insuranceProductOptions = [
 														{insuranceIcons["All Risks Insurance"]}
 														Crop Insurance
 													</h3>
-													<a href="/forms/crop_insurance_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/crop insurance proposal form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Crop Insurance Proposal Form
 													</a>
 													<div className="font-semibold mb-2">Instructions:</div>
@@ -1095,7 +1098,7 @@ const insuranceProductOptions = [
 														{insuranceIcons["Domestic Package (Write-Up Wording)"]}
 														Greenhouse Insurance
 													</h3>
-													<a href="/forms/greenhouse_insurance_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/greenhouse insurance proposal form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Greenhouse Insurance Proposal Form
 													</a>
 													<div className="font-semibold mb-2">Instructions:</div>
@@ -1111,10 +1114,10 @@ const insuranceProductOptions = [
 														{insuranceIcons["Poultry Proposal Form"]}
 														Poultry Insurance Category
 													</h3>
-													<a href="/forms/poultry_proposal.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/poultry proposal form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Poultry Insurance Proposal Form
 													</a>
-													<a href="/forms/veterinary_health_valuation_form.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
+													<a href="/dist/Downloads/vet health and valuation poultry.pdf" download className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90">
 														<FileDown className="mr-2 h-5 w-5" /> Download Veterinary Form
 													</a>
 													<div className="font-semibold mb-2">Instructions:</div>
@@ -1498,6 +1501,28 @@ const insuranceProductOptions = [
 					<h2 className="text-3xl font-bold text-primary mb-8 text-center">
 						Insurance Product Downloads & Requirements
 					</h2>
+					{/* Marine Insurance Category */}
+												<div className="p-6 bg-card rounded-lg shadow">
+													<h3 className="text-xl font-bold mb-2 text-primary flex items-center">
+														{insuranceIcons["Marine Insurance"]}
+														Marine Insurance
+													</h3>
+													<div className="font-semibold mb-2">Cover Includes:</div>
+													<ul className="list-disc ml-6 text-muted-foreground mb-2">
+														<li>Perils of the sea</li>
+														<li>Fire, collusion, theft, etc.</li>
+													</ul>
+													<div className="font-semibold mb-2">Requirements:</div>
+													<ul className="list-disc ml-6 text-muted-foreground">
+														<li>Profoma invoice</li>
+														<li>Import declaration form</li>
+														<li>Bill of lading (sea)</li>
+														<li>Airwaybill (air)</li>
+														<li>CR 12</li>
+														<li>Certificate of incorporation</li>
+														<li>KRA pin certificate</li>
+													</ul>
+												</div>
 					{/* Property & Theft Insurance */}
 					<div className="mb-12">
 						<h3 className="text-2xl font-semibold mb-4">

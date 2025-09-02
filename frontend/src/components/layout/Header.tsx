@@ -15,7 +15,7 @@ const Header = () => {
   { name: "Consultancy", href: "/consultancy" },
   { name: "Quotes", href: "/quotes" },
   { name: "Outsourcing", href: "/outsourcing" },
-  { name: "Downloads", href: "/downloads" },
+  // Downloads tab removed
   ];
 
   return (

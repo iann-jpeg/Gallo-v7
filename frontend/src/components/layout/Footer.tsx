@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -13,9 +14,21 @@ const Footer = () => {
               Professional insurance agencies and consultancy services, managing risk and arranging insurance solutions tailored to customers' needs.
             </p>
             <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
-              <Twitter className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
-              <Linkedin className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
+              <a href="https://x.com/gallowaysinsurance" target="_blank" rel="noopener noreferrer" title="X (formerly Twitter)">
+                <Twitter className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
+              </a>
+              <a href="https://facebook.com/gallowaysinsurance" target="_blank" rel="noopener noreferrer" title="Facebook">
+                <Facebook className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
+              </a>
+              <a href="https://instagram.com/gallowaysinsurance" target="_blank" rel="noopener noreferrer" title="Instagram">
+                <Instagram className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
+              </a>
+              <a href="https://linkedin.com/company/gallowaysinsurance" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                <Linkedin className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
+              </a>
+              <a href="mailto:Gallowayunderwritting@gmail.com" title="Email">
+                <Mail className="h-5 w-5 cursor-pointer hover:text-accent transition-colors" />
+              </a>
             </div>
           </div>
 
@@ -28,7 +41,7 @@ const Footer = () => {
               <li><Link to="/diaspora" className="text-sm opacity-90 hover:text-accent transition-colors">Diaspora Services</Link></li>
               <li><Link to="/consultancy" className="text-sm opacity-90 hover:text-accent transition-colors">Consultancy</Link></li>
               <li><Link to="/quotes" className="text-sm opacity-90 hover:text-accent transition-colors">Get Quote</Link></li>
-              <li><Link to="/downloads" className="text-sm opacity-90 hover:text-accent transition-colors">Forms & Downloads</Link></li>
+              {/* <li><Link to="/downloads" className="text-sm opacity-90 hover:text-accent transition-colors">Forms & Downloads</Link></li> */}
             </ul>
           </div>
 

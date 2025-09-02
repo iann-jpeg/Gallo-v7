@@ -576,47 +576,47 @@ export default function Claims() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Machinery Breakdown / Extr. Damage"]}Machinery Breakdown / Extr. Damage</h4>
-              <a href="/Downloads/Machinery_Breakdown_Extr_Damage-Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Machinery_Breakdown_Extr_Damage-Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2"><FileTextIcon className="inline-block mr-2 text-accent" />Claim Form- Damage or Loss (Amended)</h4>
-              <a href="/Downloads/Claim_Forms_-_Damage_or_Loss-amended.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Claim_Forms_-_Damage_or_Loss-amended.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2"><Car className="inline-block mr-2 text-accent" />Claim Form Motor (Amended)</h4>
-              <a href="/Downloads/Claim_Form_Motor_-_Ammended.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Claim_Form_Motor_-_Ammended.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Windscreen & Window Damage Claim Form"]}Windscreen & Window Damage Claim Form</h4>
-              <a href="/Downloads/Windscreen & window damage claim form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Windscreen & window damage claim form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Personal Accident Claim Form"]}Personal Accident Claim Form</h4>
-              <a href="/Downloads/Personal_Accident_Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Personal_Accident_Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Motor Entertainment System Claim Form"]}Motor Entertainment System Claim Form</h4>
-              <a href="/Downloads/Motor_Entertainment_System_Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Motor_Entertainment_System_Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Motor Theft Claim Form"]}Motor Theft Claim Form</h4>
-              <a href="/Downloads/Motor Theft Claim Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Motor Theft Claim Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Public Liability (Third-Party) Claim Form"]}Public Liability (Third-Party) Claim Form</h4>
-              <a href="/Downloads/Public_Liability_(THIRDPARTY)_Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Public_Liability_(THIRDPARTY)_Claim_Form.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Fidelity Guarantee Claim Form"]}Fidelity Guarantee Claim Form</h4>
-              <a href="/Downloads/Fidelity_Guarantee_Claim_Forms.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Fidelity_Guarantee_Claim_Forms.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Workmen's Compensation Accident Claim Form"]}Workmen's Compensation Accident Claim Form</h4>
-              <a href="/Downloads/Workmen's_Compenstion_Accident_Claim_Form_-_ammended.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href="/dist/Downloads/Workmen's_Compenstion_Accident_Claim_Form_-_ammended.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Claim Documentation Guide 2012"]}Claim Documentation Guide 2012</h4>
-              <a href="/Downloads/claim_documentation_guide.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download PDF</a>
+              <a href="/dist/Downloads/claim_documentation_guide.pdf" className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download PDF</a>
             </div>
           </div>
         </div>
