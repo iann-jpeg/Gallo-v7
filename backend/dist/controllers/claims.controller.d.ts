@@ -6,7 +6,35 @@ export declare class ClaimsController {
     findAll(page?: number, limit?: number): Promise<{
         success: boolean;
         data: {
-            data: any[];
+            data: {
+                documentUrls: string[];
+                user: {
+                    name: string;
+                    id: number;
+                    email: string;
+                } | null;
+                documents: {
+                    filename: string;
+                    id: number;
+                    createdAt: Date;
+                    originalName: string;
+                    mimeType: string;
+                    size: number;
+                }[];
+                description: string;
+                status: string;
+                id: number;
+                createdAt: Date;
+                updatedAt: Date;
+                userId: number | null;
+                policyNumber: string;
+                claimType: string;
+                incidentDate: Date;
+                estimatedLoss: number;
+                submitterEmail: string | null;
+                submitterName: string | null;
+                submitterPhone: string | null;
+            }[];
             meta: {
                 total: number;
                 page: number;
@@ -19,7 +47,12 @@ export declare class ClaimsController {
         success: boolean;
         data: {
             documentUrls: string[];
-            document: {
+            user: {
+                name: string;
+                id: number;
+                email: string;
+            } | null;
+            documents: {
                 filename: string;
                 id: number;
                 createdAt: Date;
@@ -27,21 +60,16 @@ export declare class ClaimsController {
                 mimeType: string;
                 size: number;
             }[];
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
             description: string;
             status: string;
             id: number;
+            createdAt: Date;
+            updatedAt: Date;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            createdAt: Date;
-            updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -65,13 +93,13 @@ export declare class ClaimsController {
             description: string;
             status: string;
             id: number;
+            createdAt: Date;
+            updatedAt: Date;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            createdAt: Date;
-            updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -84,13 +112,13 @@ export declare class ClaimsController {
             description: string;
             status: string;
             id: number;
+            createdAt: Date;
+            updatedAt: Date;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            createdAt: Date;
-            updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
@@ -111,13 +139,13 @@ export declare class ClaimsController {
             description: string;
             status: string;
             id: number;
+            createdAt: Date;
+            updatedAt: Date;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
-            createdAt: Date;
-            updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;

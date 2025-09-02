@@ -3,31 +3,35 @@ export declare class ResourcesService {
         success: boolean;
         message: any;
     } | {
-        url: string | null;
-        description: string;
+        name: string;
+        description: string | null;
         id: number;
         isPublic: boolean;
         createdAt: Date;
         updatedAt: Date;
         category: string;
-        title: string;
+        mimeType: string | null;
+        title: string | null;
         filePath: string | null;
         fileSize: number | null;
         adminOnly: boolean;
+        downloads: number;
         creatorId: number | null;
     }[]>;
     downloadResource(id: string): Promise<{
-        url: string | null;
-        description: string;
+        name: string;
+        description: string | null;
         id: number;
         isPublic: boolean;
         createdAt: Date;
         updatedAt: Date;
         category: string;
-        title: string;
+        mimeType: string | null;
+        title: string | null;
         filePath: string | null;
         fileSize: number | null;
         adminOnly: boolean;
+        downloads: number;
         creatorId: number | null;
     } | {
         success: boolean;

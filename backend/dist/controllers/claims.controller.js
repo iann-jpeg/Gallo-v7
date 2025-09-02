@@ -53,7 +53,7 @@ let ClaimsController = class ClaimsController {
             const claim = await this.claimsService.findOne(+id);
             return {
                 success: true,
-                data: claim.document
+                data: claim.documents
             };
         }
         catch (error) {
@@ -74,7 +74,7 @@ let ClaimsController = class ClaimsController {
                     path: file.path
                 }));
             }
-            const claimData = Object.assign(Object.assign({}, data), { documentDetails: documentDetails });
+            const claimData = Object.assign(Object.assign({}, data), { documents: documentPaths, documentDetails: documentDetails });
             const claim = await this.claimsService.create(claimData);
             return {
                 success: true,

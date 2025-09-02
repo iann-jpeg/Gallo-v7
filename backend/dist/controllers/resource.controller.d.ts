@@ -12,17 +12,19 @@ export declare class ResourceController {
                 email: string;
             } | null;
         } & {
-            url: string | null;
-            description: string;
+            name: string;
+            description: string | null;
             id: number;
             isPublic: boolean;
             createdAt: Date;
             updatedAt: Date;
             category: string;
-            title: string;
+            mimeType: string | null;
+            title: string | null;
             filePath: string | null;
             fileSize: number | null;
             adminOnly: boolean;
+            downloads: number;
             creatorId: number | null;
         })[];
         pagination: {
@@ -35,11 +37,11 @@ export declare class ResourceController {
     findPublicResources(category?: string): Promise<{
         success: boolean;
         data: {
-            description: string;
+            description: string | null;
             id: number;
             createdAt: Date;
             category: string;
-            title: string;
+            title: string | null;
             filePath: string | null;
             fileSize: number | null;
         }[];
@@ -51,17 +53,19 @@ export declare class ResourceController {
             email: string;
         } | null;
     } & {
-        url: string | null;
-        description: string;
+        name: string;
+        description: string | null;
         id: number;
         isPublic: boolean;
         createdAt: Date;
         updatedAt: Date;
         category: string;
-        title: string;
+        mimeType: string | null;
+        title: string | null;
         filePath: string | null;
         fileSize: number | null;
         adminOnly: boolean;
+        downloads: number;
         creatorId: number | null;
     }>;
     downloadResource(id: string, res: Response): Promise<import("fs").ReadStream>;
@@ -76,17 +80,19 @@ export declare class ResourceController {
                 email: string;
             } | null;
         } & {
-            url: string | null;
-            description: string;
+            name: string;
+            description: string | null;
             id: number;
             isPublic: boolean;
             createdAt: Date;
             updatedAt: Date;
             category: string;
-            title: string;
+            mimeType: string | null;
+            title: string | null;
             filePath: string | null;
             fileSize: number | null;
             adminOnly: boolean;
+            downloads: number;
             creatorId: number | null;
         };
     }>;
@@ -100,17 +106,19 @@ export declare class ResourceController {
                 email: string;
             } | null;
         } & {
-            url: string | null;
-            description: string;
+            name: string;
+            description: string | null;
             id: number;
             isPublic: boolean;
             createdAt: Date;
             updatedAt: Date;
             category: string;
-            title: string;
+            mimeType: string | null;
+            title: string | null;
             filePath: string | null;
             fileSize: number | null;
             adminOnly: boolean;
+            downloads: number;
             creatorId: number | null;
         };
     }>;

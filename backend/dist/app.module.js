@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const app_controller_1 = require("./app.controller");
 const core_1 = require("@nestjs/core");
 const jwt_auth_guard_1 = require("./middleware/jwt-auth.guard");
@@ -25,14 +26,17 @@ const documents_module_1 = require("./routes/documents.module");
 const outsourcing_module_1 = require("./routes/outsourcing.module");
 const payment_module_1 = require("./routes/payment.module");
 const resource_module_1 = require("./routes/resource.module");
-const static_files_module_1 = require("./routes/static-files.module");
-const admin_module_1 = require("./routes/admin.module");
+const admin_module_1 = require("./admin/admin.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+                envFilePath: '.env',
+            }),
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
             products_module_1.ProductsModule,
@@ -46,7 +50,6 @@ exports.AppModule = AppModule = __decorate([
             outsourcing_module_1.OutsourcingModule,
             payment_module_1.PaymentModule,
             resource_module_1.ResourceModule,
-            static_files_module_1.StaticFilesModule,
             admin_module_1.AdminModule,
         ],
         providers: [

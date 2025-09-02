@@ -45,11 +45,23 @@ let QuotesService = class QuotesService {
                     });
                 }
             }
-            return createdQuote;
+            const fullQuote = await prisma.quote.findUnique({
+                where: { id: createdQuote.id },
+                include: { documents: true }
+            });
+            return {
+                success: true,
+                data: fullQuote,
+                message: 'Quote created successfully'
+            };
         }
         catch (error) {
             console.error('Quote creation error:', error);
-            throw new common_1.BadRequestException('Failed to create quote: ' + (error.message || 'Unknown error'));
+            return {
+                success: false,
+                message: 'Failed to create quote: ' + (error.message || 'Unknown error'),
+                error: error.message || 'Unknown error'
+            };
         }
     }
     constructor(emailService) {

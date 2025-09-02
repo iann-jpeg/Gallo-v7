@@ -11,10 +11,10 @@ export declare class DiasporaController {
             name: string;
             status: string;
             id: number;
-            userId: number | null;
+            email: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string;
+            userId: number | null;
             phone: string;
             country: string;
             timezone: string;
@@ -30,10 +30,10 @@ export declare class DiasporaController {
             name: string;
             status: string;
             id: number;
-            userId: number | null;
+            email: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string;
+            userId: number | null;
             phone: string;
             country: string;
             timezone: string;

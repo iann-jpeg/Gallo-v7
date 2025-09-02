@@ -44,7 +44,7 @@ let DashboardService = class DashboardService {
                     orderBy: { createdAt: 'desc' },
                     where: dateFilter,
                     include: {
-                        document: true
+                        documents: true
                     }
                 }),
                 prisma.outsourcingRequest.findMany({
@@ -124,6 +124,7 @@ let DashboardService = class DashboardService {
                         organizationName: true,
                         email: true,
                         services: true,
+                        budgetRange: true,
                         status: true,
                         createdAt: true
                     }
@@ -137,7 +138,6 @@ let DashboardService = class DashboardService {
                         email: true,
                         serviceType: true,
                         status: true,
-                        consultationDate: true,
                         createdAt: true
                     }
                 }),
@@ -146,7 +146,6 @@ let DashboardService = class DashboardService {
                     orderBy: { createdAt: 'desc' },
                     select: {
                         id: true,
-                        clientName: true,
                         amount: true,
                         paymentMethod: true,
                         status: true,
@@ -167,11 +166,11 @@ let DashboardService = class DashboardService {
                 })
             ]);
             const activities = [
-                ...claims.map((item) => (Object.assign(Object.assign({}, item), { type: 'claim' }))),
-                ...outsourcing.map((item) => (Object.assign(Object.assign({}, item), { type: 'outsourcing' }))),
-                ...consultations.map((item) => (Object.assign(Object.assign({}, item), { type: 'consultation' }))),
-                ...payments.map((item) => (Object.assign(Object.assign({}, item), { type: 'payment' }))),
-                ...diaspora.map((item) => (Object.assign(Object.assign({}, item), { type: 'diaspora' })))
+                ...claims.map(item => (Object.assign(Object.assign({}, item), { id: String(item.id), type: 'claim' }))),
+                ...outsourcing.map(item => (Object.assign(Object.assign({}, item), { id: String(item.id), type: 'outsourcing' }))),
+                ...consultations.map(item => (Object.assign(Object.assign({}, item), { id: String(item.id), type: 'consultation' }))),
+                ...payments.map(item => (Object.assign(Object.assign({}, item), { id: String(item.id), type: 'payment' }))),
+                ...diaspora.map(item => (Object.assign(Object.assign({}, item), { id: String(item.id), type: 'diaspora' })))
             ];
             activities.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
             return activities.slice(0, limit);

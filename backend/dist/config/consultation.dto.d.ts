@@ -3,6 +3,7 @@ export declare class CreateConsultationDto {
     email: string;
     phone: string;
     company?: string;
+    serviceInterest: string;
     serviceType: string;
     consultationDate: string;
     consultationTime: string;
@@ -16,6 +17,7 @@ export declare class UpdateConsultationDto {
     email?: string;
     phone?: string;
     company?: string;
+    serviceInterest?: string;
     serviceType?: string;
     consultationDate?: string;
     consultationTime?: string;

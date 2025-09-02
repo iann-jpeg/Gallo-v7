@@ -9,9 +9,9 @@ export declare class AuthService {
         success: boolean;
         message: string;
         user: {
-            name: string;
             id: number;
             createdAt: Date;
+            name: string;
             email: string;
             role: import(".prisma/client").$Enums.Role;
         };
@@ -20,9 +20,9 @@ export declare class AuthService {
         success: boolean;
         message: string;
         user: {
-            name: string;
             id: number;
             createdAt: Date;
+            name: string;
             email: string;
             role: import(".prisma/client").$Enums.Role;
         };
@@ -33,9 +33,9 @@ export declare class AuthService {
             access_token: string;
             refresh_token: string;
             user: {
-                name: string;
                 id: number;
                 createdAt: Date;
+                name: string;
                 email: string;
                 role: import(".prisma/client").$Enums.Role;
             };
@@ -50,8 +50,8 @@ export declare class AuthService {
         data: {
             access_token: string;
             user: {
-                name: string;
                 id: number;
+                name: string;
                 email: string;
                 role: import(".prisma/client").$Enums.Role;
             };
@@ -60,10 +60,10 @@ export declare class AuthService {
     getProfile(userId: number): Promise<{
         success: boolean;
         data: {
-            name: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
+            name: string;
             email: string;
             role: import(".prisma/client").$Enums.Role;
         };
@@ -73,9 +73,9 @@ export declare class AuthService {
         success: boolean;
         message: string;
         user: {
-            name: string;
             id: number;
             createdAt: Date;
+            name: string;
             email: string;
             role: import(".prisma/client").$Enums.Role;
         };
@@ -84,9 +84,9 @@ export declare class AuthService {
         success: boolean;
         message: string;
         user: {
-            name: string;
             id: number;
             updatedAt: Date;
+            name: string;
             email: string;
             role: import(".prisma/client").$Enums.Role;
         };

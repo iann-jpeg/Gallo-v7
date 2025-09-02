@@ -1,8 +1,5 @@
-import { PrismaService } from '../prisma/prisma.service';
 import { AdminStatsQueryDto } from '../config/dashboard.dto';
 export declare class DashboardService {
-    private readonly prisma;
-    constructor(prisma: PrismaService);
     getDashboardStats(query?: AdminStatsQueryDto): Promise<{
         totalClaims: number;
         totalQuotes: number;
@@ -17,22 +14,22 @@ export declare class DashboardService {
         conversionRate: number;
         allSubmissions: {
             claims: ({
-                document: {
-                    path: string;
-                    filename: string;
-                    id: number;
+                documents: {
                     createdAt: Date;
+                    id: number;
                     updatedAt: Date;
+                    filename: string;
                     originalName: string;
                     mimeType: string;
                     size: number;
+                    path: string;
                     claimId: number | null;
                     quoteId: number | null;
                     outsourcingId: number | null;
                     content: Uint8Array | null;
                 }[];
             } & {
-                description: string;
+                createdAt: Date;
                 status: string;
                 id: number;
                 userId: number | null;
@@ -40,71 +37,66 @@ export declare class DashboardService {
                 claimType: string;
                 incidentDate: Date;
                 estimatedLoss: number;
-                createdAt: Date;
+                description: string;
                 updatedAt: Date;
                 submitterEmail: string | null;
                 submitterName: string | null;
                 submitterPhone: string | null;
             })[];
             outsourcing: {
-                description: string;
+                createdAt: Date;
                 status: string;
                 id: number;
                 userId: number | null;
-                createdAt: Date;
                 updatedAt: Date;
-                email: string | null;
-                category: string;
-                budget: number | null;
-                title: string;
-                organizationName: string | null;
+                organizationName: string;
+                coreFunctions: string | null;
+                location: string;
+                address: string | null;
+                email: string;
                 services: string[];
-                timeline: string | null;
+                natureOfOutsourcing: string;
+                budgetRange: string;
             }[];
             consultations: {
-                name: string;
+                createdAt: Date;
                 status: string;
                 id: number;
                 userId: number | null;
-                createdAt: Date;
                 updatedAt: Date;
+                name: string;
                 email: string;
                 phone: string;
-                country: string | null;
-                timezone: string | null;
+                country: string;
+                timezone: string;
                 serviceInterest: string;
-                serviceType: string | null;
+                serviceType: string;
                 scheduledAt: Date | null;
-                consultationDate: Date | null;
                 meetingLink: string | null;
-                duration: number | null;
+                duration: number;
                 notes: string | null;
             }[];
             payments: {
-                method: string | null;
-                description: string | null;
+                createdAt: Date;
                 status: string;
                 id: number;
-                metadata: import("@prisma/client/runtime/library").JsonValue | null;
                 userId: number | null;
-                createdAt: Date;
+                description: string | null;
                 updatedAt: Date;
-                claimId: number | null;
-                quoteId: number | null;
                 amount: number;
                 currency: string;
+                paymentMethod: string;
                 reference: string | null;
                 transactionId: string | null;
-                paymentMethod: string | null;
-                clientName: string | null;
+                metadata: import("@prisma/client/runtime/library").JsonValue | null;
             }[];
             diaspora: {
-                name: string;
+                createdAt: Date;
                 status: string;
                 id: number;
                 userId: number | null;
-                createdAt: Date;
                 updatedAt: Date;
+                name: string;
                 email: string;
                 phone: string;
                 country: string;
@@ -116,7 +108,49 @@ export declare class DashboardService {
         totalSubmissions: number;
         submissionsThisMonth: number;
     }>;
-    getActivities(limit?: number): Promise<any[]>;
+    getActivities(limit?: number): Promise<({
+        id: string;
+        type: string;
+        createdAt: Date;
+        status: string;
+        policyNumber: string;
+        claimType: string;
+        estimatedLoss: number;
+        submitterEmail: string | null;
+        submitterName: string | null;
+    } | {
+        id: string;
+        type: string;
+        createdAt: Date;
+        status: string;
+        organizationName: string;
+        email: string;
+        services: string[];
+        budgetRange: string;
+    } | {
+        id: string;
+        type: string;
+        createdAt: Date;
+        status: string;
+        name: string;
+        email: string;
+        serviceType: string;
+    } | {
+        id: string;
+        type: string;
+        createdAt: Date;
+        status: string;
+        amount: number;
+        paymentMethod: string;
+    } | {
+        id: string;
+        type: string;
+        createdAt: Date;
+        status: string;
+        name: string;
+        email: string;
+        country: string;
+    })[]>;
     getTopStats(): Promise<{
         thisMonthClaims: number;
         thisMonthOutsourcing: number;

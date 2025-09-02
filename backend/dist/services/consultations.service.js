@@ -73,11 +73,11 @@ let ConsultationsService = class ConsultationsService {
                     email: data.email,
                     phone: data.phone,
                     serviceInterest: data.serviceType,
-                    consultationDate: data.consultationDate ? new Date(data.consultationDate) : undefined,
-                    notes: [data.company, data.message].filter(Boolean).join('\n') || null,
-                    country: data.country,
-                    timezone: data.timezone,
+                    serviceType: data.serviceType,
                     scheduledAt,
+                    country: data.country || 'Kenya',
+                    timezone: data.timezone || 'Africa/Nairobi',
+                    status: 'pending'
                 },
             });
             const adminMessage = `New consultation booking received:
@@ -108,12 +108,21 @@ We will reach out to you at ${data.email} or ${data.phone} within 24 hours to co
 
 Best regards,
 Galloways Insurance Team`;
-            Promise.allSettled([
-                this.emailService.sendMail(process.env.ADMIN_EMAIL, 'New Consultation Booking', adminMessage),
-                this.emailService.sendMail(data.email, 'Consultation Booking Confirmation - Galloways Insurance', clientMessage)
-            ]).catch((error) => {
-                console.error('Notification error:', error);
-            });
+            try {
+                await Promise.allSettled([
+                    this.emailService.sendMail(process.env.ADMIN_EMAIL, 'New Consultation Booking', adminMessage),
+                    this.emailService.sendMail(data.email, 'Consultation Booking Confirmation - Galloways Insurance', clientMessage)
+                ]).then(results => {
+                    results.forEach((result, index) => {
+                        if (result.status === 'rejected') {
+                            console.error(`Email ${index + 1} failed:`, result.reason);
+                        }
+                    });
+                });
+            }
+            catch (emailError) {
+                console.error('Email notification error:', emailError);
+            }
             return {
                 success: true,
                 message: 'Consultation booked successfully',
@@ -136,15 +145,16 @@ Galloways Insurance Team`;
                 updateData.email = data.email;
             if (data.phone)
                 updateData.phone = data.phone;
-            if (data.company !== undefined || data.message !== undefined)
-                updateData.notes = [data.company, data.message].filter(Boolean).join('\n') || undefined;
+            if (data.company !== undefined)
+                updateData.company = data.company;
             if (data.serviceType)
                 updateData.serviceType = data.serviceType;
             if (data.consultationDate)
                 updateData.consultationDate = data.consultationDate;
-            if (data.consultationTime) {
-                updateData.notes = (updateData.notes ? updateData.notes + '\n' : '') + data.consultationTime;
-            }
+            if (data.consultationTime)
+                updateData.consultationTime = data.consultationTime;
+            if (data.message)
+                updateData.message = data.message;
             if (data.country !== undefined)
                 updateData.country = data.country;
             if (data.timezone !== undefined)

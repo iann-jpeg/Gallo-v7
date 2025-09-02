@@ -5,19 +5,19 @@ export declare class OutsourcingService {
     } | {
         success: boolean;
         outsourcing: {
-            description: string;
+            location: string;
             status: string;
             id: number;
-            userId: number | null;
+            email: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string | null;
-            category: string;
-            budget: number | null;
-            title: string;
-            organizationName: string | null;
+            userId: number | null;
+            organizationName: string;
+            coreFunctions: string | null;
+            address: string | null;
             services: string[];
-            timeline: string | null;
+            natureOfOutsourcing: string;
+            budgetRange: string;
         };
     }>;
     getOutsourcingRequests(page?: number, limit?: number): Promise<{
@@ -25,19 +25,19 @@ export declare class OutsourcingService {
         message: any;
     } | {
         outsourcing: {
-            description: string;
+            location: string;
             status: string;
             id: number;
-            userId: number | null;
+            email: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string | null;
-            category: string;
-            budget: number | null;
-            title: string;
-            organizationName: string | null;
+            userId: number | null;
+            organizationName: string;
+            coreFunctions: string | null;
+            address: string | null;
             services: string[];
-            timeline: string | null;
+            natureOfOutsourcing: string;
+            budgetRange: string;
         }[];
         total: number;
     }>;

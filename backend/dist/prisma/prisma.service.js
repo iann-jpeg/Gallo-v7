@@ -8,69 +8,80 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var PrismaService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrismaService = void 0;
 const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
-let PrismaService = PrismaService_1 = class PrismaService extends client_1.PrismaClient {
+let PrismaService = class PrismaService extends client_1.PrismaClient {
     constructor() {
         super({
-            log: process.env.NODE_ENV === 'production' ? ['error'] : ['query', 'error', 'warn'],
-            errorFormat: 'minimal',
-            datasources: {
-                db: {
-                    url: process.env.DATABASE_URL,
-                },
-            },
+            log: ['query', 'info', 'warn', 'error'],
+            errorFormat: 'pretty',
         });
-        this.logger = new common_1.Logger(PrismaService_1.name);
+        this.maxRetries = 3;
+        this.retryDelay = 5000;
+        const dbUrl = process.env.DATABASE_URL || 'Not set';
+        console.log('Database URL configuration:', this.maskDatabaseUrl(dbUrl));
     }
-    async onModuleInit() {
+    maskDatabaseUrl(url) {
         try {
+            const maskedUrl = new URL(url);
+            if (maskedUrl.password) {
+                maskedUrl.password = '****';
+            }
+            return maskedUrl.toString();
+        }
+        catch (e) {
+            return 'Invalid database URL';
+        }
+    }
+    async connectWithRetry(attempt = 1) {
+        try {
+            console.log(`Attempting database connection (attempt ${attempt}/${this.maxRetries})...`);
             await this.$connect();
-            this.logger.log('✅ Aplin PostgreSQL connected successfully');
-            await this.$queryRaw `SELECT 1 as connection_test`;
-            this.logger.log('✅ Database health check passed');
+            console.log('✅ Database connected successfully');
         }
         catch (error) {
-            this.logger.error(`❌ Database connection failed: ${error.message}`);
-            this.logger.warn('⚠️  Server will continue without database connection');
+            console.error(`❌ Database connection attempt ${attempt} failed:`, {
+                message: error.message,
+                code: error.code,
+                meta: error.meta,
+            });
+            if (attempt < this.maxRetries) {
+                console.log(`⏳ Retrying in ${this.retryDelay / 1000} seconds...`);
+                await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+                return this.connectWithRetry(attempt + 1);
+            }
+            else {
+                console.error('❌ Max retries reached. Could not establish database connection');
+                throw error;
+            }
+        }
+    }
+    async onModuleInit() {
+        var _a;
+        if (!process.env.DATABASE_URL) {
+            console.warn('⚠️  DATABASE_URL not set — skipping Prisma connection (safe for local testing)');
+            return;
+        }
+        try {
+            await this.connectWithRetry();
+        }
+        catch (error) {
+            console.error('❌ Database connection failed after all retries:', (_a = error === null || error === void 0 ? void 0 : error.message) !== null && _a !== void 0 ? _a : error);
+            console.log('⚠️  Server will continue without database connection');
         }
     }
     async onModuleDestroy() {
+        console.log('Disconnecting from database...');
         await this.$disconnect();
-        this.logger.log('📤 Database connection closed');
+        console.log('Database disconnected successfully');
     }
-    async healthCheck() {
-        try {
-            await this.$queryRaw `SELECT 1 as health`;
-            return true;
-        }
-        catch (error) {
-            this.logger.error(`Database health check failed: ${error.message}`);
-            return false;
-        }
-    }
-    async getDatabaseInfo() {
-        try {
-            const result = await this.$queryRaw `
-        SELECT 
-          version() as version,
-          current_database() as database,
-          current_user as user,
-          inet_server_addr() as host
-      `;
-            return result;
-        }
-        catch (error) {
-            this.logger.error(`Failed to get database info: ${error.message}`);
-            return null;
-        }
+    async enableShutdownHooks(app) {
     }
 };
 exports.PrismaService = PrismaService;
-exports.PrismaService = PrismaService = PrismaService_1 = __decorate([
+exports.PrismaService = PrismaService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [])
 ], PrismaService);

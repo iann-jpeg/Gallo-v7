@@ -36,6 +36,13 @@ let JwtAuthGuard = class JwtAuthGuard {
         }
         try {
             const payload = jwt.verify(token, process.env.JWT_SECRET);
+            const currentTimestamp = Math.floor(Date.now() / 1000);
+            if (payload.exp && payload.exp < currentTimestamp) {
+                throw new common_1.UnauthorizedException('Token has expired');
+            }
+            if (!payload.userId || !payload.role) {
+                throw new common_1.UnauthorizedException('Invalid token payload');
+            }
             req.user = {
                 userId: payload.userId,
                 sub: payload.sub,
@@ -45,8 +52,16 @@ let JwtAuthGuard = class JwtAuthGuard {
             return true;
         }
         catch (error) {
-            console.error('JWT verification error:', error);
-            throw new common_1.UnauthorizedException('Invalid or expired token');
+            if (error instanceof jwt.TokenExpiredError) {
+                throw new common_1.UnauthorizedException('Token has expired');
+            }
+            else if (error instanceof jwt.JsonWebTokenError) {
+                throw new common_1.UnauthorizedException('Invalid token');
+            }
+            else {
+                console.error('JWT verification error:', error);
+                throw new common_1.UnauthorizedException('Authentication failed');
+            }
         }
     }
 };

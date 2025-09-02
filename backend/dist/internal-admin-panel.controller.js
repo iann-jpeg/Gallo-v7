@@ -23,9 +23,7 @@ let AdminPanelSocketService = class AdminPanelSocketService {
     setupAdminPanelSocket(server) {
         this.io = new socket_io_1.Server(server, {
             cors: {
-                origin: process.env.NODE_ENV === 'development'
-                    ? ["http://localhost:8080", "http://localhost:3000", "http://localhost:5173"]
-                    : ["https://galloways.co.ke", "https://www.galloways.co.ke", "https://app.galloways.co.ke"],
+                origin: ["http://localhost:8080", "http://localhost:3000", "http://localhost:5173"],
                 credentials: true
             }
         });
@@ -109,20 +107,13 @@ let AdminPanelSocketService = class AdminPanelSocketService {
                 orderBy: { createdAt: 'desc' },
                 include: {
                     user: {
-                        include: {
-                            profile: {
-                                select: {
-                                    phone: true
-                                }
-                            }
-                        },
                         select: {
                             id: true,
                             name: true,
-                            email: true
+                            email: true,
                         }
                     },
-                    document: {
+                    documents: {
                         select: {
                             id: true,
                             filename: true,
@@ -152,12 +143,7 @@ let AdminPanelSocketService = class AdminPanelSocketService {
                         select: {
                             id: true,
                             name: true,
-                            email: true,
-                            profile: {
-                                select: {
-                                    phone: true
-                                }
-                            }
+                            email: true
                         }
                     }
                 }
@@ -184,8 +170,8 @@ let AdminPanelSocketService = class AdminPanelSocketService {
                     updatedAt: true,
                     _count: {
                         select: {
-                            payment: true,
-                            claim: true
+                            payments: true,
+                            claims: true
                         }
                     }
                 }

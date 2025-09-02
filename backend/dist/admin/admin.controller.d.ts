@@ -6,42 +6,42 @@ export declare class AdminController {
     getDashboard(): Promise<{
         success: boolean;
         data: {
-            stats: {
-                totalUsers: number;
-                totalClaims: number;
-                totalPayments: number;
-                totalRevenue: number;
-                growthRate: number;
-            };
-            recentActivity: {
-                id: string;
-                type: string;
-                action: string;
-                description: string;
-                user: any;
-                timestamp: any;
-            }[];
+            totalUsers: number;
+            totalClaims: number;
+            totalQuotes: number;
+            totalConsultations: number;
+            totalOutsourcingRequests: number;
+            totalDiasporaRequests: number;
+            pendingClaims: number;
+            pendingConsultations: number;
         };
+        message: string;
+        error?: undefined;
+    } | {
+        success: boolean;
+        message: string;
+        error: any;
+        data?: undefined;
     }>;
     getDashboardStats(): Promise<{
         success: boolean;
         data: {
-            stats: {
-                totalUsers: number;
-                totalClaims: number;
-                totalPayments: number;
-                totalRevenue: number;
-                growthRate: number;
-            };
-            recentActivity: {
-                id: string;
-                type: string;
-                action: string;
-                description: string;
-                user: any;
-                timestamp: any;
-            }[];
+            totalUsers: number;
+            totalClaims: number;
+            totalQuotes: number;
+            totalConsultations: number;
+            totalOutsourcingRequests: number;
+            totalDiasporaRequests: number;
+            pendingClaims: number;
+            pendingConsultations: number;
         };
+        message: string;
+        error?: undefined;
+    } | {
+        success: boolean;
+        message: string;
+        error: any;
+        data?: undefined;
     }>;
     getComprehensiveDashboardStats(): Promise<{
         success: boolean;
@@ -51,139 +51,33 @@ export declare class AdminController {
             totalQuotes: number;
             totalConsultations: number;
             totalOutsourcingRequests: number;
-            totalPayments: number;
             totalDiasporaRequests: number;
             pendingClaims: number;
             pendingConsultations: number;
-            activePolicies: number;
-            monthlyRevenue: number;
-            totalRevenue: number;
-            avgPaymentAmount: number;
-            conversionRate: number;
-            userGrowthRate: number;
-            claimGrowthRate: number;
-            quoteGrowthRate: number;
-            consultationGrowthRate: number;
-            revenueGrowthRate: number;
-            totalSubmissions: number;
-            allSubmissions: {
-                claims: {
-                    id: any;
-                    policyNumber: any;
-                    clientEmail: any;
-                    incidentType: any;
-                    claimAmount: any;
-                    status: any;
-                    createdAt: any;
-                }[];
-                consultations: {
-                    id: any;
-                    fullName: any;
-                    email: any;
-                    serviceType: any;
-                    preferredDate: any;
-                    status: any;
-                    createdAt: any;
-                }[];
-                outsourcing: {
-                    id: any;
-                    companyName: any;
-                    contactEmail: any;
-                    serviceType: any;
-                    budgetRange: any;
-                    status: any;
-                    createdAt: any;
-                }[];
-                payments: {
-                    id: any;
-                    policyNumber: any;
-                    clientEmail: any;
-                    amount: any;
-                    paymentMethod: any;
-                    status: any;
-                    createdAt: any;
-                }[];
-                diaspora: {
-                    id: any;
-                    fullName: any;
-                    email: any;
-                    currentCountry: any;
-                    serviceType: any;
-                    status: any;
-                    createdAt: any;
-                }[];
-            };
-            generatedAt: string;
-            isRealTime: boolean;
-            isMockData?: undefined;
-        };
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            totalUsers: number;
-            totalClaims: number;
-            totalQuotes: number;
-            totalConsultations: number;
-            totalOutsourcingRequests: number;
-            totalPayments: number;
-            totalDiasporaRequests: number;
-            pendingClaims: number;
-            pendingConsultations: number;
-            activePolicies: number;
-            monthlyRevenue: number;
-            totalRevenue: number;
-            avgPaymentAmount: number;
-            conversionRate: number;
-            userGrowthRate: number;
-            claimGrowthRate: number;
-            quoteGrowthRate: number;
-            consultationGrowthRate: number;
-            revenueGrowthRate: number;
-            totalSubmissions: number;
-            allSubmissions: {
-                claims: never[];
-                consultations: never[];
-                outsourcing: never[];
-                payments: never[];
-                diaspora: never[];
-            };
-            generatedAt: string;
-            isRealTime: boolean;
-            isMockData: boolean;
         };
         message: string;
-    }>;
-    getSystemHealth(): Promise<{
-        success: boolean;
-        data: {
-            status: string;
-            database: string;
-            timestamp: string;
-            uptime: number;
-            error?: undefined;
-        };
+        error?: undefined;
     } | {
         success: boolean;
-        data: {
-            status: string;
-            database: string;
-            timestamp: string;
-            error: any;
-            uptime?: undefined;
-        };
+        message: string;
+        error: any;
+        data?: undefined;
+    }>;
+    getSystemHealth(): Promise<{
+        healthy: boolean;
+        message: any;
     }>;
     getRecentActivities(limit?: string): Promise<{
         success: boolean;
         data: {
-            id: string;
-            type: string;
-            action: string;
-            description: string;
-            user: any;
-            timestamp: any;
-        }[];
-        message?: undefined;
+            activities: {
+                id: string;
+                type: string;
+                createdAt: any;
+                raw: any;
+            }[];
+        };
+        message: string;
         error?: undefined;
     } | {
         success: boolean;
@@ -195,51 +89,34 @@ export declare class AdminController {
         success: boolean;
         data: {
             users: {
-                name: string;
                 id: number;
-                _count: {
-                    claim: number;
-                    quote: number;
-                };
                 createdAt: Date;
                 updatedAt: Date;
+                name: string;
                 email: string;
                 role: import(".prisma/client").$Enums.Role;
             }[];
             pagination: {
-                total: number;
                 page: number;
                 limit: number;
-                pages: number;
-            };
-        };
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            users: never[];
-            pagination: {
                 total: number;
-                page: number;
-                limit: number;
                 pages: number;
             };
         };
         message: string;
+        error?: undefined;
+    } | {
+        success: boolean;
+        message: string;
+        error: any;
+        data?: undefined;
     }>;
     getUserStats(): Promise<{
         success: boolean;
         data: {
             total: number;
-            admins: number;
-            regular: number;
-            recentSignups: number;
-            byRole: {
-                role: string;
-                count: number;
-            }[];
         };
-        message?: undefined;
+        message: string;
         error?: undefined;
     } | {
         success: boolean;
@@ -249,17 +126,13 @@ export declare class AdminController {
     }>;
     updateUserStatus(id: number, status: string): Promise<{
         success: boolean;
-        message: string;
-        data?: undefined;
-        error?: undefined;
-    } | {
-        success: boolean;
         data: {
-            name: string;
             id: number;
             createdAt: Date;
             updatedAt: Date;
+            name: string;
             email: string;
+            password: string;
             role: import(".prisma/client").$Enums.Role;
         };
         message: string;
@@ -272,12 +145,14 @@ export declare class AdminController {
     }>;
     deleteUser(id: number): Promise<{
         success: boolean;
+        data: null;
         message: string;
         error?: undefined;
     } | {
         success: boolean;
         message: string;
         error: any;
+        data?: undefined;
     }>;
     getAllClaims(page?: string, limit?: string, status?: string, search?: string): Promise<{
         success: boolean;
@@ -285,18 +160,17 @@ export declare class AdminController {
             claims: ({
                 user: {
                     name: string;
-                    id: number;
                     email: string;
                 } | null;
             } & {
-                description: string;
-                status: string;
                 id: number;
                 userId: number | null;
                 policyNumber: string;
                 claimType: string;
                 incidentDate: Date;
                 estimatedLoss: number;
+                description: string;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
                 submitterEmail: string | null;
@@ -304,72 +178,59 @@ export declare class AdminController {
                 submitterPhone: string | null;
             })[];
             pagination: {
-                total: number;
                 page: number;
                 limit: number;
-                pages: number;
-                totalPages: number;
-            };
-        };
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            claims: never[];
-            pagination: {
                 total: number;
-                page: number;
-                limit: number;
                 pages: number;
-                totalPages: number;
             };
         };
         message: string;
-    }>;
-    getClaimById(id: number): Promise<{
-        success: boolean;
-        message: string;
-        data?: undefined;
         error?: undefined;
     } | {
         success: boolean;
+        message: string;
+        error: any;
+        data?: undefined;
+    }>;
+    getClaimById(id: number): Promise<{
+        success: boolean;
         data: {
-            document: {
-                filename: string;
+            user: {
+                name: string;
+                email: string;
+            } | null;
+            documents: {
                 id: number;
                 createdAt: Date;
+                updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
+                claimId: number | null;
+                quoteId: number | null;
+                outsourcingId: number | null;
+                content: Uint8Array | null;
             }[];
-            user: {
-                name: string;
-                id: number;
-                email: string;
-                profile: {
-                    phone: string | null;
-                } | null;
-            } | null;
         } & {
-            description: string;
-            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
             submitterName: string | null;
             submitterPhone: string | null;
         };
-        message?: undefined;
         error?: undefined;
     } | {
         success: boolean;
-        message: string;
         error: any;
         data?: undefined;
     }>;
@@ -380,8 +241,6 @@ export declare class AdminController {
             pending: number;
             approved: number;
             rejected: number;
-            thisMonth: number;
-            approvalRate: number;
         };
         message?: undefined;
         error?: undefined;
@@ -394,20 +253,14 @@ export declare class AdminController {
     updateClaimStatus(id: number, status: string): Promise<{
         success: boolean;
         data: {
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
-        } & {
-            description: string;
-            status: string;
             id: number;
             userId: number | null;
             policyNumber: string;
             claimType: string;
             incidentDate: Date;
             estimatedLoss: number;
+            description: string;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
             submitterEmail: string | null;
@@ -419,7 +272,39 @@ export declare class AdminController {
     } | {
         success: boolean;
         message: string;
+        error: any;
         data?: undefined;
+    }>;
+    downloadDocument(id: number, res: Response): Promise<any>;
+    getAllConsultations(page?: string, limit?: string, status?: string, search?: string): Promise<{
+        success: boolean;
+        data: {
+            consultations: {
+                id: number;
+                userId: number | null;
+                status: string;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
+                email: string;
+                phone: string;
+                country: string;
+                timezone: string;
+                serviceInterest: string;
+                serviceType: string;
+                scheduledAt: Date | null;
+                meetingLink: string | null;
+                duration: number;
+                notes: string | null;
+            }[];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                pages: number;
+            };
+        };
+        message: string;
         error?: undefined;
     } | {
         success: boolean;
@@ -427,135 +312,53 @@ export declare class AdminController {
         error: any;
         data?: undefined;
     }>;
-    downloadDocument(id: number, res: Response): Promise<void>;
-    getAllConsultations(page?: string, limit?: string, status?: string, search?: string): Promise<{
-        success: boolean;
-        data: {
-            consultations: ({
-                user: {
-                    name: string;
-                    id: number;
-                    email: string;
-                    profile: {
-                        phone: string | null;
-                    } | null;
-                } | null;
-            } & {
-                name: string;
-                status: string;
-                id: number;
-                userId: number | null;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                phone: string;
-                country: string | null;
-                timezone: string | null;
-                serviceInterest: string;
-                serviceType: string | null;
-                scheduledAt: Date | null;
-                consultationDate: Date | null;
-                meetingLink: string | null;
-                duration: number | null;
-                notes: string | null;
-            })[];
-            pagination: {
-                total: number;
-                page: number;
-                limit: number;
-                totalPages: number;
-            };
-        };
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            consultations: never[];
-            pagination: {
-                total: number;
-                page: number;
-                limit: number;
-                totalPages: number;
-            };
-        };
-        message: string;
-    }>;
     getConsultationById(id: number): Promise<{
         success: boolean;
-        message: string;
-        data?: undefined;
-        error?: undefined;
-    } | {
-        success: boolean;
         data: {
-            user: {
-                name: string;
-                id: number;
-                email: string;
-                profile: {
-                    phone: string | null;
-                } | null;
-            } | null;
-        } & {
-            name: string;
-            status: string;
             id: number;
             userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
+            name: string;
             email: string;
             phone: string;
-            country: string | null;
-            timezone: string | null;
+            country: string;
+            timezone: string;
             serviceInterest: string;
-            serviceType: string | null;
+            serviceType: string;
             scheduledAt: Date | null;
-            consultationDate: Date | null;
             meetingLink: string | null;
-            duration: number | null;
+            duration: number;
             notes: string | null;
         };
-        message?: undefined;
         error?: undefined;
     } | {
         success: boolean;
-        message: string;
         error: any;
         data?: undefined;
     }>;
     updateConsultationStatus(id: number, status: string): Promise<{
         success: boolean;
         data: {
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
-        } & {
-            name: string;
-            status: string;
             id: number;
             userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
+            name: string;
             email: string;
             phone: string;
-            country: string | null;
-            timezone: string | null;
+            country: string;
+            timezone: string;
             serviceInterest: string;
-            serviceType: string | null;
+            serviceType: string;
             scheduledAt: Date | null;
-            consultationDate: Date | null;
             meetingLink: string | null;
-            duration: number | null;
+            duration: number;
             notes: string | null;
         };
         message: string;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        data?: undefined;
         error?: undefined;
     } | {
         success: boolean;
@@ -572,56 +375,23 @@ export declare class AdminController {
         notes?: string;
     }): Promise<{
         success: boolean;
-        message: string;
-        data?: undefined;
-        error?: undefined;
-    } | {
-        success: boolean;
         data: {
-            consultation: {
-                user: {
-                    name: string;
-                    id: number;
-                    email: string;
-                    profile: {
-                        phone: string | null;
-                    } | null;
-                } | null;
-            } & {
-                name: string;
-                status: string;
-                id: number;
-                userId: number | null;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                phone: string;
-                country: string | null;
-                timezone: string | null;
-                serviceInterest: string;
-                serviceType: string | null;
-                scheduledAt: Date | null;
-                consultationDate: Date | null;
-                meetingLink: string | null;
-                duration: number | null;
-                notes: string | null;
-            };
-            meetingDetails: {
-                date: any;
-                time: any;
-                type: any;
-                link: any;
-                duration: any;
-                notes: any;
-            };
-            client: {
-                name: string;
-                id: number;
-                email: string;
-                profile: {
-                    phone: string | null;
-                } | null;
-            } | null;
+            id: number;
+            userId: number | null;
+            status: string;
+            createdAt: Date;
+            updatedAt: Date;
+            name: string;
+            email: string;
+            phone: string;
+            country: string;
+            timezone: string;
+            serviceInterest: string;
+            serviceType: string;
+            scheduledAt: Date | null;
+            meetingLink: string | null;
+            duration: number;
+            notes: string | null;
         };
         message: string;
         error?: undefined;
@@ -636,16 +406,55 @@ export declare class AdminController {
         includeLink?: boolean;
     }): Promise<{
         success: boolean;
+        data: null;
         message: string;
-        data?: undefined;
-        error?: undefined;
-    } | {
+    }>;
+    getAllQuotes(page?: string, limit?: string, status?: string, search?: string): Promise<{
         success: boolean;
         data: {
-            recipient: string;
-            phone: string;
-            message: string;
-            sentAt: string;
+            quotes: ({
+                user: {
+                    name: string;
+                    email: string;
+                } | null;
+                documents: {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    filename: string;
+                    originalName: string;
+                    mimeType: string;
+                    size: number;
+                    path: string;
+                    claimId: number | null;
+                    quoteId: number | null;
+                    outsourcingId: number | null;
+                    content: Uint8Array | null;
+                }[];
+            } & {
+                id: number;
+                userId: number | null;
+                status: string;
+                createdAt: Date;
+                updatedAt: Date;
+                email: string;
+                firstName: string;
+                lastName: string;
+                phone: string;
+                location: string | null;
+                product: string;
+                budget: string | null;
+                coverage: string | null;
+                details: string | null;
+                contactMethod: string;
+                bestTime: string | null;
+            })[];
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                pages: number;
+            };
         };
         message: string;
         error?: undefined;
@@ -655,93 +464,42 @@ export declare class AdminController {
         error: any;
         data?: undefined;
     }>;
-    getAllQuotes(page?: string, limit?: string, status?: string, search?: string): Promise<{
-        success: boolean;
-        data: {
-            quotes: ({
-                user: {
-                    name: string;
-                    id: number;
-                    email: string;
-                } | null;
-            } & {
-                location: string | null;
-                details: string | null;
-                status: string;
-                id: number;
-                userId: number | null;
-                createdAt: Date;
-                updatedAt: Date;
-                email: string;
-                phone: string;
-                product: string;
-                firstName: string;
-                lastName: string;
-                budget: string | null;
-                coverage: string | null;
-                contactMethod: string;
-                bestTime: string | null;
-            })[];
-            pagination: {
-                total: number;
-                page: number;
-                limit: number;
-                pages: number;
-                totalPages: number;
-            };
-        };
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            quotes: never[];
-            pagination: {
-                total: number;
-                page: number;
-                limit: number;
-                pages: number;
-                totalPages: number;
-            };
-        };
-        message: string;
-    }>;
     getQuoteById(id: number): Promise<{
         success: boolean;
         data: {
-            document: {
-                path: string;
-                filename: string;
+            user: {
+                name: string;
+                email: string;
+            } | null;
+            documents: {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
+                filename: string;
                 originalName: string;
                 mimeType: string;
                 size: number;
+                path: string;
                 claimId: number | null;
                 quoteId: number | null;
                 outsourcingId: number | null;
                 content: Uint8Array | null;
             }[];
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
         } & {
-            location: string | null;
-            details: string | null;
-            status: string;
             id: number;
             userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
-            phone: string;
-            product: string;
             firstName: string;
             lastName: string;
+            phone: string;
+            location: string | null;
+            product: string;
             budget: string | null;
             coverage: string | null;
+            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         };
@@ -754,20 +512,20 @@ export declare class AdminController {
     updateQuoteStatus(id: number, status: string): Promise<{
         success: boolean;
         data: {
-            location: string | null;
-            details: string | null;
-            status: string;
             id: number;
             userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
             email: string;
-            phone: string;
-            product: string;
             firstName: string;
             lastName: string;
+            phone: string;
+            location: string | null;
+            product: string;
             budget: string | null;
             coverage: string | null;
+            details: string | null;
             contactMethod: string;
             bestTime: string | null;
         };
@@ -775,9 +533,9 @@ export declare class AdminController {
         error?: undefined;
     } | {
         success: boolean;
+        message: string;
         error: any;
         data?: undefined;
-        message?: undefined;
     }>;
     getAllDiasporaRequests(page?: string, limit?: string, status?: string, search?: string): Promise<{
         success: boolean;
@@ -785,16 +543,15 @@ export declare class AdminController {
             diasporaRequests: ({
                 user: {
                     name: string;
-                    id: number;
                     email: string;
                 } | null;
             } & {
-                name: string;
-                status: string;
                 id: number;
                 userId: number | null;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
+                name: string;
                 email: string;
                 phone: string;
                 country: string;
@@ -803,65 +560,73 @@ export declare class AdminController {
                 scheduledAt: Date | null;
             })[];
             pagination: {
-                total: number;
                 page: number;
                 limit: number;
-                pages: number;
+                total: number;
                 totalPages: number;
             };
         };
-        message?: undefined;
+        message: string;
+        error?: undefined;
     } | {
         success: boolean;
         data: {
             diasporaRequests: never[];
             pagination: {
-                total: number;
                 page: number;
                 limit: number;
-                pages: number;
+                total: number;
                 totalPages: number;
             };
         };
         message: string;
+        error: any;
     }>;
     getDiasporaRequestById(id: number): Promise<{
         success: boolean;
         data: {
-            user: {
-                name: string;
+            diasporaRequest: {
+                user: {
+                    id: number;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    email: string;
+                    password: string;
+                    role: import(".prisma/client").$Enums.Role;
+                } | null;
+            } & {
                 id: number;
+                userId: number | null;
+                status: string;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
                 email: string;
-            } | null;
-        } & {
-            name: string;
-            status: string;
-            id: number;
-            userId: number | null;
-            createdAt: Date;
-            updatedAt: Date;
-            email: string;
-            phone: string;
-            country: string;
-            timezone: string;
-            serviceInterest: string;
-            scheduledAt: Date | null;
+                phone: string;
+                country: string;
+                timezone: string;
+                serviceInterest: string;
+                scheduledAt: Date | null;
+            };
         };
+        message: string;
         error?: undefined;
     } | {
         success: boolean;
+        message: string;
         error: any;
         data?: undefined;
     }>;
     updateDiasporaRequestStatus(id: number, status: string): Promise<{
         success: boolean;
         data: {
-            name: string;
-            status: string;
             id: number;
             userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
+            name: string;
             email: string;
             phone: string;
             country: string;
@@ -873,111 +638,68 @@ export declare class AdminController {
         error?: undefined;
     } | {
         success: boolean;
+        message: string;
         error: any;
         data?: undefined;
-        message?: undefined;
     }>;
     getAllPayments(page?: string, limit?: string, search?: string): Promise<{
         success: boolean;
         data: {
-            payments: ({
-                user: {
-                    name: string;
-                    id: number;
-                    email: string;
-                } | null;
-            } & {
-                method: string | null;
+            payments: {
+                id: number;
+                userId: number | null;
                 description: string | null;
                 status: string;
-                id: number;
-                metadata: import("@prisma/client/runtime/library").JsonValue | null;
-                userId: number | null;
                 createdAt: Date;
                 updatedAt: Date;
-                claimId: number | null;
-                quoteId: number | null;
                 amount: number;
                 currency: string;
+                paymentMethod: string;
                 reference: string | null;
                 transactionId: string | null;
-                paymentMethod: string | null;
-                clientName: string | null;
-            })[];
+                metadata: import("@prisma/client/runtime/library").JsonValue | null;
+            }[];
             pagination: {
-                currentPage: number;
-                totalPages: number;
-                totalItems: number;
-                itemsPerPage: number;
+                page: number;
+                limit: number;
+                total: number;
+                pages: number;
             };
         };
         message?: undefined;
+        error?: undefined;
     } | {
         success: boolean;
-        data: {
-            payments: never[];
-            pagination: {
-                currentPage: number;
-                totalPages: number;
-                totalItems: number;
-                itemsPerPage: number;
-            };
-        };
         message: string;
+        error: any;
+        data?: undefined;
     }>;
     getPaymentStats(): Promise<{
         success: boolean;
         data: {
-            totalRevenue: number;
-            monthlyRevenue: number;
-            totalPayments: number;
-            monthlyPayments: number;
-            avgPaymentAmount: number;
-            generatedAt: string;
+            total: number;
+            pending: number;
+            completed: number;
         };
-        isMockData?: undefined;
         message?: undefined;
+        error?: undefined;
     } | {
         success: boolean;
-        data: {
-            totalRevenue: number;
-            monthlyRevenue: number;
-            totalPayments: number;
-            monthlyPayments: number;
-            avgPaymentAmount: number;
-            generatedAt: string;
-        };
-        isMockData: boolean;
         message: string;
+        error: any;
+        data?: undefined;
     }>;
     getNotifications(): Promise<{
         success: boolean;
         data: {
-            notifications: never[];
-            totalCount: number;
-            unreadCount: number;
-        };
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            notifications: never[];
-            totalCount: number;
-            unreadCount: number;
+            notifications: any[];
         };
         message: string;
     }>;
     getContentStats(): Promise<{
         success: boolean;
         data: {
-            users: number;
-            claims: number;
-            quotes: number;
-            consultations: number;
-            outsourcing: number;
             resources: number;
-            payments: number;
-            total: number;
         };
         message?: undefined;
         error?: undefined;
@@ -991,87 +713,41 @@ export declare class AdminController {
         success: boolean;
         data: {
             period: string;
-            userGrowth: {
-                date: any;
-                users: number;
-            }[];
-            paymentTrends: {
-                date: any;
-                amount: number;
-                count: number;
-            }[];
-            topProducts: {
-                name: any;
-                category: string;
-                sales: number;
-            }[];
-            conversionData: {
-                rate: number;
-                change: number;
-            };
-            generatedAt: string;
-            isRealTime: boolean;
+            metrics: {};
         };
-        isMockData?: undefined;
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            period: string;
-            userGrowth: {
-                date: string;
-                users: number;
-            }[];
-            paymentTrends: {
-                date: string;
-                amount: number;
-            }[];
-            topProducts: {
-                name: string;
-                category: string;
-                sales: number;
-            }[];
-            conversionData: {
-                rate: number;
-                change: number;
-            };
-            generatedAt: string;
-            isRealTime: boolean;
-        };
-        isMockData: boolean;
         message: string;
     }>;
     getAllOutsourcingRequests(page?: string, limit?: string, status?: string, search?: string): Promise<{
         success: boolean;
         data: {
-            outsourcingRequests: ({
+            requests: ({
                 user: {
                     name: string;
-                    id: number;
                     email: string;
                 } | null;
             } & {
-                description: string;
-                status: string;
                 id: number;
                 userId: number | null;
+                status: string;
                 createdAt: Date;
                 updatedAt: Date;
-                email: string | null;
-                category: string;
-                budget: number | null;
-                title: string;
-                organizationName: string | null;
+                email: string;
+                location: string;
+                organizationName: string;
+                coreFunctions: string | null;
+                address: string | null;
                 services: string[];
-                timeline: string | null;
+                natureOfOutsourcing: string;
+                budgetRange: string;
             })[];
-            totalCount: number;
-            totalPages: number;
-            currentPage: number;
-            hasNextPage: boolean;
-            hasPrevPage: boolean;
+            pagination: {
+                page: number;
+                limit: number;
+                total: number;
+                pages: number;
+            };
         };
-        message?: undefined;
+        message: string;
         error?: undefined;
     } | {
         success: boolean;
@@ -1081,34 +757,52 @@ export declare class AdminController {
     }>;
     getOutsourcingRequestById(id: number): Promise<{
         success: boolean;
-        message: string;
+        error: string;
         data?: undefined;
-        error?: undefined;
+        message?: undefined;
     } | {
         success: boolean;
         data: {
             user: {
-                name: string;
                 id: number;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string;
                 email: string;
+                password: string;
+                role: import(".prisma/client").$Enums.Role;
             } | null;
+            documents: {
+                id: number;
+                createdAt: Date;
+                updatedAt: Date;
+                filename: string;
+                originalName: string;
+                mimeType: string;
+                size: number;
+                path: string;
+                claimId: number | null;
+                quoteId: number | null;
+                outsourcingId: number | null;
+                content: Uint8Array | null;
+            }[];
         } & {
-            description: string;
-            status: string;
             id: number;
             userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string | null;
-            category: string;
-            budget: number | null;
-            title: string;
-            organizationName: string | null;
+            email: string;
+            location: string;
+            organizationName: string;
+            coreFunctions: string | null;
+            address: string | null;
             services: string[];
-            timeline: string | null;
+            natureOfOutsourcing: string;
+            budgetRange: string;
         };
-        message?: undefined;
         error?: undefined;
+        message?: undefined;
     } | {
         success: boolean;
         message: string;
@@ -1118,25 +812,19 @@ export declare class AdminController {
     updateOutsourcingRequestStatus(id: number, status: string, notes?: string): Promise<{
         success: boolean;
         data: {
-            user: {
-                name: string;
-                id: number;
-                email: string;
-            } | null;
-        } & {
-            description: string;
-            status: string;
             id: number;
             userId: number | null;
+            status: string;
             createdAt: Date;
             updatedAt: Date;
-            email: string | null;
-            category: string;
-            budget: number | null;
-            title: string;
-            organizationName: string | null;
+            email: string;
+            location: string;
+            organizationName: string;
+            coreFunctions: string | null;
+            address: string | null;
             services: string[];
-            timeline: string | null;
+            natureOfOutsourcing: string;
+            budgetRange: string;
         };
         message: string;
         error?: undefined;
@@ -1149,32 +837,51 @@ export declare class AdminController {
     getOutsourcingStats(): Promise<{
         success: boolean;
         data: {
-            totalCount: number;
-            monthlyCount: number;
-            statusStats: Record<string, number>;
-            generatedAt: string;
+            total: number;
+            pending: number;
+            inProgress: number;
+            completed: number;
+            rejected: number;
         };
-        message?: undefined;
-    } | {
-        success: boolean;
-        data: {
-            totalCount: number;
-            monthlyCount: number;
-            statusStats: {};
-            generatedAt: string;
-        };
-        message: string;
-    }>;
-    deleteOutsourcingRequest(id: number): Promise<{
-        success: boolean;
         message: string;
         error?: undefined;
     } | {
         success: boolean;
         message: string;
         error: any;
+        data?: undefined;
+    }>;
+    deleteOutsourcingRequest(id: number): Promise<{
+        success: boolean;
+        data: null;
+        message: string;
+        error?: undefined;
+    } | {
+        success: boolean;
+        message: string;
+        error: any;
+        data?: undefined;
     }>;
     exportOutsourcingData(format?: 'csv' | 'json'): Promise<{
+        success: boolean;
+        data: {
+            id: number;
+            userId: number | null;
+            status: string;
+            createdAt: Date;
+            updatedAt: Date;
+            email: string;
+            location: string;
+            organizationName: string;
+            coreFunctions: string | null;
+            address: string | null;
+            services: string[];
+            natureOfOutsourcing: string;
+            budgetRange: string;
+        }[];
+        message?: undefined;
+        error?: undefined;
+    } | {
         success: boolean;
         data: string;
         message?: undefined;
@@ -1187,194 +894,56 @@ export declare class AdminController {
     }>;
     getSystemSettings(): Promise<{
         success: boolean;
-        data: {
-            siteName: string;
-            supportEmail: string;
-            maintenanceMode: boolean;
-            allowRegistration: boolean;
-            emailNotifications: boolean;
-            maxFileSize: number;
-            allowedFileTypes: string[];
-            backupEnabled: boolean;
-            autoBackupInterval: string;
-            sessionTimeout: number;
-            twoFactorRequired: boolean;
-            passwordMinLength: number;
-            systemHealth: {
-                database: string;
-                email: string;
-                storage: string;
-                api: string;
-                realtime: string;
-            };
-            lastUpdated: string;
-        };
-        message?: undefined;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
+        data: {};
     }>;
     updateSystemSettings(settings: any): Promise<{
         success: boolean;
         data: any;
-        message: string;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     testEmailSettings(email?: string): Promise<{
         success: boolean;
+        data: null;
         message: string;
-        data: {
-            recipient: string;
-            sentAt: string;
-        };
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     testNotifications(): Promise<{
         success: boolean;
+        data: null;
         message: string;
-        data: {
-            testedAt: string;
-            notifications: {
-                type: string;
-                message: string;
-            }[];
-        };
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     createBackup(): Promise<{
         success: boolean;
-        data: {
-            backupId: string;
-            createdAt: string;
-            size: string;
-            type: string;
-        };
+        data: null;
         message: string;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     restoreBackup(backupId: string): Promise<{
         success: boolean;
-        data: {
-            backupId: string;
-            restoredAt: string;
-        };
+        data: null;
         message: string;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     listBackups(): Promise<{
         success: boolean;
-        data: {
-            backups: {
-                id: string;
-                name: string;
-                createdAt: string;
-                size: string;
-                type: string;
-            }[];
-            totalCount: number;
-        };
-        message?: undefined;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
+        data: never[];
     }>;
     clearSystemCache(): Promise<{
         success: boolean;
-        data: {
-            clearedAt: string;
-            cacheSize: string;
-        };
+        data: null;
         message: string;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     restartServices(): Promise<{
         success: boolean;
-        data: {
-            restartedAt: string;
-            services: string[];
-        };
+        data: null;
         message: string;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     getSystemStatus(): Promise<{
         success: boolean;
         data: {
-            uptime: string;
-            lastRestart: string;
-            systemLoad: string;
-            memoryUsage: string;
-            diskUsage: string;
-            activeConnections: number;
-            health: {
-                database: string;
-                email: string;
-                storage: string;
-                api: string;
-                realtime: string;
-            };
-            timestamp: string;
+            healthy: boolean;
         };
-        message?: undefined;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
     setMaintenanceMode(enabled: boolean): Promise<{
         success: boolean;
         data: {
-            maintenanceMode: boolean;
-            updatedAt: string;
+            maintenance: boolean;
         };
-        message: string;
-        error?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        error: any;
-        data?: undefined;
     }>;
 }

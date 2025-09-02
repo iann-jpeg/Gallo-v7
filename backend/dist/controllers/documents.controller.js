@@ -14,18 +14,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DocumentsController = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("../prisma/prisma.service");
+const client_1 = require("@prisma/client");
 const public_decorator_1 = require("../middleware/public.decorator");
+const prisma = new client_1.PrismaClient();
 let DocumentsController = class DocumentsController {
-    constructor(prisma) {
-        this.prisma = prisma;
-    }
     async viewClaimDocument(filename, res) {
         try {
             if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
                 throw new common_1.BadRequestException('Invalid filename');
             }
-            const document = await this.prisma.document.findFirst({
+            const document = await prisma.document.findFirst({
                 where: {
                     filename: filename,
                     claimId: { not: null }
@@ -51,7 +49,7 @@ let DocumentsController = class DocumentsController {
             if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
                 throw new common_1.BadRequestException('Invalid filename');
             }
-            const document = await this.prisma.document.findFirst({
+            const document = await prisma.document.findFirst({
                 where: {
                     filename: filename,
                     quoteId: { not: null }
@@ -78,7 +76,7 @@ let DocumentsController = class DocumentsController {
             if (isNaN(documentId)) {
                 throw new common_1.BadRequestException('Invalid document ID');
             }
-            const document = await this.prisma.document.findUnique({
+            const document = await prisma.document.findUnique({
                 where: { id: documentId }
             });
             if (!document || !document.content) {
@@ -126,7 +124,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DocumentsController.prototype, "viewDocumentById", null);
 exports.DocumentsController = DocumentsController = __decorate([
-    (0, common_1.Controller)('documents'),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    (0, common_1.Controller)('documents')
 ], DocumentsController);
 //# sourceMappingURL=documents.controller.js.map

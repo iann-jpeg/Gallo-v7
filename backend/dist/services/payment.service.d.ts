@@ -23,22 +23,18 @@ export declare class PaymentService {
                 email: string;
             } | null;
         } & {
-            method: string | null;
             description: string | null;
             status: string;
             id: number;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
-            claimId: number | null;
-            quoteId: number | null;
+            userId: number | null;
             amount: number;
             currency: string;
+            paymentMethod: string;
             reference: string | null;
             transactionId: string | null;
-            paymentMethod: string | null;
-            clientName: string | null;
         })[];
         pagination: {
             page: number;
@@ -54,22 +50,18 @@ export declare class PaymentService {
             email: string;
         } | null;
     } & {
-        method: string | null;
         description: string | null;
         status: string;
         id: number;
         metadata: import("@prisma/client/runtime/library").JsonValue | null;
-        userId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        claimId: number | null;
-        quoteId: number | null;
+        userId: number | null;
         amount: number;
         currency: string;
+        paymentMethod: string;
         reference: string | null;
         transactionId: string | null;
-        paymentMethod: string | null;
-        clientName: string | null;
     }>;
     create(data: CreatePaymentDto): Promise<{
         success: boolean;
@@ -79,7 +71,7 @@ export declare class PaymentService {
             transactionId: string | null;
             status: string;
             amount: number;
-            paymentMethod: string | null;
+            paymentMethod: string;
             metadata: import("@prisma/client/runtime/library").JsonValue;
         } | null;
     }>;
@@ -138,22 +130,18 @@ export declare class PaymentService {
         success: boolean;
         message: string;
         data: {
-            method: string | null;
             description: string | null;
             status: string;
             id: number;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
-            claimId: number | null;
-            quoteId: number | null;
+            userId: number | null;
             amount: number;
             currency: string;
+            paymentMethod: string;
             reference: string | null;
             transactionId: string | null;
-            paymentMethod: string | null;
-            clientName: string | null;
         };
     }>;
     private simulatePaymentProcessing;
@@ -161,66 +149,54 @@ export declare class PaymentService {
         success: boolean;
         message: string;
         data: {
-            method: string | null;
             description: string | null;
             status: string;
             id: number;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
-            claimId: number | null;
-            quoteId: number | null;
+            userId: number | null;
             amount: number;
             currency: string;
+            paymentMethod: string;
             reference: string | null;
             transactionId: string | null;
-            paymentMethod: string | null;
-            clientName: string | null;
         };
     }>;
     handlePaypalCallback(callbackData: PaymentCallbackDto): Promise<{
         success: boolean;
         message: string;
         data: {
-            method: string | null;
             description: string | null;
             status: string;
             id: number;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
-            claimId: number | null;
-            quoteId: number | null;
+            userId: number | null;
             amount: number;
             currency: string;
+            paymentMethod: string;
             reference: string | null;
             transactionId: string | null;
-            paymentMethod: string | null;
-            clientName: string | null;
         };
     }>;
     handleCardCallback(callbackData: PaymentCallbackDto): Promise<{
         success: boolean;
         message: string;
         data: {
-            method: string | null;
             description: string | null;
             status: string;
             id: number;
             metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            userId: number | null;
             createdAt: Date;
             updatedAt: Date;
-            claimId: number | null;
-            quoteId: number | null;
+            userId: number | null;
             amount: number;
             currency: string;
+            paymentMethod: string;
             reference: string | null;
             transactionId: string | null;
-            paymentMethod: string | null;
-            clientName: string | null;
         };
     }>;
     private handlePaymentCallback;
@@ -230,7 +206,7 @@ export declare class PaymentService {
         createdAt: Date;
         updatedAt: Date;
         amount: number;
+        paymentMethod: string;
         transactionId: string | null;
-        paymentMethod: string | null;
     }>;
 }

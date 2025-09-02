@@ -11,11 +11,10 @@ const common_1 = require("@nestjs/common");
 let AdminGuard = class AdminGuard {
     canActivate(context) {
         const request = context.switchToHttp().getRequest();
-        const allowedOrigins = process.env.NODE_ENV === 'development'
-            ? ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173']
-            : ['https://galloways.co.ke', 'https://www.galloways.co.ke', 'https://app.galloways.co.ke'];
-        const origin = request.headers.origin;
-        return allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development';
+        const authHeader = request.headers['authorization'] || request.headers['Authorization'];
+        if (!authHeader)
+            return false;
+        return true;
     }
 };
 exports.AdminGuard = AdminGuard;
