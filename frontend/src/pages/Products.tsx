@@ -1,7 +1,7 @@
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Link } from "react-router-dom";
 import { 
   Heart, 
@@ -18,16 +18,16 @@ import {
 const Products = () => {
   // Map product titles to image filenames
   const productImages = {
-    "Pension": "/dist/pictures/pension.jpg", // Add a suitable pension image to dist/pictures/
-    "Health Insurance": "/dist/pictures/health.jpg",
-    "Medical Insurance": "/dist/pictures/medical.jpg",
-    "Motor Insurance": "/dist/pictures/motor.jpg",
-    "Life Insurance": "/dist/pictures/life.jpg",
-    "Property Insurance": "/dist/pictures/property.jpg",
-    "Travel Insurance(Inbound & Outbound)": "/dist/pictures/ndege.jpg",
-    "Technology Safety Nets": "/dist/pictures/technology.jpg",
-    "Cyber Crime Insurance": "/dist/pictures/cybercrime.jpg",
-    "Corporate Packages": "/dist/pictures/corporate.jpg",
+    "Pension": "/pictures/pension.jpg", // Add pension.jpg to public/pictures/
+    "Health Insurance": "/pictures/health.jpg",
+    "Medical Insurance": "/pictures/medical.jpg",
+    "Motor Insurance": "/pictures/motor.jpg",
+    "Life Insurance": "/pictures/life.jpg",
+    "Property Insurance": "/pictures/property.jpg",
+    "Travel Insurance(Inbound & Outbound)": "/pictures/ndege.jpg",
+    "Technology Safety Nets": "/pictures/technology.jpg",
+    "Cyber Crime Insurance": "/pictures/cybercrime.jpg",
+    "Corporate Packages": "/pictures/corporate.jpg",
   };
 
   const products = [
@@ -46,7 +46,7 @@ const Products = () => {
       downloads: [
         {
           label: "Veterinary Health Valuation Form",
-          url: "/resources/veterinary-health-valuation-form.pdf"
+          url: "/Downloads/Livestock Vetenary.pdf"
         }
       ]
     },
@@ -97,11 +97,11 @@ const Products = () => {
       downloads: [
         {
           label: "Pension Application Form",
-          url: "/dist/Downloads/pension application form.pdf"
+          url: "/Downloads/pension_application_form.pdf"
         },
         {
           label: "Pension Brochure",
-          url: "/dist/Downloads/pension brochure.pdf"
+          url: "/Downloads/pension_brochure.pdf"
         }
       ]
     },
@@ -228,7 +228,7 @@ const Products = () => {
       ],
       download: {
         label: "Contractors All Risk Proposal",
-        url: "/dist/Downloads/CONTRACTORS ALL RISK PROPOSAL FORM.pdf"
+        url: "/Downloads/CONTRACTORS ALL RISK PROPOSAL FORM.pdf"
       }
     },
     {
@@ -319,6 +319,7 @@ const Products = () => {
                               src={imageSrc}
                               alt={product.title + " image"}
                               className="w-full h-56 object-cover rounded-xl mb-6 border-2 border-primary"
+                              loading="lazy"
                             />
                           )}
                           <div className="w-fit p-3 rounded-full bg-gray-100 mb-4">
@@ -385,12 +386,14 @@ const Products = () => {
                         <div className="mb-4">
                           <div className="grid grid-cols-2 gap-4 mb-2">
                             {product.gallery?.map((img, i) => (
-                              <img key={i} src={"/dist" + img} alt={`Plant machinery ${i+1}`} className="rounded-xl border h-40 w-full object-cover" />
+                              <img key={i} src={"/pictures/" + img.replace("/pictures/", "")} alt={`Plant machinery ${i+1}`} className="rounded-xl border h-40 w-full object-cover" loading="lazy" />
                             ))}
                           </div>
-                          <a href={product.download.url} download className="block text-blue-600 underline text-sm font-medium mt-2">
-                            {product.download.label}
-                          </a>
+                          {product.download && (
+                            <a href={product.download?.url} download className="block text-blue-600 underline text-sm font-medium mt-2">
+                              {product.download?.label}
+                            </a>
+                          )}
                         </div>
                       )}
                       <Button variant="outline" className="w-full" asChild>

@@ -1,17 +1,38 @@
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Upload, Phone, Mail, MessageSquare } from "lucide-react";
-import { useState } from "react";
-import { Accordion, AccordionItem } from "@/components/ui/accordion";
-import { CheckCircle, UploadCloud, FileDown } from "lucide-react";
-import { Shield, Home, Car, Briefcase, Users, FileText, Building2, HeartPulse, Globe, PiggyBank, Hammer, Wrench, MonitorSmartphone, Plane, UserCheck, Layers, Coins } from "lucide-react";
-import { quotesService } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import React, { useState } from "react";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { Label } from "../components/ui/label";
+import { Accordion, AccordionItem } from "../components/ui/accordion";
+import { quotesService } from "../lib/api";
+import { toast } from "../hooks/use-toast";
+import {
+	Shield,
+	Home,
+	Building2,
+	Car,
+	Briefcase,
+	Users,
+	UserCheck,
+	FileText,
+	HeartPulse,
+	Layers,
+	Plane,
+	PiggyBank,
+	Coins,
+	Hammer,
+	Wrench,
+	MonitorSmartphone,
+	CheckCircle,
+	Upload,
+	Phone,
+	Mail,
+	MessageSquare,
+	FileDown
+} from "lucide-react";
 
 const insuranceIcons = {
 	"Burglary / Theft Insurance": <Shield className="inline-block mr-2 text-accent" />,
@@ -47,7 +68,7 @@ const insuranceIcons = {
 const insuranceProducts = [
 	{
 		title: "Burglary / Theft Insurance",
-		form: "/forms/burglary_proposal.pdf",
+		form: "/Downloads/burglary_proposal.pdf",
 		attachments: [
 			"Asset register",
 			"Valuation reports",
@@ -61,7 +82,7 @@ const insuranceProducts = [
 	},
 	{
 		title: "All Risks Insurance",
-		form: "/forms/all_risks_proposal.pdf",
+		form: "/Downloads/all_risks_proposal.pdf",
 		attachments: [
 			"Asset register",
 			"ID copy",

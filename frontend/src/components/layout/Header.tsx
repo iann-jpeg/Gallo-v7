@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Phone, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +27,7 @@ const Header = () => {
         <div className="flex justify-between items-center py-4">
           <Link to="/" className="flex items-center space-x-2" style={{ alignItems: 'center' }}>
             <img
-              src={"/dist/galloways logo.jpg"}
+              src={"/galloways logo.jpg"}
               alt="Galloways Logo"
               className="h-44 w-44 object-cover rounded-full mr-8 drop-shadow-lg bg-transparent border-4 border-white"
               style={{ background: 'transparent', mixBlendMode: 'multiply', marginBottom: '2.5rem' }}
