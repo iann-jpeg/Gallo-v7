@@ -25,7 +25,7 @@ $command = $argv[1] ?? '--help';
 switch ($command) {
     case '--version':
     case '-V':
-        echo "Laravel Framework 9.x (Custom API)\n";
+        echo "Laravel Framework 10.x (Custom API)\n";
         echo "PHP " . PHP_VERSION . "\n";
         break;
         

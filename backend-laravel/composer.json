@@ -2,8 +2,8 @@
   "name": "galloways/backend-laravel",
   "description": "Laravel-like API scaffold for Galloways admin endpoints (PostgreSQL ready)",
   "require": {
-    "php": "^8.1",
-    "laravel/framework": "^9.0",
+    "php": "^8.2",
+    "laravel/framework": "^10.0",
     "tymon/jwt-auth": "^2.0",
     "vlucas/phpdotenv": "^5.5"
   },
