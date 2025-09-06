@@ -3,11 +3,11 @@
         'name' => 'galloways/backend-laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8fa93dbe1a0a86a66eea01d15f400306324317ef',
+        'reference' => 'fb74660f85db56ac254d7083279aa428d593ed19',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'dev' => false,
+        'dev' => true,
     ),
     'versions' => array(
         'brick/math' => array(
@@ -85,7 +85,7 @@
         'galloways/backend-laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8fa93dbe1a0a86a66eea01d15f400306324317ef',
+            'reference' => 'fb74660f85db56ac254d7083279aa428d593ed19',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
