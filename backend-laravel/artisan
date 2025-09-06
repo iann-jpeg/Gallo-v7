@@ -1,0 +1,3 @@
+<?php
+// lightweight placeholder to satisfy cPanel expectations; real artisan requires composer install
+echo "Artisan placeholder. Run composer install to enable artisan.\n";

@@ -1,0 +1,20 @@
+{
+  "name": "galloways/backend-laravel",
+  "description": "Laravel-like API scaffold for Galloways admin endpoints (PostgreSQL ready)",
+  "require": {
+    "php": "^8.1",
+    "laravel/framework": "^10.0",
+    "tymon/jwt-auth": "^1.0",
+    "vlucas/phpdotenv": "^5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ]
+  }
+}

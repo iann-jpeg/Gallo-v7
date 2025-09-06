@@ -1,0 +1,14 @@
+# Sample .htaccess for public_html/api/
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /api/
+
+    # Redirect all requests to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Optionally increase PHP limits (if allowed by host)
+# php_value upload_max_filesize 20M
+# php_value post_max_size 25M
