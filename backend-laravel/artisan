@@ -25,7 +25,7 @@ $command = $argv[1] ?? '--help';
 switch ($command) {
     case '--version':
     case '-V':
-        echo "Laravel Framework 10.x (Custom API)\n";
+        echo "Laravel Framework 9.x (Custom API)\n";
         echo "PHP " . PHP_VERSION . "\n";
         break;
         
@@ -42,6 +42,7 @@ switch ($command) {
         echo "  key:generate             Generate app key\n";
         echo "  migrate                  Run migrations\n";
         echo "  db:seed                  Seed database\n";
+        echo "  storage:link             Create storage symlink\n";
         break;
         
     case 'serve':
@@ -66,6 +67,32 @@ switch ($command) {
     case 'db:seed':
         echo "Seeding database...\n";
         echo "Database seeding completed.\n";
+        break;
+        
+    case 'storage:link':
+        $publicPath = __DIR__ . '/public/storage';
+        $storagePath = __DIR__ . '/storage/app/public';
+        
+        // Create storage directory if it doesn't exist
+        if (!is_dir(dirname($storagePath))) {
+            mkdir(dirname($storagePath), 0755, true);
+        }
+        if (!is_dir($storagePath)) {
+            mkdir($storagePath, 0755, true);
+        }
+        
+        // Remove existing symlink if it exists
+        if (is_link($publicPath)) {
+            unlink($publicPath);
+        }
+        
+        // Create the symlink
+        if (symlink($storagePath, $publicPath)) {
+            echo "The [public/storage] directory has been linked.\n";
+        } else {
+            echo "Failed to create storage symlink.\n";
+            exit(1);
+        }
         break;
         
     default:
