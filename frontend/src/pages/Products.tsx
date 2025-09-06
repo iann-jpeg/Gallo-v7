@@ -3,6 +3,7 @@ import Footer from "../components/layout/Footer";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Link } from "react-router-dom";
+import { getPictureUrl, getDownloadUrl } from "../lib/assets";
 import { 
   Heart, 
   Car, 
@@ -18,16 +19,16 @@ import {
 const Products = () => {
   // Map product titles to image filenames
   const productImages = {
-    "Pension": "/pictures/pension.jpg", // Add pension.jpg to public/pictures/
-    "Health Insurance": "/pictures/health.jpg",
-    "Medical Insurance": "/pictures/medical.jpg",
-    "Motor Insurance": "/pictures/motor.jpg",
-    "Life Insurance": "/pictures/life.jpg",
-    "Property Insurance": "/pictures/property.jpg",
-    "Travel Insurance(Inbound & Outbound)": "/pictures/ndege.jpg",
-    "Technology Safety Nets": "/pictures/technology.jpg",
-    "Cyber Crime Insurance": "/pictures/cybercrime.jpg",
-    "Corporate Packages": "/pictures/corporate.jpg",
+    "Pension": "pension.jpg",
+    "Health Insurance": "health.jpg",
+    "Medical Insurance": "medical.jpg",
+    "Motor Insurance": "motor.jpg",
+    "Life Insurance": "life.jpg",
+    "Property Insurance": "property.jpg",
+    "Travel Insurance(Inbound & Outbound)": "ndege.jpg",
+    "Technology Safety Nets": "technology.jpg",
+    "Cyber Crime Insurance": "cybercrime.jpg",
+    "Corporate Packages": "corporate.jpg",
   };
 
   const products = [
@@ -46,7 +47,7 @@ const Products = () => {
       downloads: [
         {
           label: "Veterinary Health Valuation Form",
-          url: "/Downloads/Livestock Vetenary.pdf"
+          url: getDownloadUrl("Livestock Vetenary.pdf")
         }
       ]
     },
@@ -97,11 +98,11 @@ const Products = () => {
       downloads: [
         {
           label: "Pension Application Form",
-          url: "/Downloads/pension_application_form.pdf"
+          url: getDownloadUrl("pension_application_form.pdf")
         },
         {
           label: "Pension Brochure",
-          url: "/Downloads/pension_brochure.pdf"
+          url: getDownloadUrl("pension_brochure.pdf")
         }
       ]
     },
@@ -221,14 +222,14 @@ const Products = () => {
       ],
       color: "text-orange-600",
       gallery: [
-        "/pictures/plant1.jpg",
-        "/pictures/plant2.jpg",
-        "/pictures/plant3.jpg",
-        "/pictures/plant4.jpg"
+        getPictureUrl("plant1.jpg"),
+        getPictureUrl("plant2.jpg"),
+        getPictureUrl("plant3.jpg"),
+        getPictureUrl("plant4.jpg")
       ],
       download: {
         label: "Contractors All Risk Proposal",
-        url: "/Downloads/CONTRACTORS ALL RISK PROPOSAL FORM.pdf"
+        url: getDownloadUrl("CONTRACTORS ALL RISK PROPOSAL FORM.pdf")
       }
     },
     {
@@ -287,7 +288,7 @@ const Products = () => {
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product, index) => {
                 const IconComponent = product.icon;
-                const imageSrc = productImages[product.title];
+                const imageSrc = productImages[product.title] ? getPictureUrl(productImages[product.title]) : null;
                 if (product.title === "Pension") {
                   return (
                     <>

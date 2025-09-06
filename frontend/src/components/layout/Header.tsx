@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import { Button } from "../ui/button";
+import { getMainLogoUrl } from "../../lib/assets";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,14 +26,13 @@ const Header = () => {
       {/* Main navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <Link to="/" className="flex items-center space-x-2" style={{ alignItems: 'center' }}>
+          <Link to="/" className="flex items-center space-x-2">
             <img
-              src={"/galloways-logo.jpg"}
+              src={getMainLogoUrl()}
               alt="Galloways Logo"
               className="h-44 w-44 object-cover rounded-full mr-8 drop-shadow-lg bg-transparent border-4 border-white"
-              style={{ background: 'transparent', mixBlendMode: 'multiply', marginBottom: '2.5rem' }}
             />
-            <div className="hidden lg:block text-2xl font-bold text-primary whitespace-nowrap overflow-hidden text-ellipsis" style={{ maxWidth: '32rem' }}>
+            <div className="hidden lg:block text-2xl font-bold text-primary whitespace-nowrap overflow-hidden text-ellipsis max-w-lg">
               Galloways Insurance Agencies & Consultancy Services
             </div>
             <div className="block lg:hidden text-xl font-bold text-primary">
