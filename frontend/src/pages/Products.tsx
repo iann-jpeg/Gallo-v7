@@ -280,10 +280,9 @@ const Products = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
             {/* Industries background image */}
             <img
-              src={"/dist/pictures/industries.jpg"}
+              src={getPictureUrl("industries.jpg")}
               alt="Industries Background"
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 opacity-10 pointer-events-none select-none z-0"
-              style={{ objectFit: 'contain' }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 opacity-10 pointer-events-none select-none z-0 object-contain"
             />
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product, index) => {
