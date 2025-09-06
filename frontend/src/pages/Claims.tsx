@@ -234,11 +234,13 @@ export default function Claims() {
                   <div>
                     <Label htmlFor="claimType">Claim Type *</Label>
                     <select 
+                      id="claimType"
                       name="claimType"
                       value={formData.claimType}
                       onChange={handleInputChange}
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                       required
+                      aria-label="Claim Type"
                     >
                       <option value="">Select claim type</option>
                       <option value="Motor">Motor</option>
@@ -585,7 +587,7 @@ export default function Claims() {
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2"><Car className="inline-block mr-2 text-accent" />Claim Form Motor (Amended)</h4>
-              <a href={getDownloadUrl("Claim_Form_Motor_-_Ammended.pdf")} className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href={getDownloadUrl("Claim_Form_Motor_-_Amended.pdf")} className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Windscreen & Window Damage Claim Form"]}Windscreen & Window Damage Claim Form</h4>
@@ -613,7 +615,7 @@ export default function Claims() {
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Workmen's Compensation Accident Claim Form"]}Workmen's Compensation Accident Claim Form</h4>
-              <a href={getDownloadUrl("Workmen's_Compenstion_Accident_Claim_Form_-_ammended.pdf")} className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
+              <a href={getDownloadUrl("Workmen's_Compenstion_Accident_Claim_Form_-_amended.pdf")} className="inline-block mb-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90" download>📄 Download Form</a>
             </div>
             <div className="p-6 bg-card rounded-lg shadow">
               <h4 className="text-xl font-bold mb-2">{claimIcons["Claim Documentation Guide 2012"]}Claim Documentation Guide 2012</h4>
