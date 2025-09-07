@@ -104,7 +104,8 @@ export function AdminClaims() {
       };
 
       if (result && result.success) {
-        setClaims(result.data?.claims || result.data || []);
+        const claimsData = result.data?.claims || [];
+        setClaims(claimsData);
         setTotalPages(result.data?.pagination?.totalPages || 1);
       } else {
         console.error('API returned error:', result);
