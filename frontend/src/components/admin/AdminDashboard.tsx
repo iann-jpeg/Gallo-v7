@@ -92,20 +92,40 @@ export function AdminDashboard() {
         dashboardService.getActivities()
       ]);
 
-      if (metricsRes.success) {
+      if (metricsRes && metricsRes.success) {
         setStats(metricsRes.data);
         setConnectionStatus('connected');
       } else {
-        throw new Error(metricsRes.error || 'Failed to fetch metrics');
+        // Set default empty stats if API fails
+        setStats({
+          totalUsers: 0,
+          totalClaims: 0,
+          totalConsultations: 0,
+          totalPayments: 0,
+          totalQuotes: 0,
+          totalOutsourcingRequests: 0,
+          totalDiasporaRequests: 0,
+          totalRevenue: 0,
+          monthlyRevenue: 0,
+          conversionRate: 0,
+          userGrowthRate: 0,
+          claimsGrowthRate: 0,
+          quoteGrowthRate: 0,
+          revenueGrowthRate: 0,
+          lastUpdated: new Date().toISOString()
+        });
+        setConnectionStatus('disconnected');
       }
 
-      if (activitiesRes.success) {
+      if (activitiesRes && activitiesRes.success) {
         setRecentActivity(activitiesRes.data || []);
+      } else {
+        setRecentActivity([]);
       }
 
       setLastUpdated(new Date());
       
-      if (showToast) {
+      if (showToast && metricsRes && metricsRes.success) {
         toastHook({
           title: "Dashboard Updated",
           description: `Data refreshed at ${new Date().toLocaleTimeString()}`,
@@ -114,11 +134,34 @@ export function AdminDashboard() {
     } catch (error: any) {
       console.error('Dashboard fetch error:', error);
       setConnectionStatus('disconnected');
-      toastHook({
-        title: "Connection Error",
-        description: error.message || "Failed to fetch dashboard data",
-        variant: "destructive",
+      
+      // Set empty stats on error but don't crash
+      setStats({
+        totalUsers: 0,
+        totalClaims: 0,
+        totalConsultations: 0,
+        totalPayments: 0,
+        totalQuotes: 0,
+        totalOutsourcingRequests: 0,
+        totalDiasporaRequests: 0,
+        totalRevenue: 0,
+        monthlyRevenue: 0,
+        conversionRate: 0,
+        userGrowthRate: 0,
+        claimsGrowthRate: 0,
+        quoteGrowthRate: 0,
+        revenueGrowthRate: 0,
+        lastUpdated: new Date().toISOString()
       });
+      setRecentActivity([]);
+      
+      if (showToast) {
+        toastHook({
+          title: "Connection Error",
+          description: "Backend not connected - showing empty dashboard",
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -130,24 +173,24 @@ export function AdminDashboard() {
     const updateType = payload.eventType || 'UPDATE';
     const table = payload.table || 'Unknown';
     
-    toast.info(`Real-time update: ${updateType} in ${table}`, {
-      duration: 3000,
+    toastHook({
+      title: "Real-time Update",
+      description: `${updateType} in ${table}`,
     });
 
     fetchDashboardData(false);
-  }, [fetchDashboardData]);
+  }, [fetchDashboardData, toastHook]);
 
   const setupRealTimeSubscriptions = useCallback(() => {
     if (!realtimeEnabled) return;
 
     try {
-      // Wrap real-time setup in error handling
+      // Attempt to setup real-time subscriptions
       const channels = adminService.subscribeToRealTimeUpdates((payload: any) => {
         try {
           handleRealTimeUpdate(payload);
         } catch (error) {
           console.warn('Real-time update error:', error);
-          // Continue without breaking the app
         }
       });
       
@@ -160,7 +203,9 @@ export function AdminDashboard() {
           description: "Dashboard will update automatically",
         });
       } else {
-        throw new Error('Failed to create real-time channels');
+        console.log('Real-time not available, falling back to polling');
+        setRealtimeEnabled(false);
+        setAutoRefresh(true);
       }
     } catch (error) {
       console.error('Real-time setup error:', error);
@@ -198,7 +243,11 @@ export function AdminDashboard() {
 
     return () => {
       if (realtimeChannels.current.length > 0) {
-        adminService.unsubscribeFromRealTimeUpdates(realtimeChannels.current);
+        try {
+          adminService.unsubscribeFromRealTimeUpdates(realtimeChannels.current);
+        } catch (error) {
+          console.warn('Error unsubscribing from real-time updates:', error);
+        }
       }
       if (refreshTimer.current) {
         clearInterval(refreshTimer.current);
@@ -221,8 +270,12 @@ export function AdminDashboard() {
       setupRealTimeSubscriptions();
     } else {
       if (realtimeChannels.current.length > 0) {
-        adminService.unsubscribeFromRealTimeUpdates(realtimeChannels.current);
-        realtimeChannels.current = [];
+        try {
+          adminService.unsubscribeFromRealTimeUpdates(realtimeChannels.current);
+          realtimeChannels.current = [];
+        } catch (error) {
+          console.warn('Error cleaning up real-time subscriptions:', error);
+        }
       }
     }
   }, [realtimeEnabled, setupRealTimeSubscriptions]);
@@ -233,7 +286,7 @@ export function AdminDashboard() {
         dateFrom: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
       });
 
-      if (result.success) {
+      if (result && result.success) {
         const csvContent = [
           ['Type', 'Description', 'Entity Type', 'Created At'],
           ...(result.data || []).map((activity: any) => [
@@ -258,11 +311,13 @@ export function AdminDashboard() {
           title: "Export Complete",
           description: "Dashboard data exported successfully",
         });
+      } else {
+        throw new Error('Export failed - no data available');
       }
-    } catch (error) {
+    } catch (error: any) {
       toastHook({
         title: "Export Failed",
-        description: "Could not export dashboard data",
+        description: error.message || "Could not export dashboard data",
         variant: "destructive",
       });
     }

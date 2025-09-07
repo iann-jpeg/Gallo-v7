@@ -11,7 +11,7 @@ import { paymentsService } from "@/lib/api";
 
 export default function Diaspora() {
   return (
-    <div className="min-h-screen bg-background">
+  <div className="h-screen bg-background">
       <Header />
       <main className="pt-20">
         {/* Hero Section */}

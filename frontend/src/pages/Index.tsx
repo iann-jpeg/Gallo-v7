@@ -7,7 +7,7 @@ import Footer from "../components/layout/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+  <div className="h-screen">
       <Header />
       <main>
         <HeroSection />

@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 
 const PaymentFailure = () => {
   return (
-    <div className="min-h-screen">
+  <div className="h-screen">
       <Header />
       <main className="py-16 bg-secondary/30">
         <div className="max-w-2xl mx-auto px-4">

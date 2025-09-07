@@ -115,7 +115,7 @@ export default function Claims() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-background">
+  <div className="h-screen bg-background">
         <Header />
         <main className="pt-20 py-16">
           <div className="max-w-2xl mx-auto px-4 text-center">
@@ -139,7 +139,7 @@ export default function Claims() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+  <div className="h-screen bg-background">
       <Header />
       <main className="pt-20">
         {/* Hero Section */}

@@ -247,7 +247,7 @@ const Products = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+  <div className="h-screen">
       <Header />
       <main>
         {/* Hero Section */}

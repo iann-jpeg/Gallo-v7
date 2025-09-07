@@ -6,9 +6,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Search, Eye, Download, Filter, FileText, Calendar, DollarSign, User, RefreshCw } from 'lucide-react';
-import { adminRealtimeService } from '@/lib/admin-realtime';
 import { adminService } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
+
+interface Document {
+  id: number;
+  originalName: string;
+  size: number;
+  createdAt: string;
+  path?: string;
+  mimeType?: string;
+}
 
 interface Claim {
   id: number;
@@ -22,7 +30,7 @@ interface Claim {
   email: string;
   phone: string;
   status: string;
-  documents: string[];
+  documents: Document[];
   createdAt: string;
   updatedAt: string;
   user?: {
@@ -61,46 +69,35 @@ export function AdminClaims() {
   }, [toast]);
 
   useEffect(() => {
-    // Connect to real-time service
-    adminRealtimeService.connect();
-
-    // Subscribe to claims updates
-    adminRealtimeService.subscribe('claims-data', handleClaimsData);
-    adminRealtimeService.subscribe('claim-update', handleClaimUpdate);
-
-    // Request initial data
-    adminRealtimeService.requestClaimsData();
-
-    return () => {
-      adminRealtimeService.unsubscribe('claims-data', handleClaimsData);
-      adminRealtimeService.unsubscribe('claim-update', handleClaimUpdate);
-    };
-  }, [handleClaimsData, handleClaimUpdate]);
+    fetchClaims();
+  }, [currentPage, statusFilter, searchTerm]);
 
   const fetchClaims = async () => {
     try {
       setLoading(true);
       
-      // Direct API call instead of relying on real-time service
+      // Direct API call to backend
       const filterStatus = statusFilter === "all" ? undefined : statusFilter;
       const result = await adminService.getAllClaims(currentPage, 20, filterStatus, searchTerm || undefined);
 
-      if (result.success) {
-        setClaims(result.data.claims || []);
-        setTotalPages(result.data.pagination?.totalPages || 1);
-        
-        // Also request real-time updates
-        adminRealtimeService.requestClaimsData();
+      if (result && result.success) {
+        setClaims(result.data?.claims || result.data || []);
+        setTotalPages(result.data?.pagination?.totalPages || 1);
       } else {
         console.error('API returned error:', result);
         setClaims([]);
+        toast({
+          title: "API Error",
+          description: result?.message || "Backend not connected - no data available",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Failed to fetch claims:', error);
       setClaims([]);
       toast({
-        title: "Error",
-        description: "Failed to fetch claims data.",
+        title: "Connection Error",
+        description: "Backend not available - cannot fetch claims data",
         variant: "destructive",
       });
     } finally {

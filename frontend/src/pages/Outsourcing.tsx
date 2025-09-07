@@ -94,7 +94,7 @@ const Outsourcing = () => {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen">
+  <div className="h-screen">
         <Header />
         <main className="py-16">
           <div className="max-w-2xl mx-auto px-4 text-center">
@@ -121,7 +121,7 @@ const Outsourcing = () => {
   }
 
   return (
-    <div className="min-h-screen">
+  <div className="h-screen">
       <Header />
       <main className="py-16 bg-secondary/30">
         <div className="max-w-4xl mx-auto px-4">

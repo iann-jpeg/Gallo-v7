@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import api, { authService, dashboardService } from "@/lib/api";
+import api, { authService, dashboardService, adminService } from "@/lib/api";
 
 interface Profile {
   id: string;
@@ -223,7 +223,7 @@ const Resources = () => {
         throw new Error('No authentication token found');
       }
 
-      const response = await dashboardService.exportPDF();
+      const response = await adminService.exportData('pdf', { format: 'pdf' });
 
       if (!response.success) {
         throw new Error('Failed to generate PDF report');
@@ -290,7 +290,7 @@ Generated on: ${new Date().toLocaleString()}
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
+  <div className="h-screen bg-background">
         <Header />
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
@@ -371,7 +371,7 @@ Generated on: ${new Date().toLocaleString()}
   );
 
   return (
-    <div className="min-h-screen bg-background">
+  <div className="h-screen bg-background">
       <Header />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <section className="mb-12">

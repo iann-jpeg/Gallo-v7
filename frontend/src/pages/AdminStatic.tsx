@@ -342,7 +342,7 @@ export default function StaticAdmin() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+  <div className="h-screen bg-background">
       <div className="flex">
         <AdminSidebar 
           activeTab={activeTab} 

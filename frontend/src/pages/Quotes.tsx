@@ -1025,7 +1025,7 @@ const insuranceProductOptions = [
 	};
 
 	return (
-		<div className="min-h-screen bg-background">
+	<div className="h-screen bg-background">
 			<Header />
 			<main className="pt-20">
 				<div className="max-w-5xl mx-auto mt-8">

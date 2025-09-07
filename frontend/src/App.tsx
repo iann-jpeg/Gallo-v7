@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 import { setupDatabase } from "./lib/database-setup";
-import { testSupabaseConnection } from "./lib/api";
+import api from "./lib/api";
 
 // Lazy load components for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -42,7 +42,7 @@ function App() {
         
         // Test Supabase connection first
         console.log('🚀 Testing Supabase connection...');
-        await testSupabaseConnection();
+        await api.testSupabaseConnection();
         
         const result = await setupDatabase();
         if (result.success) {

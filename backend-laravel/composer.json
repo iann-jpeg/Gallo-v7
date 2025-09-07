@@ -3,8 +3,8 @@
   "description": "Laravel-like API scaffold for Galloways admin endpoints (PostgreSQL ready)",
   "require": {
     "php": "^8.1",
-    "laravel/framework": "^10.0",
-    "tymon/jwt-auth": "^1.0",
+  "laravel/framework": "10.0.*",
+  "tymon/jwt-auth": "^1.2",
     "vlucas/phpdotenv": "^5.5"
   },
   "autoload": {
