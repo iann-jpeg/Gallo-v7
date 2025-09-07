@@ -26,19 +26,7 @@ export default defineConfig(({ mode }) => ({
           // Vendor chunks for better caching
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-query': ['@tanstack/react-query'],
-          'vendor-ui': ['lucide-react'],
-          
-          // Admin components - loaded only when accessing admin
-          'admin': [
-            './src/pages/Admin',
-            './src/pages/Resources'
-          ],
-          
-          // Forms and components
-          'forms': [
-            './src/components/forms/ConsultationBookingForm', 
-            './src/components/forms/BrochureDownload'
-          ]
+          'vendor-ui': ['lucide-react']
         }
       }
     },
