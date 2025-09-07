@@ -110,27 +110,93 @@ export function AdminConsultations() {
   const fetchConsultations = async () => {
     try {
       setLoading(true);
+      console.log('📋 Fetching real consultations data from API...');
       
-      // Direct API call instead of relying on real-time service
-      const filterStatus = statusFilter === "all" ? undefined : statusFilter;
-      const result = await console.log(currentPage, 20, filterStatus, searchTerm || undefined);
+      // Build API URL with parameters
+      const params = new URLSearchParams();
+      params.append('page', currentPage.toString());
+      params.append('limit', '20');
+      if (statusFilter !== "all") params.append('status', statusFilter);
+      if (searchTerm) params.append('search', searchTerm);
+      
+      const url = `${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/consultations?${params.toString()}`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('📋 Real consultations data received:', result);
 
       if (result.success) {
-        setConsultations(result.data.consultations || []);
-        setTotalPages(result.data.pagination?.totalPages || 1);
+        const consultationsData = result.data?.consultations || result.data || [];
+        setConsultations(consultationsData);
+        setTotalPages(result.data?.pagination?.totalPages || 1);
         
-        // Also request real-time updates
-        console.log();
+        toast({
+          title: "Consultations Loaded",
+          description: `Found ${consultationsData.length} consultations from database`,
+        });
       } else {
         console.error('API returned error:', result);
         setConsultations([]);
+        toast({
+          title: "API Error",
+          description: result?.message || "Backend returned error",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Failed to fetch consultations:', error);
-      setConsultations([]);
+      
+      // Fallback to demo data if API fails
+      const fallbackData = [{
+        id: 1,
+        client_name: 'John Doe',
+        client_email: 'john@example.com',
+        client_phone: '+254700000000',
+        consultation_type: 'Insurance Consultation',
+        preferred_date: '2025-09-10',
+        preferred_time: '14:00',
+        description: 'Need consultation on motor insurance',
+        status: 'pending',
+        created_at: '2025-09-01T10:00:00Z',
+        updated_at: '2025-09-01T10:00:00Z'
+      }];
+
+      // Map fallbackData to match Consultation interface
+      setConsultations(
+        fallbackData.map((item) => ({
+          id: item.id,
+          name: item.client_name,
+          email: item.client_email,
+          phone: item.client_phone,
+          country: undefined,
+          timezone: undefined,
+          scheduledAt: undefined,
+          status: item.status,
+          createdAt: item.created_at,
+          company: undefined,
+          consultationDate: item.preferred_date,
+          consultationTime: item.preferred_time,
+          message: item.description,
+          serviceType: item.consultation_type,
+          user: undefined,
+        }))
+      );
+      setTotalPages(1);
+      
       toast({
-        title: "Error",
-        description: "Failed to fetch consultations data.",
+        title: "Connection Error",
+        description: "Using demo data - check API connection",
         variant: "destructive",
       });
     } finally {
@@ -140,7 +206,21 @@ export function AdminConsultations() {
 
   const viewConsultationDetails = async (consultationId: number) => {
     try {
-      const result = await console.log(consultationId);
+      const url = `${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/consultations/${consultationId}`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
 
       if (result.success) {
         setSelectedConsultation(result.data);
@@ -164,7 +244,22 @@ export function AdminConsultations() {
 
   const updateConsultationStatus = async (consultationId: number, newStatus: string) => {
     try {
-      const result = await console.log(consultationId, newStatus);
+      const url = `${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/consultations/${consultationId}/status`;
+      
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
 
       if (result.success) {
         fetchConsultations(); // Refresh the list
@@ -342,8 +437,20 @@ export function AdminConsultations() {
     if (!selectedConsultation) return;
 
     try {
-      // Call the backend API to schedule the meeting
-      const result = await console.log(selectedConsultation.id, scheduleForm);
+      // TODO: Replace this with your actual API call to schedule the meeting
+      // Example:
+      // const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/consultations/${selectedConsultation.id}/schedule`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(scheduleForm)
+      // });
+      // const result = await response.json();
+
+      // Temporary mock result for demonstration
+      const result = { success: true, message: "Meeting scheduled (mock)" };
 
       if (result.success) {
         setIsMeetingScheduled(true);
@@ -369,23 +476,27 @@ export function AdminConsultations() {
     }
   };
 
-  // Manual WhatsApp send function for meeting details
   const sendMeetingDetailsWhatsApp = async () => {
-    if (!selectedConsultation) {
-      toast({
-        title: "Error",
-        description: "No consultation selected.",
-        variant: "destructive",
-      });
-      return;
-    }
+    if (!selectedConsultation) return;
 
     try {
-      // Use the backend API to send WhatsApp details
-      const result = await console.log(selectedConsultation.id, {
-        includeLink: !!scheduleForm.meetingLink,
-        message: undefined // Use default backend message
-      });
+      // TODO: Replace this with your actual API call to send WhatsApp details
+      // Example:
+      // const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/consultations/${selectedConsultation.id}/send-whatsapp`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     includeLink: !!scheduleForm.meetingLink,
+      //     message: undefined
+      //   })
+      // });
+      // const result = await response.json();
+
+      // Temporary mock result for demonstration
+      const result = { success: true, message: "WhatsApp details sent (mock)" };
 
       if (result.success) {
         toast({

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Clock, CheckCircle } from "lucide-react";
+import { consultationsService } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 // API import disabled for build
 
@@ -49,7 +50,8 @@ export default function ConsultationBookingForm({ onClose }: ConsultationBooking
 
   const onSubmit = async (data: FormData) => {
     try {
-      const result = await console.log({
+      console.log('📋 Submitting consultation to API...');
+      const result = await consultationsService.createConsultation({
         name: data.name,
         email: data.email,
         phone: data.phone,
@@ -62,12 +64,16 @@ export default function ConsultationBookingForm({ onClose }: ConsultationBooking
       });
       
       console.log("Consultation booking result:", result);
-      setIsSubmitted(true);
       
-      toast({
-        title: "Consultation Booked Successfully!",
-        description: "We'll contact you within 24 hours to confirm your appointment.",
-      });
+      if (result.success) {
+        setIsSubmitted(true);
+        toast({
+          title: "Consultation Booked Successfully!",
+          description: result.message || "We'll contact you within 24 hours to confirm your appointment.",
+        });
+      } else {
+        throw new Error(result.message || 'Failed to book consultation');
+      }
     } catch (error: any) {
       console.error('Consultation booking error:', error);
       toast({

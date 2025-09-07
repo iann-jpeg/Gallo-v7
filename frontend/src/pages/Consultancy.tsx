@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ConsultationBookingForm from "@/components/forms/ConsultationBookingForm";
 import BrochureDownload from "@/components/forms/BrochureDownload";
-// API import disabled for build
+import { consultationsService } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Consultancy() {
@@ -65,7 +65,7 @@ export default function Consultancy() {
     }
   };
 
-  const handleProjectConsultationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleProjectConsultationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const formData = new FormData(e.target as HTMLFormElement);
@@ -78,21 +78,29 @@ export default function Consultancy() {
         serviceType: 'project-based-consultation',
         status: 'PENDING'
       };
-      await console.log({
+      
+      console.log('📋 Submitting project consultation to API...');
+      const result = await consultationsService.createConsultation({
         ...projectData,
-        type: 'project-consultation',
-        amount: 0,
+        message: projectData.projectDescription,
+        consultationDate: '',
+        consultationTime: ''
       });
-      toast({
-        title: "Project Consultation Request Submitted",
-        description: "Thank you for your request. Our team will review your project requirements and get back to you within 24-48 hours with a tailored proposal.",
-      });
-      (e.target as HTMLFormElement).reset();
+      
+      if (result.success) {
+        toast({
+          title: "Project Consultation Request Submitted",
+          description: result.message || "We'll review your project requirements and get back to you with a customized proposal within 2 business days.",
+        });
+        (e.target as HTMLFormElement).reset();
+      } else {
+        throw new Error(result.message || 'Failed to submit consultation request');
+      }
     } catch (error: any) {
-      console.error('Project consultation error:', error);
+      console.error('Project consultation submission error:', error);
       toast({
-        title: "Submission Error",
-        description: error.message || "Failed to submit project consultation request. Please try again.",
+        title: "Error",
+        description: error.message || "Failed to submit consultation request. Please try again.",
         variant: "destructive",
       });
     }

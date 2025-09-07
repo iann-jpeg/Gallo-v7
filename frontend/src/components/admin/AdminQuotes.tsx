@@ -95,14 +95,36 @@ export function AdminQuotes() {
   const fetchQuotes = async () => {
     try {
       setLoading(true);
+      console.log('📋 Fetching real quotes data from API...');
       
-      const filterStatus = statusFilter === "all" ? undefined : statusFilter;
-      const result = await console.log(currentPage, 20, filterStatus, searchTerm || undefined);
+      // Build API URL with parameters
+      const params = new URLSearchParams();
+      params.append('page', currentPage.toString());
+      params.append('limit', '20');
+      if (statusFilter !== "all") params.append('status', statusFilter);
+      if (searchTerm) params.append('search', searchTerm);
+      
+      const url = `${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/quotes?${params.toString()}`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('📋 Real quotes data received:', result);
 
       if (result.success) {
-        const quotesData = result.data.quotes || [];
+        const quotesData = result.data?.quotes || result.data || [];
         setQuotes(quotesData);
-        setTotalPages(result.data.pagination?.totalPages || 1);
+        setTotalPages(result.data?.pagination?.totalPages || 1);
         
         // Calculate stats
         const statsData = {
@@ -113,21 +135,78 @@ export function AdminQuotes() {
           draft: quotesData.filter((q: Quote) => q.status === 'draft').length,
         };
         setStats(statsData);
+        
+        toast({
+          title: "Quotes Loaded",
+          description: `Found ${quotesData.length} quotes from database`,
+        });
       } else {
         console.error('API returned error:', result);
-        setQuotes([]);
+        
+        // Fallback to demo data if API fails
+        const fallbackData = [{
+          id: 1,
+          client_name: 'Jane Smith',
+          client_email: 'jane@example.com',
+          client_phone: '+254700000001',
+          insurance_type: 'Motor Insurance',
+          coverage_amount: '1000000',
+          premium_estimate: '45000',
+          status: 'pending',
+          created_at: '2025-09-01T10:00:00Z',
+          updated_at: '2025-09-01T10:00:00Z'
+        }];
+        
+        setQuotes(fallbackData);
+        setTotalPages(1);
+        
+        const statsData = {
+          total: fallbackData.length,
+          pending: fallbackData.filter((q: Quote) => q.status === 'pending').length,
+          approved: fallbackData.filter((q: Quote) => q.status === 'approved').length,
+          rejected: fallbackData.filter((q: Quote) => q.status === 'rejected').length,
+          draft: fallbackData.filter((q: Quote) => q.status === 'draft').length,
+        };
+        setStats(statsData);
+        
         toast({
-          title: "Error",
-          description: "Failed to fetch quotes data.",
+          title: "Connection Error",
+          description: "Using demo data - check API connection",
           variant: "destructive",
         });
       }
     } catch (error) {
       console.error('Failed to fetch quotes:', error);
-      setQuotes([]);
+      
+      // Fallback to demo data if API fails
+      const fallbackData = [{
+        id: 1,
+        client_name: 'Jane Smith',
+        client_email: 'jane@example.com',
+        client_phone: '+254700000001',
+        insurance_type: 'Motor Insurance',
+        coverage_amount: '1000000',
+        premium_estimate: '45000',
+        status: 'pending',
+        created_at: '2025-09-01T10:00:00Z',
+        updated_at: '2025-09-01T10:00:00Z'
+      }];
+      
+      setQuotes(fallbackData);
+      setTotalPages(1);
+      
+      const statsData = {
+        total: fallbackData.length,
+        pending: fallbackData.filter((q: Quote) => q.status === 'pending').length,
+        approved: fallbackData.filter((q: Quote) => q.status === 'approved').length,
+        rejected: fallbackData.filter((q: Quote) => q.status === 'rejected').length,
+        draft: fallbackData.filter((q: Quote) => q.status === 'draft').length,
+      };
+      setStats(statsData);
+      
       toast({
-        title: "Error",
-        description: "Failed to fetch quotes data.",
+        title: "Connection Error", 
+        description: "Using demo data - check API connection",
         variant: "destructive",
       });
     } finally {
@@ -142,7 +221,22 @@ export function AdminQuotes() {
 
   const updateQuoteStatus = async (quoteId: number, status: string) => {
     try {
-      const result = await console.log(quoteId, status);
+      const url = `${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/quotes/${quoteId}/status`;
+      
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
       
       if (result.success) {
         await fetchQuotes();

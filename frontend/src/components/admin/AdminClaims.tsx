@@ -75,53 +75,73 @@ export function AdminClaims() {
   const fetchClaims = async () => {
     try {
       setLoading(true);
+      console.log('📋 Fetching real claims data from API...');
       
-      // Simulated API response for development
-      const result = {
-        success: true,
-        data: {
-          claims: [
-            {
-              id: 1,
-              policyNumber: 'POL001',
-              claimType: 'Motor',
-              incidentDate: '2025-09-01',
-              estimatedLoss: 50000,
-              description: 'Vehicle accident claim',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'john@example.com',
-              phone: '+254700000000',
-              status: 'pending',
-              documents: [],
-              createdAt: '2025-09-01T10:00:00Z',
-              updatedAt: '2025-09-01T10:00:00Z'
-            }
-          ],
-          pagination: { totalPages: 1 }
-        },
-        message: 'Claims loaded successfully'
-      };
+      // Fetch real data from Laravel backend API
+      const url = `${import.meta.env.VITE_API_URL || 'https://galloways.co.ke/api'}/admin/claims?page=${currentPage}&status=${statusFilter}&search=${searchTerm}`;
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('📋 Real claims data received:', result);
 
       if (result && result.success) {
-        const claimsData = result.data?.claims || [];
+        const claimsData = result.data?.claims || result.data || [];
         setClaims(claimsData);
         setTotalPages(result.data?.pagination?.totalPages || 1);
+        
+        toast({
+          title: "Claims Loaded",
+          description: `Found ${claimsData.length} claims from database`,
+        });
       } else {
         console.error('API returned error:', result);
         setClaims([]);
         toast({
           title: "API Error",
-          description: result?.message || "Backend not connected - no data available",
+          description: result?.message || "Backend returned error",
           variant: "destructive",
         });
       }
     } catch (error) {
       console.error('Failed to fetch claims:', error);
-      setClaims([]);
+      
+      // Fallback to demo data if API fails
+      const fallbackData = [
+        {
+          id: 1,
+          policyNumber: 'POL001',
+          claimType: 'Motor',
+          incidentDate: '2025-09-01',
+          estimatedLoss: 50000,
+          description: 'Vehicle accident claim',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          phone: '+254700000000',
+          status: 'pending',
+          documents: [],
+          createdAt: '2025-09-01T10:00:00Z',
+          updatedAt: '2025-09-01T10:00:00Z'
+        }
+      ];
+      
+      setClaims(fallbackData);
+      setTotalPages(1);
+      
       toast({
         title: "Connection Error",
-        description: "Backend not available - cannot fetch claims data",
+        description: "Using demo data - check API connection",
         variant: "destructive",
       });
     } finally {

@@ -9,6 +9,7 @@ import { Label } from "../components/ui/label";
 import { Phone, Mail, FileText, Clock, CheckCircle, Upload } from "lucide-react";
 import { Shield, Car, FileText as FileTextIcon, Home, Briefcase, Users, Layers, HeartPulse, PiggyBank, Coins, Hammer, Wrench, MonitorSmartphone, Plane, UserCheck } from "lucide-react";
 import { toast } from "../hooks/use-toast";
+import { claimsService } from "../lib/api";
 import { getDownloadUrl } from "../lib/assets";
 
 const claimIcons = {
@@ -94,14 +95,19 @@ export default function Claims() {
         });
       }
 
-      // Simple form submission - you can integrate with your API later
-      console.log('Form submitted:', formDataToSend);
+      // Submit to Laravel backend API
+      console.log('📋 Submitting claim to API...');
+      const result = await claimsService.createClaim(formDataToSend);
       
-      setIsSubmitted(true);
-      toast({
-        title: "Success",
-        description: "Your claim has been submitted successfully. We'll contact you soon with updates."
-      });
+      if (result.success) {
+        setIsSubmitted(true);
+        toast({
+          title: "Success",
+          description: result.message || "Your claim has been submitted successfully. We'll contact you soon with updates."
+        });
+      } else {
+        throw new Error(result.message || 'Failed to submit claim');
+      }
     } catch (error: any) {
       console.error('Claim submission error:', error);
       toast({

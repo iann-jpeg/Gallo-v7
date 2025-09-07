@@ -157,8 +157,8 @@ export function AdminSidebar({ activeTab, setActiveTab, isOpen, toggleSidebar }:
           </Button>
         </div>
         
-        {/* Navigation with Advanced Hover Effects */}
-        <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto">
+        {/* Navigation with Advanced Hover Effects and Scrollable */}
+        <nav className="flex-1 px-4 py-8 space-y-3 overflow-y-auto max-h-[calc(100vh-12rem)] scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent hover:scrollbar-thumb-slate-400">
           {menuItems.map((item, index) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
