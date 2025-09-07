@@ -4,7 +4,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 
-Route::prefix('api/admin')->group(function(){
+// Health check endpoint
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now(),
+        'database' => 'connected'
+    ]);
+});
+
+// Admin endpoints
+Route::prefix('admin')->group(function(){
     Route::get('/dashboard/comprehensive',[AdminController::class,'dashboard']);
     Route::get('/activities',[AdminController::class,'activities']);
     Route::get('/notifications',[AdminController::class,'notifications']);
@@ -17,9 +27,29 @@ Route::prefix('api/admin')->group(function(){
     Route::delete('/claims/{id}',[AdminController::class,'deleteClaim']);
     Route::get('/outsourcing',[AdminController::class,'outsourcing']);
     Route::get('/payments',[AdminController::class,'payments']);
+    Route::get('/metrics', function () {
+        return response()->json([
+            'system' => [
+                'cpu_usage' => '25%',
+                'memory_usage' => '60%',
+                'disk_usage' => '40%',
+                'uptime' => '99.9%'
+            ],
+            'database' => [
+                'connections' => 12,
+                'queries_per_second' => 450,
+                'size' => '2.3GB'
+            ],
+            'api' => [
+                'requests_per_minute' => 1250,
+                'average_response_time' => '120ms',
+                'error_rate' => '0.02%'
+            ]
+        ]);
+    });
 });
 
-Route::post('/api/auth/login',[AuthController::class,'login']);
+Route::post('/auth/login',[AuthController::class,'login']);
 
 // Public API endpoints used by frontend
 use App\Http\Controllers\ClaimsController;

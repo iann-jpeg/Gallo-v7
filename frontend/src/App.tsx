@@ -4,8 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
-import { setupDatabase } from "./lib/database-setup";
-import api from "./lib/api";
 
 // Lazy load components for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -34,28 +32,27 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  // Auto-setup database on app start
+  // Test Laravel backend connection on app start
   useEffect(() => {
-    const initDatabase = async () => {
+    const initBackend = async () => {
       try {
-        console.log('🔧 Initializing database...');
+        console.log('🔧 Testing Laravel backend connection...');
         
-        // Test Supabase connection first
-        console.log('🚀 Testing Supabase connection...');
-        await api.testSupabaseConnection();
-        
-        const result = await setupDatabase();
-        if (result.success) {
-          console.log('✅ Database initialization successful!');
+        // Test Laravel API connection
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/health`);
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ Laravel backend connected successfully!', data);
         } else {
-          console.warn('⚠️ Database initialization issue:', result.message);
+          console.warn('⚠️ Laravel backend connection issue - using fallback mode');
         }
       } catch (error) {
-        console.error('❌ Database initialization error:', error);
+        console.warn('⚠️ Backend connection error:', error);
+        console.log('🔄 Using offline mode with demo data');
       }
     };
     
-    initDatabase();
+    initBackend();
   }, []);
 
   return (
