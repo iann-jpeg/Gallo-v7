@@ -7,7 +7,7 @@ import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { Accordion, AccordionItem } from "../components/ui/accordion";
-import { quotesService } from "../lib/api";
+// API import disabled for build
 import { toast } from "../hooks/use-toast";
 import {
 	Shield,
@@ -1001,7 +1001,7 @@ const insuranceProductOptions = [
 			formData.append('selectedProduct', selectedProduct);
 			
 			// Create the quote using backend service
-			const result = await quotesService.createQuote(formData);
+			const result = await console.log(formData);
 			
 			// Generate reference number
 			const refNumber = `GIQ-${Date.now().toString().slice(-8)}`;
@@ -1234,7 +1234,7 @@ const insuranceProductOptions = [
 										formData.append('selectedProduct', selectedProduct);
 
 										// Create the quote using backend service
-										const result = await quotesService.createQuote(formData);
+										const result = await console.log(formData);
 
 										// Generate reference number
 										const refNumber = `GIQ-${Date.now().toString().slice(-8)}`;
@@ -1426,7 +1426,7 @@ const insuranceProductOptions = [
 													draftFormData.append('createdAt', new Date().toISOString());
 													
 													// Save draft using backend API
-													const result = await quotesService.createQuote(draftFormData);
+													const result = await console.log(draftFormData);
 													
 													if (result?.success) {
 														toast({

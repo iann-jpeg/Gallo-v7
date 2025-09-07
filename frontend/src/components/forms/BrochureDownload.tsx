@@ -8,7 +8,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, CheckCircle, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { resourcesService } from "@/lib/api";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -44,7 +43,14 @@ export default function BrochureDownload({ onClose }: BrochureDownloadProps) {
       let downloadSuccessful = false;
       
       try {
-        await resourcesService.downloadResource('brochure-main');
+        // Simple direct download - replace with actual brochure URL
+        const brochureUrl = "/Downloads/galloways_brochure.pdf";
+        const link = document.createElement('a');
+        link.href = brochureUrl;
+        link.download = 'Galloways_Insurance_Brochure.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
         downloadSuccessful = true;
         
         toast({

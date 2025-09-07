@@ -1,18 +1,20 @@
-import { AdminQuotes } from "../components/admin/AdminQuotes";
-import { AdminDiaspora } from "../components/admin/AdminDiaspora";
-import { AdminOutsourcing } from "../components/admin/AdminOutsourcing";
 import { useState, useEffect } from "react";
-import { AdminSidebar } from "../components/admin/AdminSidebar";
-import { AdminTopbar } from "../components/admin/AdminTopbar";
-import { AdminDashboard } from "../components/admin/AdminDashboard";
-import { AdminUsers } from "../components/admin/AdminUsers";
-import { AdminPayments } from "../components/admin/AdminPayments";
-import { AdminNotifications } from "../components/admin/AdminNotifications";
-import { AdminAnalytics } from "../components/admin/AdminAnalytics";
-import { AdminSettings } from "../components/admin/AdminSettings";
-import { AdminClaims } from "../components/admin/AdminClaims";
-import { AdminConsultations } from "../components/admin/AdminConsultations";
 import { Toaster } from "sonner";
+import {
+  AdminQuotes,
+  AdminDiaspora,
+  AdminOutsourcing,
+  AdminSidebar,
+  AdminTopbar,
+  AdminDashboard,
+  AdminUsers,
+  AdminPayments,
+  AdminNotifications,
+  AdminAnalytics,
+  AdminSettings,
+  AdminClaims,
+  AdminConsultations,
+} from "../components/admin";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("dashboard");

@@ -22,12 +22,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Vendor chunks for better caching
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-query': ['@tanstack/react-query'],
-          'vendor-ui': ['lucide-react']
-        }
+        manualChunks: undefined, // Let Vite handle chunking automatically
       }
     },
     // Increase chunk size warning limit for production builds

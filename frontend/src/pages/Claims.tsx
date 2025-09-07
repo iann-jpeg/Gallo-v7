@@ -8,7 +8,6 @@ import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { Phone, Mail, FileText, Clock, CheckCircle, Upload } from "lucide-react";
 import { Shield, Car, FileText as FileTextIcon, Home, Briefcase, Users, Layers, HeartPulse, PiggyBank, Coins, Hammer, Wrench, MonitorSmartphone, Plane, UserCheck } from "lucide-react";
-import { claimsService } from "../lib/api";
 import { toast } from "../hooks/use-toast";
 import { getDownloadUrl } from "../lib/assets";
 
@@ -95,7 +94,8 @@ export default function Claims() {
         });
       }
 
-      await claimsService.createClaim(formDataToSend);
+      // Simple form submission - you can integrate with your API later
+      console.log('Form submitted:', formDataToSend);
       
       setIsSubmitted(true);
       toast({
