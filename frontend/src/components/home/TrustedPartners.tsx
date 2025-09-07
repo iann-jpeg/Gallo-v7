@@ -1,16 +1,18 @@
+import { getLogoUrl } from "../../lib/assets";
+
 const TrustedPartners = () => {
   const partners = [
-    { name: "UAP", img: "/dist/LOGOS/UAP.png" },
-    { name: "BRITAM", img: "/dist/LOGOS/BRITAM.jpeg" },
-    { name: "CIC", img: "/dist/LOGOS/CIC.jpeg" },
-    { name: "LIBERTY", img: "/dist/LOGOS/LIBERTY.png" },
-    { name: "HERITAGE", img: "/dist/LOGOS/HERTAGE.jpeg" },
-    { name: "MADISON", img: "/dist/LOGOS/MADISON.jpeg" },
-    { name: "JUBILEE", img: "/dist/LOGOS/JUBILEE.jpeg" },
-    { name: "GA", img: "/dist/LOGOS/GA.png" },
-    { name: "NCBA", img: "/dist/LOGOS/NCBA.png" },
-    { name: "AMACO", img: "/dist/LOGOS/AMACO.jpeg" },
-    { name: "MAYFAIR", img: "/dist/LOGOS/MAYFAIR.jpeg" }
+    { name: "UAP", img: "UAP.png" },
+    { name: "BRITAM", img: "BRITAM.jpeg" },
+    { name: "CIC", img: "CIC.jpeg" },
+    { name: "LIBERTY", img: "LIBERTY.png" },
+    { name: "HERITAGE", img: "HERTAGE.jpeg" },
+    { name: "MADISON", img: "MADISON.jpeg" },
+    { name: "JUBILEE", img: "JUBILEE.jpeg" },
+    { name: "GA", img: "GA.png" },
+    { name: "NCBA", img: "NCBA.png" },
+    { name: "AMACO", img: "AMACO.jpeg" },
+    { name: "MAYFAIR", img: "MAYFAIR.jpeg" }
   ];
 
   return (
@@ -32,10 +34,9 @@ const TrustedPartners = () => {
               className="bg-card p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col items-center justify-center"
             >
               <img
-                src={partner.img}
+                src={getLogoUrl(partner.img)}
                 alt={partner.name + ' logo'}
-                className="h-16 w-28 object-contain mb-2"
-                style={{ background: 'white', borderRadius: '8px' }}
+                className="h-16 w-28 object-contain mb-2 bg-white rounded-lg"
               />
               <div className="text-lg font-semibold text-primary">
                 {partner.name}

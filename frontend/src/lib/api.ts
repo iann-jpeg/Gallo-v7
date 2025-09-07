@@ -1,5 +1,5 @@
-// API base URL for Laravel backend
-const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost/api';
+/// <reference types="vite/client" />
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost/api';
 
 // Helper for HTTP requests
 async function request(endpoint: string, options: RequestInit = {}) {
@@ -209,5 +209,3 @@ const api = {
 };
 
 export default api;
-
-

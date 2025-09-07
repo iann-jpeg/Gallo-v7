@@ -3,8 +3,8 @@
   "description": "Laravel-like API scaffold for Galloways admin endpoints (PostgreSQL ready)",
   "require": {
     "php": "^8.1",
-  "laravel/framework": "10.0.*",
-  "tymon/jwt-auth": "^1.2",
+    "laravel/framework": "10.0.*",
+    "tymon/jwt-auth": "^1.2",
     "vlucas/phpdotenv": "^5.5"
   },
   "autoload": {
@@ -16,5 +16,12 @@
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
     ]
-  }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }

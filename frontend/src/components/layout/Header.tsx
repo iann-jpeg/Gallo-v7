@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Phone, Mail } from "lucide-react";
 import { Button } from "../ui/button";
+import { getMainLogoUrl } from "../../lib/assets";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +28,7 @@ const Header = () => {
         <div className="flex justify-between items-center py-2 md:py-3">
           <Link to="/" className="flex items-center space-x-2" style={{ alignItems: 'center' }}>
             <img
-              src={"/galloways logo.jpg"}
+              src={getMainLogoUrl()}
               alt="Galloways Logo"
               className="h-14 w-14 md:h-20 md:w-20 object-cover rounded-full mr-3 drop-shadow-lg bg-transparent border-2 border-white"
               style={{ background: 'transparent', mixBlendMode: 'multiply', marginBottom: '0.5rem' }}
